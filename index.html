@@ -825,12 +825,19 @@
 
                         <!-- Кнопки действия -->
                         <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-               
+
+
+
+                            <button onclick="jumpToSlide(14)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к итогам
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
                         </div>
                     </div>
                 </section>
 
-               
+        
+
                 <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ МЕЖДУ СЛАЙДАМИ (УДОБНО ДЛЯ РЕЖИМА СЛАЙДОВ И МОБИЛЬНЫХ) -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between shadow-xs">
                     <button id="prev-slide-btn" onclick="navigateSlide(-1)" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-newsDark font-bold text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
