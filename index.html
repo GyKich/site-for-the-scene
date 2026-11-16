@@ -826,12 +826,6 @@
                         <!-- Кнопки действия -->
                         <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
 
-
-
-                            <button onclick="jumpToSlide(14)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к итогам
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
                         </div>
                     </div>
                 </section>
@@ -884,7 +878,6 @@
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             buildTableOfContents();
-            initQRCode();
             setupScrollObserver();
             updateSlideUI(1);
         });
@@ -1032,39 +1025,6 @@
         function toggleMobileToc() {
             const modal = document.getElementById('mobile-toc');
             modal.classList.toggle('hidden');
-        }
-
-        // Инициализация QR-кода на 13-м слайде
-        function initQRCode() {
-            const container = document.getElementById('qrcode-container');
-            const input = document.getElementById('qr-url-input');
-            // Берем текущий адрес страницы или дефолтный пример, если открыто локально
-            const currentUrl = window.location.href.startsWith('http')
-                ? window.location.href
-                : 'https://vestnik-project-demo.netlify.app';
-
-            input.value = currentUrl;
-            qrInstance = new QRCode(container, {
-                text: currentUrl,
-                width: 170,
-                height: 170,
-                colorDark: "#14171A",
-                colorLight: "#FFFFFF",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        // Обновление QR-кода при вводе новой ссылки
-        function updateQRCode() {
-            const input = document.getElementById('qr-url-input');
-            const val = input.value.trim();
-            if (!val) {
-                showToast('Введите корректную ссылку для генерации QR-кода');
-                return;
-            }
-            qrInstance.clear();
-            qrInstance.makeCode(val);
-            showToast('QR-код успешно обновлен!');
         }
 
         // Копирование ссылки в буфер обмена (безопасный метод для всех браузеров и iframe)
