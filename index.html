@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВЫСТУПЛЕНИЕ - ПРЕЗЕНТАЦИЯ</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифтов Inter и PT Serif для аутентичной новостной типографики СНГ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Библиотека для генерации реального QR-кода прямо на 13-м слайде -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['PT Serif', 'serif'],
+                    },
+                    colors: {
+                        newsRed: '#D9232E',
+                        newsDark: '#14171A',
+                        newsGray: '#F3F4F6',
+                        newsBorder: '#E5E7EB',
+                        newsBlue: '#0055A5'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Кастомные стили для имитации газетно-портальной верстки и бегущей строки */
+        body {
+            background-color: #F4F5F7;
+            color: #14171A;
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-move {
+            display: inline-block;
+            animation: ticker 35s linear infinite;
+        }
+        .ticker-wrap:hover .ticker-move {
+            animation-play-state: paused;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        /* Стили для режима пошаговых слайдов */
+        body.presentation-mode .slide-section {
+            display: none;
+        }
+        body.presentation-mode .slide-section.active-presentation-slide {
+            display: block;
+            animation: fadeIn 0.35s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Стилизованная заглушка изображения */
+        .media-placeholder {
+            background-image: repeating-linear-gradient(
+                -45deg,
+                #e5e7eb,
+                #e5e7eb 12px,
+                #f3f4f6 12px,
+                #f3f4f6 24px
+            );
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-newsRed selection:text-white">
+
+    <!-- ИНДИКАТОР ПРОГРЕССА ЧТЕНИЯ / ПРОСМОТРА (ВЕРХНЯЯ ПОЛОСКА) -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+        <div id="reading-progress" class="h-full bg-newsRed transition-all duration-150" style="width: 7.6%;"></div>
+    </div>
+
+    <!-- ВЕРХНЯЯ СЕРВИСНАЯ ПАНЕЛЬ СМИ (ДАТА, ИНДЕКСЫ, ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМА) -->
+    <div class="bg-newsDark text-gray-300 text-xs border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-4">
+                <span id="current-date" class="font-medium text-white">Воскресенье, 15 ноября 2026</span>
+                <span class="hidden sm:inline text-gray-500">|</span>
+                <span class="hidden sm:inline-flex items-center">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                    СТАТУС ПРОЕКТА: <strong class="text-white ml-1">ГОТОВ К ЗАПУСКУ</strong>
+                </span>
+                <span class="hidden md:inline text-gray-400">ИНДЕКС ЭФФЕКТИВНОСТИ: <span class="text-emerald-400 font-semibold">+142.8% ▲</span></span>
+            </div>
+
+            <!-- Переключатель режима отображения: Лента или Слайды -->
+            <div class="flex items-center space-x-2">
+                <span class="text-gray-400 hidden sm:inline">Формат:</span>
+                <div class="inline-flex rounded-md bg-gray-800 p-0.5 border border-gray-700">
+                    <button id="btn-mode-feed" onclick="setViewMode('feed')" class="px-2.5 py-1 rounded text-xs font-semibold bg-newsRed text-white transition">
+                        Лента СМИ
+                    </button>
+                    <button id="btn-mode-slides" onclick="setViewMode('slides')" class="px-2.5 py-1 rounded text-xs font-semibold text-gray-300 hover:text-white transition">
+                        Слайды (1/13)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ГЛАВНАЯ ШАПКА ИЗДАНИЯ -->
+    <header class="sticky top-1 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Логотип СМИ -->
+            <a href="#slide-1" onclick="jumpToSlide(1)" class="flex items-center space-x-3 group">
+                <div class="bg-newsRed text-white font-black text-xl sm:text-2xl px-2.5 py-1 tracking-tighter rounded-sm">
+                    ВЕСТНИК
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold text-sm sm:text-base tracking-tight text-newsDark leading-none">СПЕЦПРОЕКТ // ПРЕЗЕНТАЦИЯ</span>
+                    <span class="text-[11px] text-gray-500 font-medium mt-0.5">Информационно-аналитический портал</span>
+                </div>
+            </a>
+
+            <!-- Быстрая рубрикация в шапке (Desktop) -->
+            <nav class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-700">
+                <a href="#slide-1" onclick="jumpToSlide(1)" class="hover:text-newsRed transition">Главное</a>
+                <a href="#slide-13" onclick="jumpToSlide(13)" class="hover:text-newsRed transition text-newsRed">QR и Контакты</a>
+            </nav>
+
+            <!-- Счетчик текущего слайда и мобильное меню -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-lg text-xs font-bold text-newsDark">
+                    Слайд <span id="header-slide-counter" class="text-newsRed">1</span> из 13
+                </div>
+                <button onclick="toggleMobileToc()" class="lg:hidden p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 text-newsDark" aria-label="Содержание">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- БЕГУЩАЯ СТРОКА «СРОЧНО В НОМЕР» -->
+        <div class="bg-gray-50 border-t border-gray-200 py-1.5 text-xs">
+            <div class="max-w-7xl mx-auto px-4 flex items-center">
+                <span class="bg-newsRed text-white font-bold px-2 py-0.5 rounded-sm text-[10px] uppercase tracking-wider mr-3 shrink-0">
+                    Молния
+                </span>
+                <div class="ticker-wrap w-full text-gray-700 font-medium">
+                    <div class="ticker-move">
+                        <span class="mx-4">• 10:00 Представлена концепция нового проекта из 13 ключевых тезисов</span>
+                        <span class="mx-4">• 10:15 Аналитики подтвердили рост ключевых показателей эффективности</span>
+                        <span class="mx-4">• 10:30 Полная версия презентации доступна по QR-коду на финальном слайде</span>
+                        <span class="mx-4">• 10:45 Открыт прием вопросов и предложений от партнеров и инвесторов</span>
+                        <!-- Дублирование для бесшовной прокрутки -->
+                        <span class="mx-4">• 10:00 Представлена концепция нового проекта из 13 ключевых тезисов</span>
+                        <span class="mx-4">• 10:15 Аналитики подтвердили рост ключевых показателей эффективности</span>
+                        <span class="mx-4">• 10:30 Полная версия презентации доступна по QR-коду на финальном слайде</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ВЫПАДАЮЩЕЕ МОБИЛЬНОЕ ОГЛАВЛЕНИЕ (1-13) -->
+    <div id="mobile-toc" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs lg:hidden" onclick="toggleMobileToc()">
+        <div class="bg-white w-80 max-w-[85vw] h-full p-5 overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                <span class="font-extrabold text-base uppercase tracking-tight">Лента слайдов (1–13)</span>
+                <button onclick="toggleMobileToc()" class="p-1.5 rounded-lg bg-gray-100 text-gray-600">✕</button>
+            </div>
+            <ul id="mobile-toc-list" class="mt-4 space-y-1.5 text-sm">
+                <!-- Заполняется автоматически скриптом -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР: САЙДБАР СЛЕВА + ЛЕНТА ИЗ 13 СЛАЙДОВ СПРАВА -->
+    <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            <!-- ЛЕВЫЙ САЙДБАР: ЛЕНТА НОВОСТЕЙ / НАВИГАЦИЯ ПО 13 СЛАЙДАМ (DESKTOP) -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3 sticky top-28 bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                <div class="bg-newsDark text-white px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 bg-newsRed rounded-full"></span>
+                        <h2 class="font-bold text-xs uppercase tracking-wider">Хроника слайдов</h2>
+                    </div>
+                    <span class="text-[11px] text-gray-400">Оглавление</span>
+                </div>
+                <div class="p-2 max-h-[calc(100vh-11rem)] overflow-y-auto">
+                    <ul id="desktop-toc-list" class="space-y-1">
+                        <!-- Заполняется автоматически через JS -->
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- ПРАВАЯ / ЦЕНТРАЛЬНАЯ КОЛОНКА: 13 СЕКЦИЙ-СЛАЙДОВ -->
+            <main class="lg:col-span-8 xl:col-span-9 space-y-8">
+
+                <!-- ========================================================= -->
+                <!-- СЛАЙД 1: ГЛАВНЫЙ ЭКРАН / СРОЧНАЯ НОВОСТЬ (HERO)           -->
+                <!-- ========================================================= -->
+                <section id="slide-1" data-slide="1" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 01 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №1]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(2)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 2)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================= -->
+                <!-- СЛАЙД 2: КОНТЕКСТ И ПРЕДПОСЫЛКИ («КАРТИНА ДНЯ»)            -->
+                <!-- ========================================================= -->
+                <section id="slide-2" data-slide="2" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 02 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №2]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(3)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 3)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+		<section id="slide-3" data-slide="3" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 03 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №3]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(4)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 4)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+		<section id="slide-4" data-slide="4" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 04 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №4]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(5)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 5)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-5" data-slide="5" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 05 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №5]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(6)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 6)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-6" data-slide="6" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 06 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №6]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(7)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 7)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-7" data-slide="7" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 07 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №7]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(8)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 8)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-8" data-slide="8" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 08 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №8]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(9)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 9)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-9" data-slide="9" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 09 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №9]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(10)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 10)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-10" data-slide="10" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 10 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №10]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(11)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 11)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+		<section id="slide-11" data-slide="11" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 11 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №11]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(12)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 12)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-12" data-slide="12" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 12 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №12]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+                            <button onclick="jumpToSlide(13)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
+                                Перейти к (Слайд 13)
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+		<section id="slide-13" data-slide="13" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="p-6 sm:p-8">
+                        <!-- Метаданные новости -->
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
+                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
+                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Слайд 13 / 13</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-500">Время чтения: ~4 мин</span>
+                        </div>
+
+                        <!-- Заголовок -->
+                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
+                            Флекс самых лучших активистов планеты
+                        </h1>
+
+                        <!-- Лид-абзац -->
+                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
+                            Абсолютный флекс, но поменьше
+                        </p>
+
+                        <!-- Заглушка главного фото 16:9 -->
+                        <figure class="mb-6">
+                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
+                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №13]</div>
+                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
+                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
+                                </div>
+                            </div>
+                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                <span>Подпись к иллюстрации</span>
+                                <span class="font-medium">Фото: Архив проекта</span>
+                            </figcaption>
+                        </figure>
+
+                        <!-- Кнопки действия -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+               
+                        </div>
+                    </div>
+                </section>
+
+               
+                <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ МЕЖДУ СЛАЙДАМИ (УДОБНО ДЛЯ РЕЖИМА СЛАЙДОВ И МОБИЛЬНЫХ) -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between shadow-xs">
+                    <button id="prev-slide-btn" onclick="navigateSlide(-1)" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-newsDark font-bold text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        ← Предыдущий
+                    </button>
+                    <div class="text-center">
+                        <span class="text-xs text-gray-500 block">Текущий раздел</span>
+                        <span id="bottom-slide-indicator" class="font-extrabold text-sm text-newsDark">Слайд 1 из 13</span>
+                    </div>
+                    <button id="next-slide-btn" onclick="navigateSlide(1)" class="px-4 py-2.5 rounded-lg bg-newsRed hover:bg-red-700 text-white font-bold text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        Следующий →
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (ВМЕСТО ALERT) -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-newsDark text-white px-4 py-3 rounded-lg shadow-xl border-l-4 border-newsRed text-sm font-medium">
+        Ссылка скопирована в буфер обмена!
+    </div>
+
+    <!-- ФУТЕР ИЗДАНИЯ -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="bg-newsDark text-white font-black px-2 py-0.5 rounded-sm">ВЕСТНИК</span>
+                <span>© 2026 Спецпроект-презентация. Все материалы носят ознакомительный характер.</span>
+            </div>
+            <div>
+                Верстка адаптирована для мобильных устройств и QR-навигации • 13 слайдов
+            </div>
+        </div>
+    </footer>
+
+    <!-- СКРИПТ УПРАВЛЕНИЯ СЛАЙДАМИ, ОГЛАВЛЕНИЕМ И QR-КОДОМ -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 13;
+        let viewMode = 'feed'; // 'feed' (лента скроллом) или 'slides' (пошагово)
+        let qrInstance = null;
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            buildTableOfContents();
+            initQRCode();
+            setupScrollObserver();
+            updateSlideUI(1);
+        });
+
+        // Построение оглавления для десктопного сайдбара и мобильного меню из data-атрибутов секций
+        function buildTableOfContents() {
+            const sections = document.querySelectorAll('.slide-section');
+            const desktopList = document.getElementById('desktop-toc-list');
+            const mobileList = document.getElementById('mobile-toc-list');
+
+            sections.forEach((sec) => {
+                const num = parseInt(sec.dataset.slide);
+                const title = sec.dataset.title;
+                const time = sec.dataset.time;
+
+                const createItemHTML = (isMobile) => `
+                    <button onclick="jumpToSlide(${num}); ${isMobile ? 'toggleMobileToc();' : ''}" 
+                        data-toc-btn="${num}"
+                        class="toc-btn w-full text-left px-3 py-2.5 rounded-lg transition flex items-start space-x-2.5 hover:bg-gray-100 group">
+                        <span class="text-[11px] font-mono text-gray-400 mt-0.5 shrink-0">${time}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-gray-200 text-gray-700 group-hover:bg-newsRed group-hover:text-white transition">
+                                    ${num < 10 ? '0' + num : num}
+                                </span>
+                                <span class="text-xs font-semibold text-gray-800 truncate">${title}</span>
+                            </div>
+                        </div>
+                    </button>
+                `;
+
+                desktopList.insertAdjacentHTML('beforeend', `<li>${createItemHTML(false)}</li>`);
+                mobileList.insertAdjacentHTML('beforeend', `<li>${createItemHTML(true)}</li>`);
+            });
+        }
+
+        // Переключение режима: «Лента СМИ» или «Слайды (пошагово)»
+        function setViewMode(mode) {
+            viewMode = mode;
+            const btnFeed = document.getElementById('btn-mode-feed');
+            const btnSlides = document.getElementById('btn-mode-slides');
+
+            if (mode === 'slides') {
+                document.body.classList.add('presentation-mode');
+                btnSlides.classList.add('bg-newsRed', 'text-white');
+                btnSlides.classList.remove('text-gray-300');
+                btnFeed.classList.remove('bg-newsRed', 'text-white');
+                btnFeed.classList.add('text-gray-300');
+                showSingleSlide(currentSlide);
+            } else {
+                document.body.classList.remove('presentation-mode');
+                btnFeed.classList.add('bg-newsRed', 'text-white');
+                btnFeed.classList.remove('text-gray-300');
+                btnSlides.classList.remove('bg-newsRed', 'text-white');
+                btnSlides.classList.add('text-gray-300');
+                const target = document.getElementById(`slide-${currentSlide}`);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            updateSlideUI(currentSlide);
+        }
+
+        // Показать конкретный слайд в режиме презентации
+        function showSingleSlide(num) {
+            document.querySelectorAll('.slide-section').forEach(sec => {
+                sec.classList.remove('active-presentation-slide');
+            });
+            const activeSec = document.getElementById(`slide-${num}`);
+            if (activeSec) {
+                activeSec.classList.add('active-presentation-slide');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Переход к любому слайду по номеру (1..13)
+        function jumpToSlide(num) {
+            if (num < 1) num = 1;
+            if (num > totalSlides) num = totalSlides;
+            currentSlide = num;
+            updateSlideUI(num);
+
+            if (viewMode === 'slides') {
+                showSingleSlide(num);
+            } else {
+                const el = document.getElementById(`slide-${num}`);
+                if (el) {
+                    const headerOffset = 115;
+                    const elementPosition = el.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Листание вперед/назад (-1 или +1)
+        function navigateSlide(delta) {
+            jumpToSlide(currentSlide + delta);
+        }
+
+        // Обновление счетчиков, прогресс-бара и подсветки активного пункта в оглавлении
+        function updateSlideUI(num) {
+            currentSlide = num;
+            document.getElementById('header-slide-counter').textContent = num;
+            document.getElementById('bottom-slide-indicator').textContent = `Слайд ${num} из ${totalSlides}`;
+            document.getElementById('btn-mode-slides').textContent = `Слайды (${num}/${totalSlides})`;
+
+            // Прогресс-бар
+            const percent = (num / totalSlides) * 100;
+            document.getElementById('reading-progress').style.width = `${percent}%`;
+
+            // Кнопки Назад / Вперед
+            document.getElementById('prev-slide-btn').disabled = (num === 1);
+            document.getElementById('next-slide-btn').disabled = (num === totalSlides);
+
+            // Подсветка в оглавлении
+            document.querySelectorAll('.toc-btn').forEach(btn => {
+                const btnNum = parseInt(btn.dataset.tocBtn);
+                if (btnNum === num) {
+                    btn.classList.add('bg-red-50', 'border-l-2', 'border-newsRed');
+                } else {
+                    btn.classList.remove('bg-red-50', 'border-l-2', 'border-newsRed');
+                }
+            });
+        }
+
+        // Отслеживание активного слайда при скролле в режиме ленты
+        function setupScrollObserver() {
+            const sections = document.querySelectorAll('.slide-section');
+            const observer = new IntersectionObserver((entries) => {
+                if (viewMode !== 'feed') return;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const num = parseInt(entry.target.dataset.slide);
+                        updateSlideUI(num);
+                    }
+                });
+            }, {
+                rootMargin: '-25% 0px -55% 0px',
+                threshold: 0.05
+            });
+
+            sections.forEach(sec => observer.observe(sec));
+        }
+
+        // Открытие/закрытие мобильного оглавления
+        function toggleMobileToc() {
+            const modal = document.getElementById('mobile-toc');
+            modal.classList.toggle('hidden');
+        }
+
+        // Инициализация QR-кода на 13-м слайде
+        function initQRCode() {
+            const container = document.getElementById('qrcode-container');
+            const input = document.getElementById('qr-url-input');
+            // Берем текущий адрес страницы или дефолтный пример, если открыто локально
+            const currentUrl = window.location.href.startsWith('http')
+                ? window.location.href
+                : 'https://vestnik-project-demo.netlify.app';
+
+            input.value = currentUrl;
+            qrInstance = new QRCode(container, {
+                text: currentUrl,
+                width: 170,
+                height: 170,
+                colorDark: "#14171A",
+                colorLight: "#FFFFFF",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // Обновление QR-кода при вводе новой ссылки
+        function updateQRCode() {
+            const input = document.getElementById('qr-url-input');
+            const val = input.value.trim();
+            if (!val) {
+                showToast('Введите корректную ссылку для генерации QR-кода');
+                return;
+            }
+            qrInstance.clear();
+            qrInstance.makeCode(val);
+            showToast('QR-код успешно обновлен!');
+        }
+
+        // Копирование ссылки в буфер обмена (безопасный метод для всех браузеров и iframe)
+        function copyCurrentUrl() {
+            const input = document.getElementById('qr-url-input');
+            const urlToCopy = input.value || window.location.href;
+            const tempInput = document.createElement('input');
+            tempInput.value = urlToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('Ссылка скопирована! Теперь её можно отправить или зашить в QR.');
+        }
+
+        // Показ всплывающего уведомления
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            toast.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
