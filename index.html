@@ -1,1054 +1,1893 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ВЫСТУПЛЕНИЕ - ПРЕЗЕНТАЦИЯ</title>
-    <!-- Подключение Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Подключение шрифтов Inter и PT Serif для аутентичной новостной типографики СНГ -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- Библиотека для генерации реального QR-кода прямо на 13-м слайде -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorldNews — August 2012 SJ Template</title>
+  <style>
+    /* =========================================================================
+       БАЗОВЫЙ СБРОС И ПРОВЕРЕННЫЙ КАРКАС 980px С МАСШТАБИРОВАНИЕМ ПОД FULL HD
+       ========================================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['PT Serif', 'serif'],
-                    },
-                    colors: {
-                        newsRed: '#D9232E',
-                        newsDark: '#14171A',
-                        newsGray: '#F3F4F6',
-                        newsBorder: '#E5E7EB',
-                        newsBlue: '#0055A5'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Кастомные стили для имитации газетно-портальной верстки и бегущей строки */
-        body {
-            background-color: #F4F5F7;
-            color: #14171A;
-        }
-        .ticker-wrap {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .ticker-move {
-            display: inline-block;
-            animation: ticker 35s linear infinite;
-        }
-        .ticker-wrap:hover .ticker-move {
-            animation-play-state: paused;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        /* Стили для режима пошаговых слайдов */
-        body.presentation-mode .slide-section {
-            display: none;
-        }
-        body.presentation-mode .slide-section.active-presentation-slide {
-            display: block;
-            animation: fadeIn 0.35s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Стилизованная заглушка изображения */
-        .media-placeholder {
-            background-image: repeating-linear-gradient(
-                -45deg,
-                #e5e7eb,
-                #e5e7eb 12px,
-                #f3f4f6 12px,
-                #f3f4f6 24px
-            );
-        }
-    </style>
+    body {
+      background-color: #f4f4f4;
+      background-image: linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%);
+      color: #333333;
+      font-family: Arial, Helvetica, Tahoma, sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* Пропорциональное масштабирование всей страницы на широких экранах ПК без перекоса сетки */
+    .page-scaler {
+      width: 100%;
+    }
+
+    @media (min-width: 1280px) {
+      .page-scaler {
+        zoom: 1.24;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .page-scaler {
+        zoom: 1.45;
+      }
+    }
+
+    @media (min-width: 1800px) {
+      .page-scaler {
+        zoom: 1.72;
+      }
+    }
+
+    /* Классический центрированный контейнер 980px как в оригинале */
+    .container {
+      width: 980px;
+      margin: 0 auto;
+      padding: 12px 0 26px 0;
+    }
+
+    /* =========================================================================
+       1. ШАПКА ПОРТАЛА (HEADER) С ДЕКОРАТИВНОЙ ДУГОЙ СПРАВА
+       ========================================================================= */
+    .site-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px 14px 4px;
+      overflow: hidden;
+    }
+
+    /* Декоративная светло-серая дуга на фоне справа (как на референсе) */
+    .site-header::before {
+      content: "";
+      position: absolute;
+      right: 90px;
+      top: -60px;
+      width: 340px;
+      height: 190px;
+      background: radial-gradient(ellipse at center, rgba(220, 224, 230, 0.55) 0%, rgba(255, 255, 255, 0) 72%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .brand-box {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .brand-logo {
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -1.4px;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .brand-logo .word-bold {
+      font-weight: 700;
+      color: #0e2d4c;
+    }
+
+    .brand-logo .word-light {
+      font-weight: 400;
+      color: #215382;
+    }
+
+    .brand-subtext {
+      font-size: 11px;
+      color: #6b6b6b;
+      padding-left: 44px;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding-right: 12px;
+    }
+
+    .in-worldnews-badge {
+      background: linear-gradient(180deg, #ee1f27 0%, #d4131a 100%);
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+      letter-spacing: 0.4px;
+    }
+
+    .header-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      column-gap: 32px;
+      row-gap: 7px;
+    }
+
+    .header-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      color: #163b5c;
+      text-align: left;
+      transition: color 0.15s ease;
+    }
+
+    .header-link-btn:hover {
+      color: #e31b23;
+      text-decoration: underline;
+    }
+
+    .header-link-dot {
+      width: 4px;
+      height: 4px;
+      background-color: #e31b23;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================================
+       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (BREAKING NEWS) — БЕЗ ПАНЕЛИ КАТЕГОРИЙ ВЫШЕ
+       ========================================================================= */
+    .breaking-bar {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 14px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .breaking-badge {
+      background: linear-gradient(180deg, #ee1f27 0%, #cf141b 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .breaking-track {
+      background: linear-gradient(180deg, #1b4673 0%, #123456 100%);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 10px 5px 14px;
+      color: #ffffff;
+      min-width: 0;
+    }
+
+    .breaking-text-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .breaking-text-wrap:hover .breaking-headline {
+      text-decoration: underline;
+    }
+
+    .breaking-headline {
+      font-weight: 700;
+      font-style: italic;
+      font-size: 11.5px;
+      color: #ffffff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .breaking-time {
+      font-style: italic;
+      font-size: 10.5px;
+      color: #9ec5eb;
+      flex-shrink: 0;
+    }
+
+    .breaking-controls {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 12px;
+      flex-shrink: 0;
+    }
+
+    .breaking-arrow {
+      width: 18px;
+      height: 18px;
+      color: #a9cdf2;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+    }
+
+    .breaking-arrow:hover {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+
+    /* =========================================================================
+       3. ГЛАВНАЯ ТРЕХКОЛОНОЧНАЯ СЕТКА (215px | 1fr | 265px, gap: 14px)
+       ========================================================================= */
+    .main-three-cols {
+      display: grid;
+      grid-template-columns: 215px 1fr 265px;
+      gap: 14px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+
+    .panel-box {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+    }
+
+    /* --- ЛЕВАЯ КОЛОНКА: TOP NEWS (ТОЛЬКО ТЕКСТ) --- */
+    .top-news-panel {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-news-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 7px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #d8d8d8;
+    }
+
+    .section-heading-condensed {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #222222;
+      letter-spacing: -0.2px;
+      line-height: 1;
+    }
+
+    .cool-pill {
+      background: linear-gradient(180deg, #b858e3 0%, #9b48c9 100%);
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      position: relative;
+      letter-spacing: 0.4px;
+    }
+
+    .cool-pill::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 6px;
+      border-width: 4px 4px 0 0;
+      border-style: solid;
+      border-color: #9b48c9 transparent transparent transparent;
+    }
+
+    .top-news-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
+
+    .top-news-item {
+      border-bottom: 1px dashed #d2d2d2;
+      padding: 7px 0;
+    }
+
+    .top-news-item:first-child {
+      padding-top: 2px;
+    }
+
+    .top-news-item:last-child {
+      border-bottom: none;
+      padding-bottom: 2px;
+    }
+
+    .top-news-link {
+      text-align: left;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #163d66;
+      display: block;
+      width: 100%;
+      transition: color 0.15s ease;
+    }
+
+    .top-news-link:hover {
+      color: #d61f26;
+      text-decoration: underline;
+    }
+
+    /* --- ЦЕНТРАЛЬНАЯ КОЛОНКА: ГЛАВНЫЙ СЛАЙДЕР --- */
+    .hero-slider-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .hero-stage {
+      position: relative;
+      height: 318px;
+      background-color: #1c2c3d;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .hero-stage svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.68);
+      padding: 10px 14px 12px 14px;
+      color: #ffffff;
+    }
+
+    .hero-meta {
+      font-size: 9.5px;
+      color: #cccccc;
+      margin-bottom: 2px;
+    }
+
+    .hero-title {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .hero-stage:hover .hero-title {
+      color: #9ecbff;
+    }
+
+    .hero-summary {
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: #e6e6e6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .hero-tabs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: 50px;
+      border-top: 1px solid #0d243d;
+    }
+
+    .hero-tab-btn {
+      background: linear-gradient(180deg, #1e4d7d 0%, #163d66 100%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.25;
+      padding: 6px 10px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #0f2c4a;
+      transition: background 0.15s ease;
+    }
+
+    .hero-tab-btn:last-child {
+      border-right: none;
+    }
+
+    .hero-tab-btn:hover {
+      background: linear-gradient(180deg, #275f99 0%, #1f5185 100%);
+    }
+
+    .hero-tab-btn.active {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* --- ПРАВАЯ КОЛОНКА: COMMUNITY BLOG + STAY CONNECTED --- */
+    .right-column-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .blog-box-header {
+      background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+      border-bottom: 1px solid #dcdcdc;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .blog-title-text {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 16.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .blog-title-text .red-word {
+      color: #d61f26;
+    }
+
+    .blog-title-text .navy-word {
+      color: #163d66;
+    }
+
+    .blog-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .blog-dot-btn {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #222222;
+      transition: background-color 0.15s ease;
+    }
+
+    .blog-dot-btn.active {
+      background-color: #d61f26;
+    }
+
+    .blog-items-wrap {
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .blog-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .blog-thumb {
+      width: 82px;
+      height: 60px;
+      border: 1px solid #cccccc;
+      padding: 2px;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .blog-thumb svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .blog-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .blog-item-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #163d66;
+      margin-bottom: 3px;
+      line-height: 1.2;
+    }
+
+    .blog-card:hover .blog-item-title {
+      color: #d61f26;
+      text-decoration: underline;
+    }
+
+    .blog-item-excerpt {
+      font-size: 10.5px;
+      color: #555555;
+      line-height: 1.32;
+    }
+
+    /* Блок STAY CONNECTED WITH WorldNews */
+    .social-box {
+      padding: 9px 11px 11px 11px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .social-box-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 6px;
+      margin-bottom: 9px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .social-heading {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #163d66;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .social-mini-brand {
+      font-size: 10.5px;
+      color: #163d66;
+      letter-spacing: -0.2px;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 10px;
+      column-gap: 6px;
+      text-align: center;
+    }
+
+    .social-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .social-tile:hover .social-svg-wrap {
+      transform: translateY(-1px);
+    }
+
+    .social-svg-wrap {
+      width: 34px;
+      height: 34px;
+      transition: transform 0.15s ease;
+    }
+
+    .social-label {
+      font-size: 10px;
+      color: #444444;
+    }
+
+    .social-tile:hover .social-label {
+      color: #163d66;
+      text-decoration: underline;
+    }
+
+    /* =========================================================================
+       4. НИЖНИЙ БЛОК: EDITOR'S CHOICE (6 КАРТОЧЕК В РЯД)
+       ========================================================================= */
+    .editors-section {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+      padding: 10px 10px 12px 10px;
+    }
+
+    .editors-header {
+      padding-bottom: 7px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .editors-carousel-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .carousel-arrow-btn {
+      width: 16px;
+      height: 118px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #777777;
+      background-color: #f8f8f8;
+      border: 1px solid #e4e4e4;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .carousel-arrow-btn:hover {
+      background-color: #163d66;
+      color: #ffffff;
+      border-color: #163d66;
+    }
+
+    .editors-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      flex: 1;
+    }
+
+    .editor-card {
+      position: relative;
+      height: 118px;
+      border: 1px solid #cccccc;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #222222;
+    }
+
+    .editor-card svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .editor-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%);
+      padding: 5px 6px;
+      color: #ffffff;
+      font-size: 9.8px;
+      font-weight: 700;
+      line-height: 1.22;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .editor-card:hover .editor-caption {
+      color: #9ecbff;
+    }
+
+    /* =========================================================================
+       5. ФУТЕР И МОДАЛЬНОЕ ОКНО ЧТЕНИЯ СТАТЬИ
+       ========================================================================= */
+    .site-footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #dcdcdc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: #777777;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-window {
+      background: #ffffff;
+      border: 1px solid #bbbbbb;
+      border-radius: 3px;
+      width: 680px;
+      max-width: 95vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+    }
+
+    .modal-top-bar {
+      background: #163d66;
+      color: #ffffff;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-cat-tag {
+      background: #e31b23;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-right: 8px;
+    }
+
+    .modal-close-x {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0 6px;
+    }
+
+    .modal-content-area {
+      padding: 18px 22px;
+      overflow-y: auto;
+    }
+
+    .modal-article-title {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f2d4a;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .modal-article-meta {
+      font-size: 12px;
+      color: #777777;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .modal-illustration {
+      width: 100%;
+      height: 240px;
+      border: 1px solid #cccccc;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .modal-illustration svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .modal-paragraphs p {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .modal-bottom-bar {
+      background: #f2f2f2;
+      border-top: 1px solid #dcdcdc;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-close-btn {
+      background: #163d66;
+      color: #ffffff;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+
+    .modal-close-btn:hover {
+      background: #0f2d4a;
+    }
+
+    .toast-notice {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #163d66;
+      color: #ffffff;
+      border: 1px solid #35679c;
+      padding: 10px 16px;
+      border-radius: 3px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 1100;
+    }
+
+    .toast-notice.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="antialiased selection:bg-newsRed selection:text-white">
+<body>
 
-    <!-- ИНДИКАТОР ПРОГРЕССА ЧТЕНИЯ / ПРОСМОТРА (ВЕРХНЯЯ ПОЛОСКА) -->
-    <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-        <div id="reading-progress" class="h-full bg-newsRed transition-all duration-150" style="width: 7.6%;"></div>
+  <div class="page-scaler">
+    <div class="container">
+      <!-- ===================================================================
+           1. ШАПКА ПОРТАЛА (HEADER)
+           =================================================================== -->
+      <header class="site-header">
+        <div class="brand-box" id="brandResetBtn" title="Вернуться на главную страницу">
+          <div class="brand-logo">
+            <span class="word-bold">World</span><span class="word-light">News</span>
+          </div>
+          <div class="brand-subtext">Ноябрь 2026 AN</div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-links-grid">
+            <button type="button" class="header-link-btn" data-quick-index="0">
+              <span class="header-link-dot"></span>
+              <span>РУССКАЯ ВЕРСИЯ САЙТА</span>
+            </button>
+            <button type="button" class="header-link-btn" data-quick-index="1">
+              <span class="header-link-dot"></span>
+              <span>КАЗАХСКАЯ ВЕРСИЯ САЙТА</span>
+            </button>
+          </div>
+	  <div class="in-worldnews-badge">
+            IN THE<br>AMANZHOLOV NEWS
+          </div>
+        </div>
+      </header>
+
+      <!-- ===================================================================
+           2. БЕГУЩАЯ СТРОКА СРОЧНЫХ НОВОСТЕЙ (BREAKING NEWS)
+           =================================================================== -->
+      <section class="breaking-bar" aria-label="Breaking News">
+        <div class="breaking-badge">Срочные новости</div>
+        <div class="breaking-track">
+          <div class="breaking-text-wrap" id="breakingTextTrigger">
+            <span class="breaking-headline" id="breakingHeadlineText">
+              Фенис выходят на сцену
+            </span>
+            <span class="breaking-time" id="breakingTimeText">
+              - Четверг, 25 Ноября 2026 18:00
+            </span>
+          </div>
+          <div class="breaking-controls">
+            <button type="button" class="breaking-arrow" id="breakingPrevBtn" title="Предыдущая новость">&lt;</button>
+            <button type="button" class="breaking-arrow" id="breakingNextBtn" title="Следующая новость">&gt;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           3. ГЛАВНЫЙ ТРЕХКОЛОНОЧНЫЙ БЛОК (215px | 1fr | 265px)
+           =================================================================== -->
+      <main class="main-three-cols">
+        <!-- ЛЕВЫЙ БЛОК: ТОЛЬКО ТЕКСТОВЫЕ НОВОСТИ (TOP NEWS) -->
+        <aside class="panel-box top-news-panel">
+          <div class="top-news-header">
+            <h2 class="section-heading-condensed">Комментарии читателей</h2>
+            <span class="cool-pill">ЭМОЦИИ</span>
+          </div>
+          <ul class="top-news-list" id="topNewsList"></ul>
+        </aside>
+
+        <!-- ЦЕНТРАЛЬНЫЙ БЛОК: ГЛАВНАЯ НОВОСТЬ СО СЛАЙДЕРОМ -->
+        <section class="panel-box hero-slider-panel" id="heroSliderPanel">
+          <div class="hero-stage" id="heroStage">
+            <div id="heroSvgContainer" style="width:100%; height:100%;"></div>
+            <div class="hero-overlay">
+              <div class="hero-meta" id="heroMeta">Last Updated on Jul 19 2012</div>
+              <h1 class="hero-title" id="heroTitle">В АМАНЖОЛОВЕ ВЫСТУПАЕТ ФЕНИТ</h1>
+              <p class="hero-summary" id="heroSummary">
+                Etiam vitae commodo dolor. Ut quis urna nisl. Nulla eu purus odio, at aliquet orci. Nulla est justo, commodo id facilisis ac, viverra non lectus. Mauris euismod elit
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ПРАВЫЙ БЛОК: COMMUNITY BLOG (КАРТИНКИ + ТЕКСТ) И STAY CONNECTED -->
+        <aside class="right-column-stack">
+          <!-- Карточка COMMUNITY BLOG -->
+          <div class="panel-box">
+            <div class="blog-box-header">
+              <h2 class="blog-title-text">
+                <span class="red-word">COMMUNITY</span> <span class="navy-word">BLOG</span>
+              </h2>
+              <div class="blog-dots" id="blogDots">
+                <button type="button" class="blog-dot-btn active" data-page="0" title="Страница 1"></button>
+                <button type="button" class="blog-dot-btn" data-page="1" title="Страница 2"></button>
+                <button type="button" class="blog-dot-btn" data-page="2" title="Страница 3"></button>
+              </div>
+            </div>
+            <div class="blog-items-wrap" id="blogItemsWrap"></div>
+          </div>
+
+          <!-- Карточка STAY CONNECTED WITH WorldNews -->
+          <div class="panel-box social-box">
+            <div class="social-box-header">
+              <h3 class="social-heading">STAY CONNECTED WITH</h3>
+              <div class="social-mini-brand"><strong>World</strong>News</div>
+            </div>
+            <div class="social-grid">
+              <!-- Facebook -->
+              <button type="button" class="social-tile" data-social="Facebook">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <defs>
+                      <linearGradient id="fbGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#4e71ba"/>
+                        <stop offset="100%" stop-color="#2c4785"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="4" y="4" width="40" height="40" rx="7" fill="url(#fbGrad)" stroke="#1d3263" stroke-width="1.5"/>
+                    <path d="M5 11 Q24 18 43 11 L43 9 Q43 5 39 5 L9 5 Q5 5 5 9 Z" fill="rgba(255,255,255,0.22)"/>
+                    <text x="29" y="38" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold" font-size="33">f</text>
+                  </svg>
+                </div>
+                <span class="social-label">Facebook</span>
+              </button>
+
+              <!-- RSS -->
+              <button type="button" class="social-tile" data-social="RSS Feed">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <defs>
+                      <linearGradient id="rssGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffa93a"/>
+                        <stop offset="100%" stop-color="#e36414"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="4" y="4" width="40" height="40" rx="7" fill="url(#rssGrad)" stroke="#b84b09" stroke-width="1.5"/>
+                    <path d="M5 11 Q24 18 43 11 L43 9 Q43 5 39 5 L9 5 Q5 5 5 9 Z" fill="rgba(255,255,255,0.28)"/>
+                    <circle cx="14" cy="34" r="3.5" fill="#ffffff"/>
+                    <path d="M11 24 A13 13 0 0 1 24 37" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M11 15 A22 22 0 0 1 33 37" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <span class="social-label">Rss</span>
+              </button>
+
+              <!-- Twitter -->
+              <button type="button" class="social-tile" data-social="Twitter">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <defs>
+                      <linearGradient id="twGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#69d2ff"/>
+                        <stop offset="100%" stop-color="#1da1f2"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="4" y="4" width="40" height="40" rx="7" fill="url(#twGrad)" stroke="#1479b8" stroke-width="1.5"/>
+                    <path d="M5 11 Q24 18 43 11 L43 9 Q43 5 39 5 L9 5 Q5 5 5 9 Z" fill="rgba(255,255,255,0.32)"/>
+                    <text x="24" y="36" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold" font-size="31">t</text>
+                  </svg>
+                </div>
+                <span class="social-label">Twitter</span>
+              </button>
+
+              <!-- Mobile -->
+              <button type="button" class="social-tile" data-social="Mobile Edition">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <rect x="13" y="4" width="22" height="40" rx="4" fill="#3a4452" stroke="#1f252e" stroke-width="1.5"/>
+                    <rect x="16" y="9" width="16" height="26" rx="1" fill="#77b5f7"/>
+                    <path d="M16 9 L32 9 L32 20 L16 26 Z" fill="rgba(255,255,255,0.35)"/>
+                    <circle cx="24" cy="39.5" r="2" fill="#cfd6de"/>
+                  </svg>
+                </div>
+                <span class="social-label">Mobile</span>
+              </button>
+
+              <!-- Newsletter -->
+              <button type="button" class="social-tile" data-social="Email Newsletter">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <rect x="6" y="13" width="36" height="24" rx="3" fill="#f5f8fc" stroke="#7d97b5" stroke-width="1.5"/>
+                    <path d="M7 14 L24 27 L41 14" fill="none" stroke="#5379a3" stroke-width="2.2"/>
+                    <path d="M14 9 L34 9 L34 21 L24 28 L14 21 Z" fill="#ffffff" stroke="#89a4c2" stroke-width="1.2"/>
+                    <line x1="18" y1="14" x2="30" y2="14" stroke="#4272a8" stroke-width="2"/>
+                    <line x1="18" y1="18" x2="27" y2="18" stroke="#9ab4d1" stroke-width="2"/>
+                  </svg>
+                </div>
+                <span class="social-label">Newsletter</span>
+              </button>
+
+              <!-- TV -->
+              <button type="button" class="social-tile" data-social="WorldNews TV">
+                <div class="social-svg-wrap">
+                  <svg viewBox="0 0 48 48">
+                    <rect x="6" y="8" width="36" height="25" rx="3" fill="#2d3b4a" stroke="#18222c" stroke-width="1.5"/>
+                    <rect x="9" y="11" width="30" height="19" fill="#5da9f6"/>
+                    <path d="M9 11 L39 11 L39 19 L9 25 Z" fill="rgba(255,255,255,0.3)"/>
+                    <rect x="20" y="33" width="8" height="4" fill="#637385"/>
+                    <rect x="14" y="37" width="20" height="3" rx="1.5" fill="#465463"/>
+                  </svg>
+                </div>
+                <span class="social-label">TV</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <!-- ===================================================================
+           4. НИЖНИЙ БЛОК: EDITOR'S CHOICE
+           =================================================================== -->
+      <section class="editors-section" aria-label="Editor's Choice">
+        <div class="editors-header">
+          <h2 class="section-heading-condensed">EDITOR&#39;S CHOICE</h2>
+        </div>
+        <div class="editors-carousel-row">
+          <button type="button" class="carousel-arrow-btn" id="editorsPrevBtn" title="Прокрутить влево">&lt;</button>
+          <div class="editors-cards-grid" id="editorsCardsGrid"></div>
+          <button type="button" class="carousel-arrow-btn" id="editorsNextBtn" title="Прокрутить вправо">&gt;</button>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           5. ФУТЕР
+           =================================================================== -->
+      <footer class="site-footer">
+        <div>Copyright &copy; 2012 <strong>WorldNews</strong>. All Rights Reserved. Designed by SmartAddons.Com</div>
+        <div>Joomla! 2.5 Template &bull; Classic 980px Scaled Edition</div>
+      </footer>
     </div>
+  </div>
 
-    <!-- ВЕРХНЯЯ СЕРВИСНАЯ ПАНЕЛЬ СМИ (ДАТА, ИНДЕКСЫ, ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМА) -->
-    <div class="bg-newsDark text-gray-300 text-xs border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center space-x-4">
-                <span id="current-date" class="font-medium text-white">Воскресенье, 15 ноября 2026</span>
-                <span class="hidden sm:inline text-gray-500">|</span>
-                <span class="hidden sm:inline-flex items-center">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-                    СТАТУС ПРОЕКТА: <strong class="text-white ml-1">ГОТОВ К ЗАПУСКУ</strong>
-                </span>
-                <span class="hidden md:inline text-gray-400">ИНДЕКС ЭФФЕКТИВНОСТИ: <span class="text-emerald-400 font-semibold">+142.8% ▲</span></span>
-            </div>
-
-            <!-- Переключатель режима отображения: Лента или Слайды -->
-            <div class="flex items-center space-x-2">
-                <span class="text-gray-400 hidden sm:inline">Формат:</span>
-                <div class="inline-flex rounded-md bg-gray-800 p-0.5 border border-gray-700">
-                    <button id="btn-mode-feed" onclick="setViewMode('feed')" class="px-2.5 py-1 rounded text-xs font-semibold bg-newsRed text-white transition">
-                        Лента СМИ
-                    </button>
-                    <button id="btn-mode-slides" onclick="setViewMode('slides')" class="px-2.5 py-1 rounded text-xs font-semibold text-gray-300 hover:text-white transition">
-                        Слайды (1/13)
-                    </button>
-                </div>
-            </div>
+  <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ЧТЕНИЯ СТАТЬИ -->
+  <div class="modal-backdrop" id="articleModal" role="dialog" aria-modal="true">
+    <div class="modal-window">
+      <div class="modal-top-bar">
+        <div>
+          <span class="modal-cat-tag" id="modalCategory">WORLD NEWS</span>
+          <span style="font-size:12px; color:#c8def5;">WorldNews Editorial Desk</span>
         </div>
+        <button type="button" class="modal-close-x" id="modalCloseTopBtn" title="Закрыть">&times;</button>
+      </div>
+      <div class="modal-content-area">
+        <h2 class="modal-article-title" id="modalTitle">Заголовок статьи</h2>
+        <div class="modal-article-meta" id="modalMeta">Published on Jul 19 2012 &bull; Written by Editor</div>
+        <div class="modal-illustration" id="modalSvgBox"></div>
+        <div class="modal-paragraphs" id="modalBody"></div>
+      </div>
+      <div class="modal-bottom-bar">
+        <button type="button" class="modal-close-btn" id="modalCloseBottomBtn">Закрыть окно</button>
+      </div>
     </div>
-
-    <!-- ГЛАВНАЯ ШАПКА ИЗДАНИЯ -->
-    <header class="sticky top-1 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <!-- Логотип СМИ -->
-            <a href="#slide-1" onclick="jumpToSlide(1)" class="flex items-center space-x-3 group">
-                <div class="bg-newsRed text-white font-black text-xl sm:text-2xl px-2.5 py-1 tracking-tighter rounded-sm">
-                    ВЕСТНИК
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-extrabold text-sm sm:text-base tracking-tight text-newsDark leading-none">СПЕЦПРОЕКТ // ПРЕЗЕНТАЦИЯ</span>
-                    <span class="text-[11px] text-gray-500 font-medium mt-0.5">Информационно-аналитический портал</span>
-                </div>
-            </a>
-
-            <!-- Быстрая рубрикация в шапке (Desktop) -->
-            <nav class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-700">
-                <a href="#slide-1" onclick="jumpToSlide(1)" class="hover:text-newsRed transition">Главное</a>
-                <a href="#slide-13" onclick="jumpToSlide(13)" class="hover:text-newsRed transition text-newsRed">QR и Контакты</a>
-            </nav>
-
-            <!-- Счетчик текущего слайда и мобильное меню -->
-            <div class="flex items-center space-x-3">
-                <div class="bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-lg text-xs font-bold text-newsDark">
-                    Слайд <span id="header-slide-counter" class="text-newsRed">1</span> из 13
-                </div>
-                <button onclick="toggleMobileToc()" class="lg:hidden p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 text-newsDark" aria-label="Содержание">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"></path></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- БЕГУЩАЯ СТРОКА «СРОЧНО В НОМЕР» -->
-        <div class="bg-gray-50 border-t border-gray-200 py-1.5 text-xs">
-            <div class="max-w-7xl mx-auto px-4 flex items-center">
-                <span class="bg-newsRed text-white font-bold px-2 py-0.5 rounded-sm text-[10px] uppercase tracking-wider mr-3 shrink-0">
-                    Молния
-                </span>
-                <div class="ticker-wrap w-full text-gray-700 font-medium">
-                    <div class="ticker-move">
-                        <span class="mx-4">• 10:00 Представлена концепция нового проекта из 13 ключевых тезисов</span>
-                        <span class="mx-4">• 10:15 Аналитики подтвердили рост ключевых показателей эффективности</span>
-                        <span class="mx-4">• 10:30 Полная версия презентации доступна по QR-коду на финальном слайде</span>
-                        <span class="mx-4">• 10:45 Открыт прием вопросов и предложений от партнеров и инвесторов</span>
-                        <!-- Дублирование для бесшовной прокрутки -->
-                        <span class="mx-4">• 10:00 Представлена концепция нового проекта из 13 ключевых тезисов</span>
-                        <span class="mx-4">• 10:15 Аналитики подтвердили рост ключевых показателей эффективности</span>
-                        <span class="mx-4">• 10:30 Полная версия презентации доступна по QR-коду на финальном слайде</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ВЫПАДАЮЩЕЕ МОБИЛЬНОЕ ОГЛАВЛЕНИЕ (1-13) -->
-    <div id="mobile-toc" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs lg:hidden" onclick="toggleMobileToc()">
-        <div class="bg-white w-80 max-w-[85vw] h-full p-5 overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
-            <div class="flex items-center justify-between pb-4 border-b border-gray-200">
-                <span class="font-extrabold text-base uppercase tracking-tight">Лента слайдов (1–13)</span>
-                <button onclick="toggleMobileToc()" class="p-1.5 rounded-lg bg-gray-100 text-gray-600">✕</button>
-            </div>
-            <ul id="mobile-toc-list" class="mt-4 space-y-1.5 text-sm">
-                <!-- Заполняется автоматически скриптом -->
-            </ul>
-        </div>
-    </div>
-
-    <!-- ОСНОВНОЙ КОНТЕЙНЕР: САЙДБАР СЛЕВА + ЛЕНТА ИЗ 13 СЛАЙДОВ СПРАВА -->
-    <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-
-            <!-- ЛЕВЫЙ САЙДБАР: ЛЕНТА НОВОСТЕЙ / НАВИГАЦИЯ ПО 13 СЛАЙДАМ (DESKTOP) -->
-            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3 sticky top-28 bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                <div class="bg-newsDark text-white px-4 py-3 flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-2 h-2 bg-newsRed rounded-full"></span>
-                        <h2 class="font-bold text-xs uppercase tracking-wider">Хроника слайдов</h2>
-                    </div>
-                    <span class="text-[11px] text-gray-400">Оглавление</span>
-                </div>
-                <div class="p-2 max-h-[calc(100vh-11rem)] overflow-y-auto">
-                    <ul id="desktop-toc-list" class="space-y-1">
-                        <!-- Заполняется автоматически через JS -->
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- ПРАВАЯ / ЦЕНТРАЛЬНАЯ КОЛОНКА: 13 СЕКЦИЙ-СЛАЙДОВ -->
-            <main class="lg:col-span-8 xl:col-span-9 space-y-8">
-
-                <!-- ========================================================= -->
-                <!-- СЛАЙД 1: ГЛАВНЫЙ ЭКРАН / СРОЧНАЯ НОВОСТЬ (HERO)           -->
-                <!-- ========================================================= -->
-                <section id="slide-1" data-slide="1" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 01 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №1]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(2)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 2)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ========================================================= -->
-                <!-- СЛАЙД 2: КОНТЕКСТ И ПРЕДПОСЫЛКИ («КАРТИНА ДНЯ»)            -->
-                <!-- ========================================================= -->
-                <section id="slide-2" data-slide="2" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 02 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №2]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(3)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 3)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-		<section id="slide-3" data-slide="3" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 03 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №3]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(4)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 4)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-		<section id="slide-4" data-slide="4" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 04 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №4]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(5)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 5)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-5" data-slide="5" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 05 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №5]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(6)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 6)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-6" data-slide="6" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 06 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №6]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(7)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 7)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-7" data-slide="7" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 07 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №7]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(8)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 8)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-8" data-slide="8" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 08 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №8]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(9)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 9)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-9" data-slide="9" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 09 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №9]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(10)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 10)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-10" data-slide="10" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 10 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №10]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(11)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 11)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-		<section id="slide-11" data-slide="11" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 11 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №11]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(12)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 12)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-12" data-slide="12" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 12 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №12]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-                            <button onclick="jumpToSlide(13)" class="bg-newsRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm transition inline-flex items-center shadow-xs">
-                                Перейти к (Слайд 13)
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-
-
-		<section id="slide-13" data-slide="13" data-title="Главный анонс проекта" data-time="09:00" class="slide-section bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-                    <div class="p-6 sm:p-8">
-                        <!-- Метаданные новости -->
-                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold mb-4">
-                            <span class="bg-newsRed text-white px-2.5 py-1 rounded-sm uppercase tracking-wider">Срочно в номер</span>
-                            <span class="text-newsBlue uppercase tracking-wider">Спецпроект</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Слайд 13 / 13</span>
-                            <span class="text-gray-400">•</span>
-                            <span class="text-gray-500">Время чтения: ~4 мин</span>
-                        </div>
-
-                        <!-- Заголовок -->
-                        <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-black text-newsDark leading-tight tracking-tight mb-4">
-                            Флекс самых лучших активистов планеты
-                        </h1>
-
-                        <!-- Лид-абзац -->
-                        <p class="font-serif text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-newsRed pl-4">
-                            Абсолютный флекс, но поменьше
-                        </p>
-
-                        <!-- Заглушка главного фото 16:9 -->
-                        <figure class="mb-6">
-                            <div class="media-placeholder w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                                <div class="bg-white/90 backdrop-blur-xs px-4 py-3 rounded-lg border border-gray-200 shadow-xs max-w-md">
-                                    <div class="text-newsRed font-extrabold text-xs uppercase tracking-widest mb-1">[ФОТО 16:9 — ЗАГЛУШКА СЛАЙДА №13]</div>
-                                    <p class="text-sm font-semibold text-gray-800">Главное обложечное изображение или ключевой рендер продукта</p>
-                                    <p class="text-xs text-gray-500 mt-1">Рекомендуемое разрешение: 1920×1080 px</p>
-                                </div>
-                            </div>
-                            <figcaption class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                                <span>Подпись к иллюстрации</span>
-                                <span class="font-medium">Фото: Архив проекта</span>
-                            </figcaption>
-                        </figure>
-
-                        <!-- Кнопки действия -->
-                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
-
-                        </div>
-                    </div>
-                </section>
-
-        
-
-                <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ МЕЖДУ СЛАЙДАМИ (УДОБНО ДЛЯ РЕЖИМА СЛАЙДОВ И МОБИЛЬНЫХ) -->
-                <div class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between shadow-xs">
-                    <button id="prev-slide-btn" onclick="navigateSlide(-1)" class="px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-newsDark font-bold text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
-                        ← Предыдущий
-                    </button>
-                    <div class="text-center">
-                        <span class="text-xs text-gray-500 block">Текущий раздел</span>
-                        <span id="bottom-slide-indicator" class="font-extrabold text-sm text-newsDark">Слайд 1 из 13</span>
-                    </div>
-                    <button id="next-slide-btn" onclick="navigateSlide(1)" class="px-4 py-2.5 rounded-lg bg-newsRed hover:bg-red-700 text-white font-bold text-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
-                        Следующий →
-                    </button>
-                </div>
-
-            </main>
-        </div>
-    </div>
-
-    <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (ВМЕСТО ALERT) -->
-    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-newsDark text-white px-4 py-3 rounded-lg shadow-xl border-l-4 border-newsRed text-sm font-medium">
-        Ссылка скопирована в буфер обмена!
-    </div>
-
-    <!-- ФУТЕР ИЗДАНИЯ -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-xs text-gray-500">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center space-x-2">
-                <span class="bg-newsDark text-white font-black px-2 py-0.5 rounded-sm">ВЕСТНИК</span>
-                <span>© 2026 Спецпроект-презентация. Все материалы носят ознакомительный характер.</span>
-            </div>
-            <div>
-                Верстка адаптирована для мобильных устройств и QR-навигации • 13 слайдов
-            </div>
-        </div>
-    </footer>
-
-    <!-- СКРИПТ УПРАВЛЕНИЯ СЛАЙДАМИ, ОГЛАВЛЕНИЕМ И QR-КОДОМ -->
-    <script>
-        let currentSlide = 1;
-        const totalSlides = 13;
-        let viewMode = 'feed'; // 'feed' (лента скроллом) или 'slides' (пошагово)
-        let qrInstance = null;
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            buildTableOfContents();
-            setupScrollObserver();
-            updateSlideUI(1);
+  </div>
+
+  <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ -->
+  <div class="toast-notice" id="toastNotice"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* =====================================================================
+         ВСТРОЕННЫЕ ВЕКТОРНЫЕ ИЛЛЮСТРАЦИИ (SVG) — ГАРАНТИЯ ОТСУТСТВИЯ БИТЫХ ФОТО
+         ===================================================================== */
+      var SVG_ART = {
+        pressConference: [
+          '<svg viewBox="0 0 800 495" preserveAspectRatio="xMidYMid slice">',
+          '  <defs>',
+          '    <linearGradient id="bgBackdrop" x1="0" y1="0" x2="1" y2="1">',
+          '      <stop offset="0%" stop-color="#9fb4c7"/>',
+          '      <stop offset="55%" stop-color="#bfd0de"/>',
+          '      <stop offset="100%" stop-color="#8ca3b8"/>',
+          '    </linearGradient>',
+          '    <linearGradient id="suitGrad" x1="0" y1="0" x2="1" y2="0">',
+          '      <stop offset="0%" stop-color="#1b222c"/>',
+          '      <stop offset="50%" stop-color="#2c3542"/>',
+          '      <stop offset="100%" stop-color="#171d26"/>',
+          '    </linearGradient>',
+          '  </defs>',
+          '  <rect width="800" height="495" fill="url(#bgBackdrop)"/>',
+          '  <g opacity="0.22" fill="#2c445c" font-family="Arial, sans-serif" font-weight="bold">',
+          '    <text x="18" y="88" font-size="68" letter-spacing="4">ТВОЯ</text>',
+          '    <text x="18" y="164" font-size="68" letter-spacing="4">АКЦИЯ</text>',
+          '    <text x="530" y="95" font-size="22">2012 SUMMIT</text>',
+          '    <text x="530" y="128" font-size="18">INTERNATIONAL PRESS</text>',
+          '  </g>',
+          '  <circle cx="400" cy="210" r="245" fill="rgba(255,255,255,0.24)"/>',
+          '  <path d="M235 420 Q245 275 335 258 L475 258 Q565 275 575 420 Z" fill="url(#suitGrad)"/>',
+          '  <polygon points="365,256 435,256 402,355" fill="#f7f9fc"/>',
+          '  <polygon points="392,268 412,268 418,348 402,365 388,348" fill="#7d1924"/>',
+          '  <polygon points="391,264 413,264 409,278 395,278" fill="#5e111a"/>',
+          '  <polygon points="365,256 342,298 378,325 395,285" fill="#171d24"/>',
+          '  <polygon points="435,256 462,298 424,325 408,285" fill="#171d24"/>',
+          '  <rect x="377" y="216" width="46" height="45" rx="14" fill="#dfa387"/>',
+          '  <ellipse cx="400" cy="172" rx="48" ry="60" fill="#eab398"/>',
+          '  <ellipse cx="351" cy="176" rx="7" ry="13" fill="#dfa387"/>',
+          '  <ellipse cx="449" cy="176" rx="7" ry="13" fill="#dfa387"/>',
+          '  <path d="M352 154 Q352 104 402 104 Q450 104 448 154 Q438 128 400 128 Q366 128 352 154 Z" fill="#4f3524"/>',
+          '  <path d="M366 116 Q400 98 436 116 Q424 128 382 126 Z" fill="#63432e"/>',
+          '  <path d="M368 156 Q380 151 391 155" stroke="#4a3121" stroke-width="3.2" fill="none" stroke-linecap="round"/>',
+          '  <path d="M409 155 Q420 151 432 156" stroke="#4a3121" stroke-width="3.2" fill="none" stroke-linecap="round"/>',
+          '  <ellipse cx="380" cy="166" rx="5.5" ry="3.5" fill="#ffffff"/>',
+          '  <circle cx="380" cy="166" r="2.3" fill="#2b3a4a"/>',
+          '  <ellipse cx="420" cy="166" rx="5.5" ry="3.5" fill="#ffffff"/>',
+          '  <circle cx="420" cy="166" r="2.3" fill="#2b3a4a"/>',
+          '  <path d="M400 164 L395 186 L405 187" stroke="#c9876b" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+          '  <path d="M385 204 Q400 209 415 204" stroke="#b56a53" stroke-width="3" fill="none" stroke-linecap="round"/>',
+          '  <polygon points="285,342 515,342 535,495 265,495" fill="#4e5966"/>',
+          '  <rect x="280" y="336" width="240" height="10" rx="3" fill="#677485"/>',
+          '  <path d="M165 495 Q215 340 278 265" stroke="#181c20" stroke-width="6" fill="none"/>',
+          '  <ellipse cx="283" cy="260" rx="14" ry="8" transform="rotate(-38 283 260)" fill="#2c3238"/>',
+          '  <path d="M235 495 Q285 345 345 268" stroke="#181c20" stroke-width="6" fill="none"/>',
+          '  <ellipse cx="350" cy="263" rx="14" ry="8" transform="rotate(-38 350 263)" fill="#2c3238"/>',
+          '</svg>'
+        ].join(""),
+
+        economySummit: [
+          '<svg viewBox="0 0 800 495" preserveAspectRatio="xMidYMid slice">',
+          '  <defs>',
+          '    <linearGradient id="econSky" x1="0" y1="0" x2="0" y2="1">',
+          '      <stop offset="0%" stop-color="#173a5e"/>',
+          '      <stop offset="100%" stop-color="#3c6e9c"/>',
+          '    </linearGradient>',
+          '  </defs>',
+          '  <rect width="800" height="495" fill="url(#econSky)"/>',
+          '  <g fill="#0e253d">',
+          '    <rect x="65" y="135" width="75" height="360"/>',
+          '    <rect x="160" y="95" width="95" height="400"/>',
+          '    <rect x="275" y="160" width="80" height="335"/>',
+          '    <rect x="380" y="75" width="110" height="420"/>',
+          '    <rect x="515" y="125" width="85" height="370"/>',
+          '    <rect x="620" y="155" width="95" height="340"/>',
+          '  </g>',
+          '  <g stroke="rgba(164, 212, 255, 0.22)" stroke-width="1">',
+          '    <line x1="0" y1="120" x2="800" y2="120"/>',
+          '    <line x1="0" y1="200" x2="800" y2="200"/>',
+          '    <line x1="0" y1="280" x2="800" y2="280"/>',
+          '    <line x1="200" y1="0" x2="200" y2="495"/>',
+          '    <line x1="400" y1="0" x2="400" y2="495"/>',
+          '    <line x1="600" y1="0" x2="600" y2="495"/>',
+          '  </g>',
+          '  <polyline points="60,310 185,275 290,295 415,210 535,230 665,135 755,155" fill="none" stroke="#5ce1e6" stroke-width="6" stroke-linecap="round"/>',
+          '  <circle cx="415" cy="210" r="8" fill="#ffffff"/>',
+          '  <circle cx="665" cy="135" r="9" fill="#ff4d57"/>',
+          '</svg>'
+        ].join(""),
+
+        spaceOrbit: [
+          '<svg viewBox="0 0 800 495" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="800" height="495" fill="#091322"/>',
+          '  <circle cx="110" cy="75" r="2" fill="#ffffff"/>',
+          '  <circle cx="240" cy="55" r="1.5" fill="#b7d7f7"/>',
+          '  <circle cx="520" cy="70" r="2.2" fill="#ffffff"/>',
+          '  <circle cx="685" cy="105" r="1.8" fill="#ffffff"/>',
+          '  <circle cx="615" cy="195" r="105" fill="#1d63b8"/>',
+          '  <path d="M545 155 Q600 130 655 170 Q625 215 565 205 Z" fill="#3da35d"/>',
+          '  <circle cx="615" cy="195" r="109" fill="none" stroke="#7dc2ff" stroke-width="4" opacity="0.5"/>',
+          '  <g transform="translate(320, 175) rotate(-18)">',
+          '    <rect x="-125" y="-22" width="90" height="44" fill="#214f8a" stroke="#7fb9ff" stroke-width="2"/>',
+          '    <rect x="35" y="-22" width="90" height="44" fill="#214f8a" stroke="#7fb9ff" stroke-width="2"/>',
+          '    <rect x="-25" y="-16" width="50" height="32" rx="6" fill="#d9e2ec"/>',
+          '    <circle cx="0" cy="0" r="9" fill="#334e68"/>',
+          '  </g>',
+          '</svg>'
+        ].join(""),
+
+        blogParade: [
+          '<svg viewBox="0 0 124 92" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="124" height="92" fill="#cdd7e0"/>',
+          '  <rect y="52" width="124" height="40" fill="#5b6659"/>',
+          '  <rect x="32" y="16" width="60" height="24" fill="#e6ecf2" stroke="#9aa8b8"/>',
+          '  <g fill="#2b332a">',
+          '    <circle cx="24" cy="56" r="4"/><rect x="20" y="61" width="8" height="16"/>',
+          '    <circle cx="42" cy="56" r="4"/><rect x="38" y="61" width="8" height="16"/>',
+          '    <circle cx="62" cy="56" r="4"/><rect x="58" y="61" width="8" height="16"/>',
+          '    <circle cx="82" cy="56" r="4"/><rect x="78" y="61" width="8" height="16"/>',
+          '    <circle cx="100" cy="56" r="4"/><rect x="96" y="61" width="8" height="16"/>',
+          '  </g>',
+          '</svg>'
+        ].join(""),
+
+        blogDelegates: [
+          '<svg viewBox="0 0 124 92" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="124" height="92" fill="#e9eef2"/>',
+          '  <rect x="14" y="10" width="14" height="36" fill="#1b4f9c"/>',
+          '  <rect x="42" y="10" width="14" height="36" fill="#c92a2a"/>',
+          '  <rect x="70" y="10" width="14" height="36" fill="#2b8a3e"/>',
+          '  <rect x="98" y="10" width="14" height="36" fill="#1864ab"/>',
+          '  <g fill="#1c2530">',
+          '    <circle cx="22" cy="48" r="4.5"/><rect x="16" y="54" width="12" height="34" rx="2"/>',
+          '    <circle cx="48" cy="47" r="4.5"/><rect x="42" y="53" width="12" height="35" rx="2"/>',
+          '    <circle cx="76" cy="48" r="4.5"/><rect x="70" y="54" width="12" height="34" rx="2"/>',
+          '    <circle cx="102" cy="47" r="4.5"/><rect x="96" y="53" width="12" height="35" rx="2"/>',
+          '  </g>',
+          '</svg>'
+        ].join(""),
+
+        blogCityHall: [
+          '<svg viewBox="0 0 124 92" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="124" height="92" fill="#74a9d8"/>',
+          '  <polygon points="22,38 62,16 102,38" fill="#f1f3f5"/>',
+          '  <rect x="26" y="38" width="72" height="44" fill="#dee2e6"/>',
+          '  <g fill="#adb5bd">',
+          '    <rect x="33" y="42" width="6" height="36"/>',
+          '    <rect x="49" y="42" width="6" height="36"/>',
+          '    <rect x="69" y="42" width="6" height="36"/>',
+          '    <rect x="85" y="42" width="6" height="36"/>',
+          '  </g>',
+          '  <rect y="80" width="124" height="12" fill="#495057"/>',
+          '</svg>'
+        ].join(""),
+
+        blogTechLab: [
+          '<svg viewBox="0 0 124 92" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="124" height="92" fill="#182c42"/>',
+          '  <rect x="18" y="18" width="54" height="36" rx="2" fill="#339af0" stroke="#a5d8ff" stroke-width="2"/>',
+          '  <polyline points="24,44 36,32 46,38 64,24" fill="none" stroke="#ffffff" stroke-width="2.5"/>',
+          '  <circle cx="94" cy="46" r="8" fill="#eab398"/>',
+          '  <path d="M80 86 Q82 60 94 58 Q106 60 108 86 Z" fill="#f8f9fa"/>',
+          '</svg>'
+        ].join(""),
+
+        edSailor: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#6b7a89"/>',
+          '  <path d="M55 185 Q65 128 120 124 Q175 128 185 185 Z" fill="#1b3552"/>',
+          '  <polygon points="102,126 138,126 120,158" fill="#ffffff"/>',
+          '  <circle cx="120" cy="88" r="34" fill="#e5ab8e"/>',
+          '  <ellipse cx="120" cy="48" rx="46" ry="15" fill="#f8f9fa"/>',
+          '  <rect x="82" y="54" width="76" height="11" fill="#192a3d"/>',
+          '  <circle cx="108" cy="84" r="3" fill="#2b2b2b"/>',
+          '  <circle cx="132" cy="84" r="3" fill="#2b2b2b"/>',
+          '  <path d="M108 104 Q120 112 132 104" stroke="#9e5a44" stroke-width="2.5" fill="none"/>',
+          '</svg>'
+        ].join(""),
+
+        edCouple: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#79b8f2"/>',
+          '  <rect y="128" width="240" height="57" fill="#2268a8"/>',
+          '  <circle cx="88" cy="76" r="24" fill="#f0b99d"/>',
+          '  <path d="M66 72 Q86 44 112 72 Q114 102 104 112 L68 106 Z" fill="#d9a441"/>',
+          '  <circle cx="156" cy="64" r="23" fill="#e2a384"/>',
+          '  <path d="M126 185 Q132 104 166 100 Q196 104 202 185 Z" fill="#d62828"/>',
+          '  <path d="M52 185 Q58 112 92 108 Q126 112 134 185 Z" fill="#b51d24"/>',
+          '</svg>'
+        ].join(""),
+
+        edEvolution: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#8b7d6b"/>',
+          '  <rect x="14" y="24" width="212" height="106" fill="#b7aea3" stroke="#5c5346" stroke-width="3"/>',
+          '  <g fill="#2b2620">',
+          '    <circle cx="48" cy="86" r="7"/><path d="M40 126 L44 96 L56 102 L54 126 Z"/>',
+          '    <circle cx="84" cy="76" r="7"/><path d="M78 126 L80 86 L90 90 L88 126 Z"/>',
+          '    <circle cx="122" cy="66" r="7"/><rect x="116" y="75" width="11" height="51"/>',
+          '    <circle cx="160" cy="60" r="7"/><rect x="155" y="69" width="11" height="57"/>',
+          '  </g>',
+          '  <circle cx="198" cy="72" r="7" fill="#eab398"/>',
+          '  <rect x="192" y="81" width="12" height="32" fill="#20c997"/>',
+          '</svg>'
+        ].join(""),
+
+        edPortrait: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#9c7a63"/>',
+          '  <path d="M46 185 Q42 32 120 26 Q198 32 194 185 Z" fill="#4a3222"/>',
+          '  <ellipse cx="120" cy="96" rx="46" ry="56" fill="#f3c1a8"/>',
+          '  <path d="M74 88 Q96 42 126 44 Q156 44 166 90 Q144 64 114 64 Q88 64 74 88 Z" fill="#5c3e2b"/>',
+          '  <ellipse cx="102" cy="92" rx="7" ry="4.5" fill="#ffffff"/>',
+          '  <circle cx="103" cy="92" r="3" fill="#4d6b53"/>',
+          '  <ellipse cx="138" cy="92" rx="7" ry="4.5" fill="#ffffff"/>',
+          '  <circle cx="139" cy="92" r="3" fill="#4d6b53"/>',
+          '  <path d="M108 124 Q120 130 132 124" stroke="#c97a6b" stroke-width="3" fill="none"/>',
+          '</svg>'
+        ].join(""),
+
+        edBroadcast: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#3a6ea5"/>',
+          '  <circle cx="96" cy="84" r="34" fill="#dfb096"/>',
+          '  <path d="M44 185 Q52 126 96 122 Q140 126 148 185 Z" fill="#233142"/>',
+          '  <g stroke="rgba(255,255,255,0.45)" stroke-width="1.5" fill="none">',
+          '    <rect x="132" y="22" width="90" height="54"/>',
+          '    <line x1="132" y1="40" x2="222" y2="40"/>',
+          '    <line x1="162" y1="22" x2="162" y2="76"/>',
+          '    <line x1="192" y1="22" x2="192" y2="76"/>',
+          '  </g>',
+          '  <rect x="174" y="88" width="44" height="36" fill="#18222f"/>',
+          '</svg>'
+        ].join(""),
+
+        edCoaster: [
+          '<svg viewBox="0 0 240 185" preserveAspectRatio="xMidYMid slice">',
+          '  <rect width="240" height="185" fill="#82c0f5"/>',
+          '  <path d="M0 145 Q65 95 130 135 T240 110 L240 185 L0 185 Z" fill="#c2a378"/>',
+          '  <path d="M16 140 Q110 18 224 125" fill="none" stroke="#d99b26" stroke-width="9"/>',
+          '  <path d="M24 146 Q110 30 216 132" fill="none" stroke="#9e6d11" stroke-width="4"/>',
+          '  <rect x="104" y="64" width="34" height="16" rx="4" fill="#2b8a3e"/>',
+          '  <circle cx="114" cy="60" r="4.5" fill="#ffd43b"/>',
+          '  <circle cx="128" cy="60" r="4.5" fill="#ffd43b"/>',
+          '</svg>'
+        ].join("")
+      };
+
+      /* =====================================================================
+         ДАННЫЕ ПОРТАЛА (ЗАГОЛОВКИ, СЛАЙДЫ, БЛОГИ, ВЫБОР РЕДАКЦИИ)
+         ===================================================================== */
+      var BREAKING_NEWS = [
+        {
+          headline: "В Аманжолове выступает творческий коллектив Фенис.",
+          time: "- Monday, 23 July 2012 17:29",
+        },
+        {
+          headline: "Крупный бизнесмен был пойман пойман за взяточничеством.",
+          time: "- Monday, 23 July 2012 16:45",
+        },
+        {
+          headline: "Этот сайт писал вктушник",
+          time: "- Monday, 23 July 2012 15:10",
+        }
+      ];
+
+      var QUICK_HEADER_ARTICLES = [
+        {
+          title: "CBC in Syria: Dispatches from the Northern Border",
+        },
+        {
+          title: "Detroit Auto Snow: Winter Testing for 2013 Concept Fleets",
+        }
+      ];
+
+      var TOP_NEWS_ITEMS = [
+        {
+          title: "О БОЖЕ! Я даже не думал что Назаров Ерасыл мог такое вытворить!",
+        },
+        {
+          title: "НИЧЕГО СЕБЕ!",
+        },
+        {
+          title: "Да тут и так было понятно, ничего нового",
+        },
+        {
+          title: "Наконец-то они его посадят!",
+        },
+        {
+          title: "НЕТ! ЭТО ПРОСТО НЕВОЗМОЖНО!",
+        },
+        {
+          title: "Да ну нет, не верю",
+        }
+      ];
+
+      var HERO_SLIDES = [
+        {
+          tabLabel: "Ursus senectus aliquet pretium",
+          meta: "Last Updated on Jul 19 2012",
+          title: "В Аманжолове выступают фенит",
+          summary: "Etiam vitae commodo dolor. Ut quis urna nisl. Nulla eu purus odio, at aliquet orci. Nulla est justo, commodo id facilisis ac, viverra non lectus. Mauris euismod elit",
+          art: "pressConference",
+          paragraphs: [
+            "Флекс",
+            "Флекс лютый"
+          ]
+        }
+      ];
+
+      var BLOG_PAGES = [
+        [
+          {
+            title: "Netra fauci",
+            excerpt: "Class aptent taciti sociosqu ad litora torquent",
+            meta: "Jul 22 2012 • Community Blog",
+            art: "blogParade",
+            paragraphs: [
+              "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam porta sem malesuada magna mollis euismod.",
+              "Community correspondents documented public civic ceremonies and local cultural festivals taking place across the capital square."
+            ]
+          },
+          {
+            title: "Ruci tenna mes",
+            excerpt: "Pendisse erat dolor, dictum in interdum non,",
+            meta: "Jul 21 2012 • Community Blog",
+            art: "blogDelegates",
+            paragraphs: [
+              "Pendisse erat dolor, dictum in interdum non, cursus at enim. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
+              "International delegates convened for roundtable discussions focused on youth education exchanges and municipal partnerships."
+            ]
+          }
+        ],
+        [
+          {
+            title: "Civic forum live",
+            excerpt: "Mauris blandit aliquet elit, eget tincidunt nibh",
+            meta: "Jul 19 2012 • Community Blog",
+            art: "blogCityHall",
+            paragraphs: [
+              "Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.",
+              "Residents shared proposals for historic district preservation and expanded public library hours."
+            ]
+          },
+          {
+            title: "Digital newsroom",
+            excerpt: "Vestibulum ac diam sit amet quam vehicula",
+            meta: "Jul 18 2012 • Community Blog",
+            art: "blogTechLab",
+            paragraphs: [
+              "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Proin eget tortor risus.",
+              "Independent journalists demonstrated mobile reporting tools designed for rapid field verification."
+            ]
+          }
+        ],
+        [
+          {
+            title: "Harbor chronicle",
+            excerpt: "Donec sollicitudin molestie malesuada vivamus",
+            meta: "Jul 16 2012 • Community Blog",
+            art: "blogParade",
+            paragraphs: [
+              "Donec sollicitudin molestie malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.",
+              "Maritime historians celebrated the restoration of vintage coastal vessels at the annual regatta."
+            ]
+          },
+          {
+            title: "Autumn summit",
+            excerpt: "Pellentesque in ipsum id orci porta dapibus",
+            meta: "Jul 15 2012 • Community Blog",
+            art: "blogDelegates",
+            paragraphs: [
+              "Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat.",
+              "Preparations are underway for the upcoming regional forum on sustainable urban transit."
+            ]
+          }
+        ]
+      ];
+
+      var EDITORS_CHOICE_ITEMS = [
+        {
+          title: "Ceger nisi Pellentesque in id metus laoreet",
+          meta: "Jul 23 2012 • Editor's Choice",
+          art: "edSailor",
+          paragraphs: [
+            "Ceger nisi Pellentesque in id metus laoreet. Veteran naval officers gathered at the harbor memorial to commemorate decades of maritime service.",
+            "Archival photographs and personal logbooks were exhibited alongside restored ceremonial uniforms."
+          ]
+        },
+        {
+          title: "Lacinia sed convallis urna lacus interdum",
+          meta: "Jul 22 2012 • Editor's Choice",
+          art: "edCouple",
+          paragraphs: [
+            "Lacinia sed convallis urna lacus interdum. Crowds cheered along the coastal promenade as athletes returned from the summer regatta.",
+            "Organizers praised the record turnout and sunny weather throughout the weekend festivities."
+          ]
+        },
+        {
+          title: "Cum sociis natoque penatibus et magnis dis",
+          meta: "Jul 21 2012 • Editor's Choice",
+          art: "edEvolution",
+          paragraphs: [
+            "Cum sociis natoque penatibus et magnis dis parturient montes. The natural history museum unveiled an interactive anthropology mural.",
+            "Visitors can explore timelines detailing human migration and early toolmaking."
+          ]
+        },
+        {
+          title: "Lorem ipsum dolor sit amet, consectetur",
+          meta: "Jul 20 2012 • Editor's Choice",
+          art: "edPortrait",
+          paragraphs: [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Independent cinema directors showcased portrait documentaries at the summer festival.",
+            "Critics highlighted natural lighting techniques and intimate storytelling across this year's entries."
+          ]
+        },
+        {
+          title: "Donec adipiscing arcu nec quam iaculis",
+          meta: "Jul 19 2012 • Editor's Choice",
+          art: "edBroadcast",
+          paragraphs: [
+            "Donec adipiscing arcu nec quam iaculis. Broadcast studios upgraded their live telemetry walls ahead of international election coverage.",
+            "Real-time graphics engines allow correspondents to break down regional results within seconds."
+          ]
+        },
+        {
+          title: "Fuspen disse at libero porttitor nisi aliquet",
+          meta: "Jul 18 2012 • Editor's Choice",
+          art: "edCoaster",
+          paragraphs: [
+            "Fuspen disse at libero porttitor nisi aliquet. Theme park engineers completed safety trials on a new desert canyon roller coaster.",
+            "The steel track reaches peak speeds across sweeping banked turns overlooking the valley."
+          ]
+        },
+        {
+          title: "Mauris blandit aliquet elit eget tincidunt",
+          meta: "Jul 17 2012 • Editor's Choice",
+          art: "spaceOrbit",
+          paragraphs: [
+            "Mauris blandit aliquet elit eget tincidunt nibh pulvinar a. Deep-space observatories captured high-resolution spectra of distant exoplanets.",
+            "Astronomers plan follow-up observations later this autumn."
+          ]
+        }
+      ];
+
+      /* =====================================================================
+         СОСТОЯНИЕ И ИНТЕРАКТИВНОСТЬ
+         ===================================================================== */
+      var state = {
+        breakingIndex: 0,
+        heroIndex: 0,
+        blogPageIndex: 0,
+        editorsOffset: 0,
+        heroTimer: null,
+        toastTimer: null
+      };
+
+      function showToast(message) {
+        var toastEl = document.getElementById("toastNotice");
+        toastEl.textContent = message;
+        toastEl.classList.add("visible");
+        clearTimeout(state.toastTimer);
+        state.toastTimer = setTimeout(function () {
+          toastEl.classList.remove("visible");
+        }, 2600);
+      }
+
+      function openArticleModal(article) {
+        document.getElementById("modalCategory").textContent = article.category || "WORLD NEWS";
+        document.getElementById("modalTitle").textContent = article.title;
+        document.getElementById("modalMeta").textContent = article.meta || "Published on Jul 23 2012 • WorldNews Desk";
+        document.getElementById("modalSvgBox").innerHTML = SVG_ART[article.art] || SVG_ART.pressConference;
+
+        var bodyEl = document.getElementById("modalBody");
+        bodyEl.innerHTML = "";
+        (article.paragraphs || []).forEach(function (text) {
+          var p = document.createElement("p");
+          p.textContent = text;
+          bodyEl.appendChild(p);
         });
 
-        // Построение оглавления для десктопного сайдбара и мобильного меню из data-атрибутов секций
-        function buildTableOfContents() {
-            const sections = document.querySelectorAll('.slide-section');
-            const desktopList = document.getElementById('desktop-toc-list');
-            const mobileList = document.getElementById('mobile-toc-list');
+        document.getElementById("articleModal").classList.add("open");
+      }
 
-            sections.forEach((sec) => {
-                const num = parseInt(sec.dataset.slide);
-                const title = sec.dataset.title;
-                const time = sec.dataset.time;
+      function closeArticleModal() {
+        document.getElementById("articleModal").classList.remove("open");
+      }
 
-                const createItemHTML = (isMobile) => `
-                    <button onclick="jumpToSlide(${num}); ${isMobile ? 'toggleMobileToc();' : ''}" 
-                        data-toc-btn="${num}"
-                        class="toc-btn w-full text-left px-3 py-2.5 rounded-lg transition flex items-start space-x-2.5 hover:bg-gray-100 group">
-                        <span class="text-[11px] font-mono text-gray-400 mt-0.5 shrink-0">${time}</span>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-1.5">
-                                <span class="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-gray-200 text-gray-700 group-hover:bg-newsRed group-hover:text-white transition">
-                                    ${num < 10 ? '0' + num : num}
-                                </span>
-                                <span class="text-xs font-semibold text-gray-800 truncate">${title}</span>
-                            </div>
-                        </div>
-                    </button>
-                `;
+      /* 1. Рендер Breaking News */
+      function renderBreakingNews() {
+        var item = BREAKING_NEWS[state.breakingIndex];
+        document.getElementById("breakingHeadlineText").textContent = item.headline;
+        document.getElementById("breakingTimeText").textContent = item.time;
+      }
 
-                desktopList.insertAdjacentHTML('beforeend', `<li>${createItemHTML(false)}</li>`);
-                mobileList.insertAdjacentHTML('beforeend', `<li>${createItemHTML(true)}</li>`);
+      /* 2. Рендер левой колонки TOP NEWS */
+      function renderTopNews() {
+        var listEl = document.getElementById("topNewsList");
+        listEl.innerHTML = "";
+        TOP_NEWS_ITEMS.forEach(function (item) {
+          var li = document.createElement("li");
+          li.className = "top-news-item";
+
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "top-news-link";
+          btn.textContent = item.title;
+          btn.addEventListener("click", function () {
+            openArticleModal({
+              title: item.title,
+              meta: item.meta,
+              category: "TOP NEWS",
+              art: item.art,
+              paragraphs: item.paragraphs
             });
-        }
+          });
 
-        // Переключение режима: «Лента СМИ» или «Слайды (пошагово)»
-        function setViewMode(mode) {
-            viewMode = mode;
-            const btnFeed = document.getElementById('btn-mode-feed');
-            const btnSlides = document.getElementById('btn-mode-slides');
+          li.appendChild(btn);
+          listEl.appendChild(li);
+        });
+      }
 
-            if (mode === 'slides') {
-                document.body.classList.add('presentation-mode');
-                btnSlides.classList.add('bg-newsRed', 'text-white');
-                btnSlides.classList.remove('text-gray-300');
-                btnFeed.classList.remove('bg-newsRed', 'text-white');
-                btnFeed.classList.add('text-gray-300');
-                showSingleSlide(currentSlide);
-            } else {
-                document.body.classList.remove('presentation-mode');
-                btnFeed.classList.add('bg-newsRed', 'text-white');
-                btnFeed.classList.remove('text-gray-300');
-                btnSlides.classList.remove('bg-newsRed', 'text-white');
-                btnSlides.classList.add('text-gray-300');
-                const target = document.getElementById(`slide-${currentSlide}`);
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            updateSlideUI(currentSlide);
-        }
+      /* 3. Рендер центрального слайдера */
+      function renderHeroSlide(index) {
+        state.heroIndex = index;
+        var slide = HERO_SLIDES[index];
+        document.getElementById("heroSvgContainer").innerHTML = SVG_ART[slide.art];
+        document.getElementById("heroMeta").textContent = slide.meta;
+        document.getElementById("heroTitle").textContent = slide.title;
+        document.getElementById("heroSummary").textContent = slide.summary;
 
-        // Показать конкретный слайд в режиме презентации
-        function showSingleSlide(num) {
-            document.querySelectorAll('.slide-section').forEach(sec => {
-                sec.classList.remove('active-presentation-slide');
+        var tabButtons = document.querySelectorAll("#heroTabsGrid .hero-tab-btn");
+        tabButtons.forEach(function (btn, idx) {
+          if (idx === index) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      function startHeroAutoplay() {
+        clearInterval(state.heroTimer);
+        state.heroTimer = setInterval(function () {
+          var nextIdx = (state.heroIndex + 1) % HERO_SLIDES.length;
+          renderHeroSlide(nextIdx);
+        }, 5500);
+      }
+
+      /* 4. Рендер правой колонки COMMUNITY BLOG */
+      function renderBlogPage(pageIndex) {
+        state.blogPageIndex = pageIndex;
+        var wrapEl = document.getElementById("blogItemsWrap");
+        wrapEl.innerHTML = "";
+
+        var posts = BLOG_PAGES[pageIndex];
+        posts.forEach(function (post) {
+          var card = document.createElement("article");
+          card.className = "blog-card";
+
+          var thumb = document.createElement("div");
+          thumb.className = "blog-thumb";
+          thumb.innerHTML = SVG_ART[post.art];
+
+          var info = document.createElement("div");
+          info.className = "blog-info";
+
+          var titleEl = document.createElement("h3");
+          titleEl.className = "blog-item-title";
+          titleEl.textContent = post.title;
+
+          var excerptEl = document.createElement("p");
+          excerptEl.className = "blog-item-excerpt";
+          excerptEl.textContent = post.excerpt;
+
+          info.appendChild(titleEl);
+          info.appendChild(excerptEl);
+          card.appendChild(thumb);
+          card.appendChild(info);
+
+          card.addEventListener("click", function () {
+            openArticleModal({
+              title: post.title,
+              meta: post.meta,
+              category: "COMMUNITY BLOG",
+              art: post.art,
+              paragraphs: post.paragraphs
             });
-            const activeSec = document.getElementById(`slide-${num}`);
-            if (activeSec) {
-                activeSec.classList.add('active-presentation-slide');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
+          });
 
-        // Переход к любому слайду по номеру (1..13)
-        function jumpToSlide(num) {
-            if (num < 1) num = 1;
-            if (num > totalSlides) num = totalSlides;
-            currentSlide = num;
-            updateSlideUI(num);
+          wrapEl.appendChild(card);
+        });
 
-            if (viewMode === 'slides') {
-                showSingleSlide(num);
-            } else {
-                const el = document.getElementById(`slide-${num}`);
-                if (el) {
-                    const headerOffset = 115;
-                    const elementPosition = el.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                }
-            }
-        }
+        var dots = document.querySelectorAll("#blogDots .blog-dot-btn");
+        dots.forEach(function (dot, idx) {
+          if (idx === pageIndex) {
+            dot.classList.add("active");
+          } else {
+            dot.classList.remove("active");
+          }
+        });
+      }
 
-        // Листание вперед/назад (-1 или +1)
-        function navigateSlide(delta) {
-            jumpToSlide(currentSlide + delta);
-        }
+      /* 5. Рендер нижнего блока EDITOR'S CHOICE */
+      function renderEditorsChoice() {
+        var gridEl = document.getElementById("editorsCardsGrid");
+        gridEl.innerHTML = "";
+        var total = EDITORS_CHOICE_ITEMS.length;
 
-        // Обновление счетчиков, прогресс-бара и подсветки активного пункта в оглавлении
-        function updateSlideUI(num) {
-            currentSlide = num;
-            document.getElementById('header-slide-counter').textContent = num;
-            document.getElementById('bottom-slide-indicator').textContent = `Слайд ${num} из ${totalSlides}`;
-            document.getElementById('btn-mode-slides').textContent = `Слайды (${num}/${totalSlides})`;
+        for (var i = 0; i < 6; i++) {
+          var item = EDITORS_CHOICE_ITEMS[(state.editorsOffset + i) % total];
+          (function (currentItem) {
+            var card = document.createElement("article");
+            card.className = "editor-card";
+            card.innerHTML = SVG_ART[currentItem.art];
 
-            // Прогресс-бар
-            const percent = (num / totalSlides) * 100;
-            document.getElementById('reading-progress').style.width = `${percent}%`;
+            var caption = document.createElement("div");
+            caption.className = "editor-caption";
+            caption.textContent = currentItem.title;
 
-            // Кнопки Назад / Вперед
-            document.getElementById('prev-slide-btn').disabled = (num === 1);
-            document.getElementById('next-slide-btn').disabled = (num === totalSlides);
-
-            // Подсветка в оглавлении
-            document.querySelectorAll('.toc-btn').forEach(btn => {
-                const btnNum = parseInt(btn.dataset.tocBtn);
-                if (btnNum === num) {
-                    btn.classList.add('bg-red-50', 'border-l-2', 'border-newsRed');
-                } else {
-                    btn.classList.remove('bg-red-50', 'border-l-2', 'border-newsRed');
-                }
-            });
-        }
-
-        // Отслеживание активного слайда при скролле в режиме ленты
-        function setupScrollObserver() {
-            const sections = document.querySelectorAll('.slide-section');
-            const observer = new IntersectionObserver((entries) => {
-                if (viewMode !== 'feed') return;
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const num = parseInt(entry.target.dataset.slide);
-                        updateSlideUI(num);
-                    }
-                });
-            }, {
-                rootMargin: '-25% 0px -55% 0px',
-                threshold: 0.05
+            card.appendChild(caption);
+            card.addEventListener("click", function () {
+              openArticleModal({
+                title: currentItem.title,
+                meta: currentItem.meta,
+                category: "EDITOR'S CHOICE",
+                art: currentItem.art,
+                paragraphs: currentItem.paragraphs
+              });
             });
 
-            sections.forEach(sec => observer.observe(sec));
+            gridEl.appendChild(card);
+          })(item);
         }
+      }
 
-        // Открытие/закрытие мобильного оглавления
-        function toggleMobileToc() {
-            const modal = document.getElementById('mobile-toc');
-            modal.classList.toggle('hidden');
-        }
+      /* =====================================================================
+         ПРИВЯЗКА ВСЕХ ОБРАБОТЧИКОВ СОБЫТИЙ
+         ===================================================================== */
+      document.getElementById("brandResetBtn").addEventListener("click", function () {
+        state.breakingIndex = 0;
+        renderBreakingNews();
+        renderHeroSlide(0);
+        renderBlogPage(0);
+        state.editorsOffset = 0;
+        renderEditorsChoice();
+        showToast("Главная страница WorldNews обновлена");
+      });
 
-        // Копирование ссылки в буфер обмена (безопасный метод для всех браузеров и iframe)
-        function copyCurrentUrl() {
-            const input = document.getElementById('qr-url-input');
-            const urlToCopy = input.value || window.location.href;
-            const tempInput = document.createElement('input');
-            tempInput.value = urlToCopy;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast('Ссылка скопирована! Теперь её можно отправить или зашить в QR.');
-        }
+      document.querySelectorAll(".header-link-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var idx = parseInt(btn.getAttribute("data-quick-index"), 10) || 0;
+          openArticleModal(QUICK_HEADER_ARTICLES[idx]);
+        });
+      });
 
-        // Показ всплывающего уведомления
-        function showToast(message) {
-            const toast = document.getElementById('toast-notification');
-            toast.textContent = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+      document.getElementById("breakingPrevBtn").addEventListener("click", function () {
+        state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
+        renderBreakingNews();
+      });
+
+      document.getElementById("breakingNextBtn").addEventListener("click", function () {
+        state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
+        renderBreakingNews();
+      });
+
+      document.getElementById("breakingTextTrigger").addEventListener("click", function () {
+        var current = BREAKING_NEWS[state.breakingIndex];
+        openArticleModal({
+          title: current.headline,
+          meta: "Breaking News " + current.time,
+          category: current.category,
+          art: current.art,
+          paragraphs: current.paragraphs
+        });
+      });
+
+      document.getElementById("heroStage").addEventListener("click", function () {
+        var slide = HERO_SLIDES[state.heroIndex];
+        openArticleModal({
+          title: slide.title,
+          meta: slide.meta,
+          category: "FEATURED STORY",
+          art: slide.art,
+          paragraphs: slide.paragraphs
+        });
+      });
+
+      document.querySelectorAll("#heroTabsGrid .hero-tab-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var idx = parseInt(btn.getAttribute("data-slide"), 10) || 0;
+          renderHeroSlide(idx);
+          startHeroAutoplay();
+        });
+      });
+
+      var heroPanelEl = document.getElementById("heroSliderPanel");
+      heroPanelEl.addEventListener("mouseenter", function () {
+        clearInterval(state.heroTimer);
+      });
+      heroPanelEl.addEventListener("mouseleave", function () {
+        startHeroAutoplay();
+      });
+
+      document.querySelectorAll("#blogDots .blog-dot-btn").forEach(function (dot) {
+        dot.addEventListener("click", function () {
+          var page = parseInt(dot.getAttribute("data-page"), 10) || 0;
+          renderBlogPage(page);
+        });
+      });
+
+      document.querySelectorAll(".social-tile").forEach(function (tile) {
+        tile.addEventListener("click", function () {
+          var service = tile.getAttribute("data-social");
+          showToast("WorldNews — раздел «" + service + "»");
+        });
+      });
+
+      document.getElementById("editorsPrevBtn").addEventListener("click", function () {
+        var total = EDITORS_CHOICE_ITEMS.length;
+        state.editorsOffset = (state.editorsOffset - 1 + total) % total;
+        renderEditorsChoice();
+      });
+
+      document.getElementById("editorsNextBtn").addEventListener("click", function () {
+        var total = EDITORS_CHOICE_ITEMS.length;
+        state.editorsOffset = (state.editorsOffset + 1) % total;
+        renderEditorsChoice();
+      });
+
+      document.getElementById("modalCloseTopBtn").addEventListener("click", closeArticleModal);
+      document.getElementById("modalCloseBottomBtn").addEventListener("click", closeArticleModal);
+      document.getElementById("articleModal").addEventListener("click", function (e) {
+        if (e.target === this) {
+          closeArticleModal();
         }
-    </script>
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeArticleModal();
+        }
+      });
+
+      /* Инициализация при загрузке */
+      renderBreakingNews();
+      renderTopNews();
+      renderHeroSlide(0);
+      renderBlogPage(0);
+      renderEditorsChoice();
+      startHeroAutoplay();
+    })();
+  </script>
 </body>
 </html>
