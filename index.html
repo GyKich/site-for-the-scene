@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WorldNews — August 2012 SJ Template</title>
+  <title>AmanzholovNews</title>
   <style>
     /* =========================================================================
        БАЗОВЫЙ СБРОС И КАРКАС 980px С МАСШТАБИРОВАНИЕМ ПОД FULL HD
@@ -322,7 +322,7 @@
     }
 
     .comments-scroll-container {
-      height: 310px;
+      height: 340px;
       overflow: hidden;
       position: relative;
     }
@@ -412,7 +412,7 @@
     .right-column-stack {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px; /* Должен совпадать с gap в .main-three-cols */
     }
 
     .blog-box-header {
@@ -500,7 +500,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
     }
 
     .social-box-header {
@@ -530,7 +530,7 @@
     .social-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      row-gap: 10px;
+      row-gap: 30px;
       column-gap: 6px;
       text-align: center;
     }
@@ -549,7 +549,7 @@
     .social-img-wrap {
       width: 34px;
       height: 34px;
-      transition: transform 0.15s ease;
+      transition: transform 0.3s ease;
     }
 
     .social-img-wrap img {
@@ -597,7 +597,7 @@
 
     .carousel-arrow-btn {
       width: 16px;
-      height: 118px;
+      height: 142px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -625,7 +625,7 @@
 
     .editor-card {
       position: relative;
-      height: 118px;
+      height: 142px;
       border: 1px solid #cccccc;
       overflow: hidden;
       cursor: pointer;
@@ -651,7 +651,7 @@
       font-weight: 700;
       line-height: 1.22;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -828,7 +828,7 @@
       <header class="site-header">
         <div class="brand-box" id="brandResetBtn" title="Вернуться на главную страницу">
           <div class="brand-logo">
-            <span class="word-bold">World</span><span class="word-light">News</span>
+            <span class="word-bold">Amansholov</span><span class="word-light">News</span>
           </div>
           <div class="brand-subtext">Ноябрь 2026 AN</div>
         </div>
@@ -914,27 +914,27 @@
               <div class="social-mini-brand"><strong>World</strong>News</div>
             </div>
             <div class="social-grid">
-              <button type="button" class="social-tile" data-social="Facebook">
-                <div class="social-img-wrap"><img src="images/3.jpg" alt="Facebook"></div>
-                <span class="social-label">Facebook</span>
+              <button type="button" class="social-tile" data-social="Instagram">
+                <div class="social-img-wrap"><img src="images/3.jpg" alt="Instagram"></div>
+                <span class="social-label">Instagram</span>
               </button>
-              <button type="button" class="social-tile" data-social="RSS Feed">
-                <div class="social-img-wrap"><img src="images/4.jpg" alt="RSS"></div>
-                <span class="social-label">Rss</span>
+              <button type="button" class="social-tile" data-social="University">
+                <div class="social-img-wrap"><img src="images/4.jpg" alt="University"></div>
+                <span class="social-label">University</span>
               </button>
               <button type="button" class="social-tile" data-social="Twitter">
                 <div class="social-img-wrap"><img src="images/5.jpg" alt="Twitter"></div>
                 <span class="social-label">Twitter</span>
               </button>
-              <button type="button" class="social-tile" data-social="Mobile Edition">
-                <div class="social-img-wrap"><img src="images/6.jpg" alt="Mobile"></div>
-                <span class="social-label">Mobile</span>
+              <button type="button" class="social-tile" data-social="Contact Phone">
+                <div class="social-img-wrap"><img src="images/6.jpg" alt="Contact Phone"></div>
+                <span class="social-label">Contact Phone</span>
               </button>
               <button type="button" class="social-tile" data-social="Email Newsletter">
                 <div class="social-img-wrap"><img src="images/7.jpg" alt="Newsletter"></div>
                 <span class="social-label">Newsletter</span>
               </button>
-              <button type="button" class="social-tile" data-social="WorldNews TV">
+              <button type="button" class="social-tile" data-social="AmanzholowNews TV">
                 <div class="social-img-wrap"><img src="images/8.jpg" alt="TV"></div>
                 <span class="social-label">TV</span>
               </button>
@@ -957,8 +957,8 @@
 
       <!-- 5. ФУТЕР -->
       <footer class="site-footer">
-        <div>Copyright © 2012 <strong>WorldNews</strong>. All Rights Reserved. Designed by SmartAddons.Com</div>
-        <div>Joomla! 2.5 Template • Classic 980px Scaled Edition</div>
+        <div>Copyright © 2026 <strong>Rostislav K</strong>. All Rights Reserved.</div>
+        <div>Создано специально для коллектива Фенит. Все имена вымышлены, все совпадения случайны</div>
       </footer>
     </div>
   </div>
@@ -968,8 +968,8 @@
     <div class="modal-window">
       <div class="modal-top-bar">
         <div>
-          <span class="modal-cat-tag" id="modalCategory">WORLD NEWS</span>
-          <span style="font-size:12px; color:#c8def5;">WorldNews Editorial Desk</span>
+          <span class="modal-cat-tag" id="modalCategory">AMANZHOLOV NEWS</span>
+          <span style="font-size:12px; color:#c8def5;">AMANZHOLOV NEWS</span>
         </div>
         <button type="button" class="modal-close-x" id="modalCloseTopBtn" title="Закрыть">×</button>
       </div>
@@ -993,9 +993,9 @@
       "use strict";
 
       var BREAKING_NEWS = [
-        { headline: "В Аманжолове выступает творческий коллектив Фенис.", time: "- Monday, 23 July 2012 17:29" },
-        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- Monday, 23 July 2012 16:45" },
-        { headline: "Этот сайт писал вктушник", time: "- Monday, 23 July 2012 15:10" }
+        { headline: "В Аманжолове выступает творческий коллектив Фенис.", time: "- 19 Ноября 2026 17:29" },
+        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- 10 Ноября 2026 16:45" },
+        { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 1 Сентября 2026 15:10" }
       ];
 
       var QUICK_HEADER_ARTICLES = [
@@ -1010,7 +1010,7 @@
         "Наконец-то они его посадят!",
         "НЕТ! ЭТО ПРОСТО НЕВОЗМОЖНО!",
         "Да ну нет, не верю",
-        "Шок! Смотреть до конца без регистрации",
+        "ДАААААААААААААА!!!",
         "Комментарий пользователя #77: Полностью поддерживаю автора."
       ];
 
@@ -1024,29 +1024,29 @@
 
       var COMMUNITY_BLOG_ITEMS = [
         {
-          title: "Netra fauci",
-          excerpt: "Class aptent taciti sociosqu ad litora torquent",
-          meta: "Jul 22 2012 • Community Blog",
+          title: "Перваши повелись",
+          excerpt: "Первашей опять затролили старшаки",
+          meta: "Нояб 22 2026 • Community Blog",
           img: "images/2.jpg",
-          paragraphs: ["Class aptent taciti sociosqu ad litora torquent per conubia nostra."]
+          paragraphs: ["Первашей опять затролили старшаки"]
         },
         {
-          title: "Ruci tenna mes",
-          excerpt: "Pendisse erat dolor, dictum in interdum non,",
+          title: "Перваши стали первашами",
+          excerpt: "Никогда такого не было, и вот опять",
           meta: "Jul 21 2012 • Community Blog",
           img: "images/9.jpg",
-          paragraphs: ["Pendisse erat dolor, dictum in interdum non, cursus at enim."]
+          paragraphs: ["Никогда такого не было, и вот опять"]
         }
       ];
 
       var EDITORS_CHOICE_ITEMS = [
-        { title: "Ceger nisi Pellentesque in id metus laoreet", meta: "Jul 23 2012", img: "images/10.jpg", paragraphs: ["Detail text..."] },
-        { title: "Lacinia sed convallis urna lacus interdum", meta: "Jul 22 2012", img: "images/11.jpg", paragraphs: ["Detail text..."] },
-        { title: "Cum sociis natoque penatibus et magnis dis", meta: "Jul 21 2012", img: "images/12.jpg", paragraphs: ["Detail text..."] },
-        { title: "Lorem ipsum dolor sit amet, consectetur", meta: "Jul 20 2012", img: "images/13.jpg", paragraphs: ["Detail text..."] },
-        { title: "Donec adipiscing arcu nec quam iaculis", meta: "Jul 19 2012", img: "images/14.jpg", paragraphs: ["Detail text..."] },
-        { title: "Fuspen disse at libero porttitor nisi aliquet", meta: "Jul 18 2012", img: "images/15.jpg", paragraphs: ["Detail text..."] },
-        { title: "Mauris blandit aliquet elit eget tincidunt", meta: "Jul 17 2012", img: "images/16.jpg", paragraphs: ["Detail text..."] }
+        { title: "В Аманжолове девочка поступила на грант со 123 баллами", meta: "Сен 1 2026", img: "images/10.jpg", paragraphs: ["Detail text..."] },
+        { title: "За коррупцию арестовали известного бизнесмена Назарова Ерасыла", meta: "Нояб 2 2026", img: "images/11.jpg", paragraphs: ["Detail text..."] },
+        { title: "Происходит какой то движ", meta: "Нояб 9 2026", img: "images/12.jpg", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове 24-25 Ноября выступают активисты", meta: "Нояб 5 2026", img: "images/13.jpg", paragraphs: ["Detail text..."] },
+        { title: "Девочка набравшая 123 балла оказалась дочерью Назарова Ерасыла", meta: "Нояб 9 2026", img: "images/14.jpg", paragraphs: ["Detail text..."] },
+        { title: "Назаров Ерасыл подозревается во взятке и угрозах конкурентам", meta: "Нояб 10 2026", img: "images/15.jpg", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове планируются крупные события", meta: "Нояб 20 2026", img: "images/16.jpg", paragraphs: ["Detail text..."] }
       ];
 
       var state = {
@@ -1067,9 +1067,9 @@
       }
 
       function openArticleModal(article) {
-        document.getElementById("modalCategory").textContent = article.category || "WORLD NEWS";
+        document.getElementById("modalCategory").textContent = article.category || "AMANZHOLOV NEWS";
         document.getElementById("modalTitle").textContent = article.title;
-        document.getElementById("modalMeta").textContent = article.meta || "Published on Jul 23 2012 • WorldNews Desk";
+        document.getElementById("modalMeta").textContent = article.meta || "Published on Jul 23 2012 • AmaznholovNews Desk";
 
         var modalImgBox = document.getElementById("modalImgBox");
         modalImgBox.innerHTML = "";
@@ -1221,7 +1221,7 @@
         renderBreakingNews();
         state.editorsOffset = 0;
         renderEditorsChoice();
-        showToast("Главная страница WorldNews обновлена");
+        showToast("Главная страница AmanzholovNews обновлена");
       });
 
       document.querySelectorAll(".header-link-btn").forEach(function (btn) {
@@ -1265,7 +1265,7 @@
       document.querySelectorAll(".social-tile").forEach(function (tile) {
         tile.addEventListener("click", function () {
           var service = tile.getAttribute("data-social");
-          showToast("WorldNews — раздел «" + service + "»");
+          showToast("AmanzholovNews — раздел «" + service + "»");
         });
       });
 
