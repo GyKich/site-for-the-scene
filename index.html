@@ -818,6 +818,82 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* =========================================================================
+       ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ С ВЫЕЗЖАЮЩИМ ТЕКСТОМ)
+       ========================================================================= */
+    .full-news-feed {
+      margin-top: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .news-feed-card {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .news-feed-trigger {
+      position: relative;
+      height: 160px; /* Высота картинки на всю ширину контейнера */
+      cursor: pointer;
+      background-color: #222222;
+    }
+
+    .news-feed-trigger img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .news-feed-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%);
+      padding: 12px 16px;
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .news-feed-trigger:hover .news-feed-overlay {
+      color: #9ecbff;
+    }
+
+    .news-feed-dropdown {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+      background: #fafafa;
+      padding: 0 18px;
+    }
+
+    .news-feed-card.open .news-feed-dropdown {
+      max-height: 400px; /* Достаточно для текста статьи */
+      padding: 16px 18px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .news-feed-dropdown p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .news-feed-dropdown p:last-child {
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -910,8 +986,8 @@
           <!-- СЕТЬ СОЦСЕТЕЙ (ИКОНКИ 3.jpg - 8.jpg) -->
           <div class="panel-box social-box">
             <div class="social-box-header">
-              <h3 class="social-heading">STAY CONNECTED WITH</h3>
-              <div class="social-mini-brand"><strong>World</strong>News</div>
+              <h3 class="social-heading">ОСТАВАЙТЕСЬ НА СВЯЗИ</h3>
+              <div class="social-mini-brand"><strong>Amanzholov</strong>News</div>
             </div>
             <div class="social-grid">
               <button type="button" class="social-tile" data-social="Instagram">
@@ -954,7 +1030,154 @@
           <button type="button" class="carousel-arrow-btn" id="editorsNextBtn" title="Прокрутить вправо">></button>
         </div>
       </section>
+      <!-- ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ) -->
+      <section class="full-news-feed" aria-label="News Feed">
+        
+        <!-- Элемент 1 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/17.jpg" alt="Новость 1">
+            <div class="news-feed-overlay">Заголовок первой новости в ленте: подробности событий</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Здесь располагается основной текст статьи первой новости. При клике на картинку этот блок плавно выдвигается из-под нее, раздвигая остальные карточки вниз.</p>
+            <p>Повторный клик по изображению затягивает текст обратно наверх.</p>
+          </div>
+        </article>
 
+        <!-- Элемент 2 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/18.jpg" alt="Новость 2">
+            <div class="news-feed-overlay">Заголовок второй новости: эксклюзивный материал редакции</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Основной текст статьи второй новости. Текст написан специально для демонстрации работы интерактивного выпадающего списка.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 3 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/19.jpg" alt="Новость 3">
+            <div class="news-feed-overlay">Заголовок третьей новости: важные изменения в регионе</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст третьей новости. Вы можете добавлять сюда сколько угодно абзацев, верстка автоматически адаптируется.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 4 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/20.jpg" alt="Новость 4">
+            <div class="news-feed-overlay">Заголовок четвертой новости: интервью с участниками</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст четвертой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 5 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/21.jpg" alt="Новость 5">
+            <div class="news-feed-overlay">Заголовок пятой новости: итоги прошедшей недели</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст пятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 6 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/22.jpg" alt="Новость 6">
+            <div class="news-feed-overlay">Заголовок шестой новости: аналитика и прогнозы</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст шестой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 7 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/23.jpg" alt="Новость 7">
+            <div class="news-feed-overlay">Заголовок седьмой новости: студенческая жизнь изнутри</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст седьмой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 8 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/24.jpg" alt="Новость 8">
+            <div class="news-feed-overlay">Заголовок восьмой новости: спортивные достижения</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст восьмой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 9 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/25.jpg" alt="Новость 9">
+            <div class="news-feed-overlay">Заголовок девятой новости: культурные мероприятия города</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст девятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 10 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/26.jpg" alt="Новость 10">
+            <div class="news-feed-overlay">Заголовок десятой новости: технологии и инновации</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст десятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 11 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/27.jpg" alt="Новость 11">
+            <div class="news-feed-overlay">Заголовок одиннадцатой новости: мнения экспертов</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст одиннадцатой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 12 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/28.jpg" alt="Новость 12">
+            <div class="news-feed-overlay">Заголовок двенадцатой новости: специальный репортаж</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст двенадцатой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 13 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="images/29.jpg" alt="Новость 13">
+            <div class="news-feed-overlay">Заголовок тринадцатой новости: главные события месяца</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст тринадцатой новости.</p>
+          </div>
+        </article>
+
+      </section>
       <!-- 5. ФУТЕР -->
       <footer class="site-footer">
         <div>Copyright © 2026 <strong>Rostislav K</strong>. All Rights Reserved.</div>
@@ -1300,6 +1523,13 @@
       renderHero();
       renderCommunityBlog();
       renderEditorsChoice();
+      // Обработка клика для выезда текста в ленте новостей
+      document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+          var card = this.closest('.news-feed-card');
+          card.classList.toggle('open');
+        });
+      });
     })();
   </script>
 </body>
