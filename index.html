@@ -92,7 +92,7 @@
       line-height: 1;
       letter-spacing: -1.4px;
       display: flex;
-      align-items: baseline;
+      align-items: center;
     }
 
     .brand-logo .word-bold {
@@ -103,6 +103,15 @@
     .brand-logo .word-light {
       font-weight: 400;
       color: #215382;
+    }
+
+    .brand-logo-img {
+      height: 40px;
+      width: auto;
+      margin-left: 12px;
+      border-radius: 4px;
+      object-fit: contain;
+      display: block;
     }
 
     .brand-subtext {
@@ -412,7 +421,7 @@
     .right-column-stack {
       display: flex;
       flex-direction: column;
-      gap: 14px; /* Должен совпадать с gap в .main-three-cols */
+      gap: 14px;
     }
 
     .blog-box-header {
@@ -494,7 +503,7 @@
       line-height: 1.32;
     }
 
-    /* Блок STAY CONNECTED WITH WorldNews */
+    /* Блок STAY CONNECTED WITH PhoenixNews */
     .social-box {
       padding: 9px 11px 11px 11px;
       flex: 1;
@@ -540,6 +549,7 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
+      text-decoration: none;
     }
 
     .social-tile:hover .social-img-wrap {
@@ -818,8 +828,9 @@
       opacity: 1;
       transform: translateY(0);
     }
+
     /* =========================================================================
-       ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ С ВЫЕЗЖАЮЩИМ ТЕКСТОМ)
+       ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ С УВЕЛИЧЕНИЕМ КАРТИНКИ И ВЫЕЗЖАЮЩИМ ТЕКСТОМ)
        ========================================================================= */
     .full-news-feed {
       margin-top: 14px;
@@ -839,9 +850,14 @@
 
     .news-feed-trigger {
       position: relative;
-      height: 160px; /* Высота картинки на всю ширину контейнера */
+      height: 160px;
       cursor: pointer;
       background-color: #222222;
+      transition: height 0.4s ease-in-out;
+    }
+
+    .news-feed-card.open .news-feed-trigger {
+      height: 420px;
     }
 
     .news-feed-trigger img {
@@ -879,7 +895,7 @@
     }
 
     .news-feed-card.open .news-feed-dropdown {
-      max-height: 400px; /* Достаточно для текста статьи */
+      max-height: 450px;
       padding: 16px 18px;
       border-top: 1px solid #e0e0e0;
     }
@@ -894,6 +910,63 @@
     .news-feed-dropdown p:last-child {
       margin-bottom: 0;
     }
+
+    /* =========================================================================
+       МОБИЛЬНАЯ АДАПТАЦИЯ (MOBILE RESPONSIVE STYLES)
+       ========================================================================= */
+    @media (max-width: 768px) {
+      .container {
+        width: 100%;
+        padding: 8px;
+      }
+
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 6px;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-right: 0;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .main-three-cols {
+        grid-template-columns: 1fr;
+      }
+
+      /* На мобилке скрываем боковые колонки, оставляя на виду центральную новость */
+      .top-news-panel,
+      .right-column-stack {
+        display: none;
+      }
+
+      .hero-stage {
+        min-height: 280px;
+      }
+
+      /* Делаем карусель Editor's Choice прокручиваемой по горизонтали, чтобы все 6+ картинок были доступны */
+      .editors-cards-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 8px;
+      }
+
+      .editor-card {
+        flex: 0 0 130px;
+        scroll-snap-align: start;
+        height: 130px;
+      }
+
+      .carousel-arrow-btn {
+        display: none; /* на тач-устройствах стрелки не нужны, работает свайп */
+      }
+    }
   </style>
 </head>
 <body>
@@ -905,6 +978,7 @@
         <div class="brand-box" id="brandResetBtn" title="Вернуться на главную страницу">
           <div class="brand-logo">
             <span class="word-bold">Phoenix</span><span class="word-light">News</span>
+            <img src="images/logo.jpg" alt="PhoenixNews Logo" class="brand-logo-img">
           </div>
           <div class="brand-subtext">Ноябрь 2026 AN</div>
         </div>
@@ -951,7 +1025,7 @@
         <aside class="panel-box top-news-panel">
           <div class="top-news-header">
             <h2 class="section-heading-condensed">Комментарии читателей</h2>
-            <span class="cool-pill">ЭМОЦИИ</span>
+            <span class="cool-pill">LIVE</span>
           </div>
           <div class="comments-scroll-container">
             <div class="comments-scroll-track" id="commentsScrollTrack"></div>
@@ -983,37 +1057,25 @@
             <div class="blog-items-wrap" id="blogItemsWrap"></div>
           </div>
 
-          <!-- СЕТЬ СОЦСЕТЕЙ (ИКОНКИ 3.jpg - 8.jpg) -->
+          <!-- СЕТЬ СОЦСЕТЕЙ (КЛИКАБЕЛЬНЫЕ ССЫЛКИ) -->
           <div class="panel-box social-box">
             <div class="social-box-header">
               <h3 class="social-heading">ОСТАВАЙТЕСЬ НА СВЯЗИ</h3>
               <div class="social-mini-brand"><strong>Phoenix</strong>News</div>
             </div>
             <div class="social-grid">
-              <button type="button" class="social-tile" data-social="Instagram">
+              <a href="https://www.instagram.com/phx.fam?mdxt=YWNpbjdlYnc1NDBm" target="_blank" class="social-tile" data-social="Instagram">
                 <div class="social-img-wrap"><img src="images/3.jpg" alt="Instagram"></div>
                 <span class="social-label">Instagram</span>
-              </button>
-              <button type="button" class="social-tile" data-social="University">
+              </a>
+              <a href="https://vku.edu.kz/ru/" target="_blank" class="social-tile" data-social="University">
                 <div class="social-img-wrap"><img src="images/4.jpg" alt="University"></div>
                 <span class="social-label">University</span>
-              </button>
-              <button type="button" class="social-tile" data-social="Twitter">
+              </a>
+              <a href="https://www.tiktok.com/@phx.fam?_r=1&_t=ZS-9BU8iLvZnYy" target="_blank" class="social-tile" data-social="Twitter">
                 <div class="social-img-wrap"><img src="images/5.jpg" alt="Twitter"></div>
-                <span class="social-label">Twitter</span>
-              </button>
-              <button type="button" class="social-tile" data-social="Contact Phone">
-                <div class="social-img-wrap"><img src="images/6.jpg" alt="Contact Phone"></div>
-                <span class="social-label">Contact Phone</span>
-              </button>
-              <button type="button" class="social-tile" data-social="Email Newsletter">
-                <div class="social-img-wrap"><img src="images/7.jpg" alt="Newsletter"></div>
-                <span class="social-label">Newsletter</span>
-              </button>
-              <button type="button" class="social-tile" data-social="AmanzholowNews TV">
-                <div class="social-img-wrap"><img src="images/8.jpg" alt="TV"></div>
-                <span class="social-label">TV</span>
-              </button>
+                <span class="social-label">TikTok</span>
+              </a>
             </div>
           </div>
         </aside>
@@ -1030,18 +1092,18 @@
           <button type="button" class="carousel-arrow-btn" id="editorsNextBtn" title="Прокрутить вправо">></button>
         </div>
       </section>
+
       <!-- ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ) -->
       <section class="full-news-feed" aria-label="News Feed">
-        
         <!-- Элемент 1 -->
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/17.jpg" alt="Новость 1">
-            <div class="news-feed-overlay">Заголовок первой новости в ленте: подробности событий</div>
+            <div class="news-feed-overlay">Заголовок первой новости: Пролог «Адалсыздықтың құны»</div>
           </div>
           <div class="news-feed-dropdown">
-            <p>Здесь располагается основной текст статьи первой новости. При клике на картинку этот блок плавно выдвигается из-под нее, раздвигая остальные карточки вниз.</p>
-            <p>Повторный клик по изображению затягивает текст обратно наверх.</p>
+            <p>Здесь располагается основной текст статьи первой новости. При клике на картинку этот блок плавно выдвигается из-под нее, а сама картинка увеличивается в высоту.</p>
+            <p>Повторный клик по изображению затягивает текст обратно и возвращает исходный размер фотографии.</p>
           </div>
         </article>
 
@@ -1049,7 +1111,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/18.jpg" alt="Новость 2">
-            <div class="news-feed-overlay">Заголовок второй новости: эксклюзивный материал редакции</div>
+            <div class="news-feed-overlay">Заголовок второй новости: Эстрадный танец «Are you gonna be my girl?»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Основной текст статьи второй новости. Текст написан специально для демонстрации работы интерактивного выпадающего списка.</p>
@@ -1060,7 +1122,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/19.jpg" alt="Новость 3">
-            <div class="news-feed-overlay">Заголовок третьей новости: важные изменения в регионе</div>
+            <div class="news-feed-overlay">Заголовок третьей новости: Вокальный номер «Доп»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст третьей новости. Вы можете добавлять сюда сколько угодно абзацев, верстка автоматически адаптируется.</p>
@@ -1071,7 +1133,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/20.jpg" alt="Новость 4">
-            <div class="news-feed-overlay">Заголовок четвертой новости: интервью с участниками</div>
+            <div class="news-feed-overlay">Заголовок четвёртой новости: Жайдарман</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст четвертой новости.</p>
@@ -1082,7 +1144,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/21.jpg" alt="Новость 5">
-            <div class="news-feed-overlay">Заголовок пятой новости: итоги прошедшей недели</div>
+            <div class="news-feed-overlay">Заголовок пятой новости: Народный танец «Ağ çiçəyim»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст пятой новости.</p>
@@ -1093,7 +1155,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/22.jpg" alt="Новость 6">
-            <div class="news-feed-overlay">Заголовок шестой новости: аналитика и прогнозы</div>
+            <div class="news-feed-overlay">Заголовок шестой новости: Вокальный соло «Training season»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст шестой новости.</p>
@@ -1104,7 +1166,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/23.jpg" alt="Новость 7">
-            <div class="news-feed-overlay">Заголовок седьмой новости: студенческая жизнь изнутри</div>
+            <div class="news-feed-overlay">Заголовок седьмой новости: Патриотический номер</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст седьмой новости.</p>
@@ -1115,7 +1177,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/24.jpg" alt="Новость 8">
-            <div class="news-feed-overlay">Заголовок восьмой новости: спортивные достижения</div>
+            <div class="news-feed-overlay">Заголовок восьмой новости: Профориентационный ролик</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст восьмой новости.</p>
@@ -1126,7 +1188,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/25.jpg" alt="Новость 9">
-            <div class="news-feed-overlay">Заголовок девятой новости: культурные мероприятия города</div>
+            <div class="news-feed-overlay">Заголовок девятой новости: Сюжетный танец «Lucent»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст девятой новости.</p>
@@ -1137,7 +1199,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/26.jpg" alt="Новость 10">
-            <div class="news-feed-overlay">Заголовок десятой новости: технологии и инновации</div>
+            <div class="news-feed-overlay">Заголовок десятой новости: Художественное слово Адал азамат</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст десятой новости.</p>
@@ -1148,7 +1210,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/27.jpg" alt="Новость 11">
-            <div class="news-feed-overlay">Заголовок одиннадцатой новости: мнения экспертов</div>
+            <div class="news-feed-overlay">Заголовок одиннадцатой новости: Оригинальный номер. «Every breath you take»</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст одиннадцатой новости.</p>
@@ -1159,7 +1221,7 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/28.jpg" alt="Новость 12">
-            <div class="news-feed-overlay">Заголовок двенадцатой новости: специальный репортаж</div>
+            <div class="news-feed-overlay">Заголовок двенадцатой новости: Современный танец</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст двенадцатой новости.</p>
@@ -1170,14 +1232,14 @@
         <article class="news-feed-card">
           <div class="news-feed-trigger">
             <img src="images/29.jpg" alt="Новость 13">
-            <div class="news-feed-overlay">Заголовок тринадцатой новости: главные события месяца</div>
+            <div class="news-feed-overlay">Заголовок тринадцатой новости:</div>
           </div>
           <div class="news-feed-dropdown">
             <p>Текст тринадцатой новости.</p>
           </div>
         </article>
-
       </section>
+
       <!-- 5. ФУТЕР -->
       <footer class="site-footer">
         <div>Copyright © 2026 <strong>Rostislav K</strong>. All Rights Reserved.</div>
@@ -1198,7 +1260,7 @@
       </div>
       <div class="modal-content-area">
         <h2 class="modal-article-title" id="modalTitle">Заголовок статьи</h2>
-        <div class="modal-article-meta" id="modalMeta">Опубликовано 25 Ноября 2026 • Written by Editor</div>
+        <div class="modal-article-meta" id="modalMeta">Обновлено 25 Ноября 2026 • Written by Editor</div>
         <div class="modal-illustration" id="modalImgBox"></div>
         <div class="modal-paragraphs" id="modalBody"></div>
       </div>
@@ -1228,13 +1290,13 @@
 
       var COMMENT_ITEMS = [
         "О БОЖЕ! Я даже не думал что Назаров Ерасыл мог такое вытворить!",
-        "НИЧЕГО СЕБЕ!",
-        "Да тут и так было понятно, ничего нового",
-        "Наконец-то они его посадят!",
-        "НЕТ! ЭТО ПРОСТО НЕВОЗМОЖНО!",
-        "Да ну нет, не верю",
-        "ДАААААААААААААА!!!",
-        "Комментарий пользователя #77: Полностью поддерживаю автора."
+        "уау Дана крашиха я влюбилась 😍😍 Аян краш 🔥🔥",
+        "Да тут и так было кто такой этот Назаров Ерасыл.",
+        "Наконец-то ВШITиЕН выступят 🔥🔥🔥",
+        "Я знаю Назарова, его подставили!",
+        "Как кто-то смог набрать 123 балла? Я тоже так хочу😤!",
+        "А на выступлении будет Архат?",
+        "УЭЭЭЭЭЭЭЭЭ"
       ];
 
       var SINGLE_HERO_SLIDE = {
@@ -1259,6 +1321,13 @@
           meta: "Обновлено 25 Ноября 2026 • Community Blog",
           img: "images/9.jpg",
           paragraphs: ["Никогда такого не было, и вот опять"]
+        },
+        {
+          title: "Четвертый курс принял первашей",
+          excerpt: "Наследие университета сохранено",
+          meta: "Обновлено 25 Ноября 2026 • Community Blog",
+          img: "images/6.jpg",
+          paragraphs: ["Наследие университета сохранено"]
         }
       ];
 
@@ -1276,7 +1345,8 @@
         breakingIndex: 0,
         editorsOffset: 0,
         toastTimer: null,
-        commentsTimer: null
+        commentsTimer: null,
+        breakingTimer: null
       };
 
       function showToast(message) {
@@ -1292,7 +1362,7 @@
       function openArticleModal(article) {
         document.getElementById("modalCategory").textContent = article.category || "PHOENIX NEWS";
         document.getElementById("modalTitle").textContent = article.title;
-        document.getElementById("modalMeta").textContent = article.meta || "Обновлено 23 Ноября 2026 • AmaznholovNews Desk";
+        document.getElementById("modalMeta").textContent = article.meta || "Обновлено 23 Ноября 2026 • AmanzholovNews Desk";
 
         var modalImgBox = document.getElementById("modalImgBox");
         modalImgBox.innerHTML = "";
@@ -1320,6 +1390,14 @@
         var item = BREAKING_NEWS[state.breakingIndex];
         document.getElementById("breakingHeadlineText").textContent = item.headline;
         document.getElementById("breakingTimeText").textContent = item.time;
+      }
+
+      function startBreakingAutoplay() {
+        clearInterval(state.breakingTimer);
+        state.breakingTimer = setInterval(function () {
+          state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
+          renderBreakingNews();
+        }, 4000);
       }
 
       function initCommentsTicker() {
@@ -1442,6 +1520,7 @@
       document.getElementById("brandResetBtn").addEventListener("click", function () {
         state.breakingIndex = 0;
         renderBreakingNews();
+        startBreakingAutoplay();
         state.editorsOffset = 0;
         renderEditorsChoice();
         showToast("Главная страница PhoenixNews обновлена");
@@ -1457,11 +1536,13 @@
       document.getElementById("breakingPrevBtn").addEventListener("click", function () {
         state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
         renderBreakingNews();
+        startBreakingAutoplay();
       });
 
       document.getElementById("breakingNextBtn").addEventListener("click", function () {
         state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
         renderBreakingNews();
+        startBreakingAutoplay();
       });
 
       document.getElementById("breakingTextTrigger").addEventListener("click", function () {
@@ -1482,13 +1563,6 @@
           category: "FEATURED STORY",
           img: SINGLE_HERO_SLIDE.img,
           paragraphs: SINGLE_HERO_SLIDE.paragraphs
-        });
-      });
-
-      document.querySelectorAll(".social-tile").forEach(function (tile) {
-        tile.addEventListener("click", function () {
-          var service = tile.getAttribute("data-social");
-          showToast("PhoenixNews — раздел «" + service + "»");
         });
       });
 
@@ -1519,11 +1593,13 @@
       });
 
       renderBreakingNews();
+      startBreakingAutoplay();
       initCommentsTicker();
       renderHero();
       renderCommunityBlog();
       renderEditorsChoice();
-      // Обработка клика для выезда текста в ленте новостей
+
+      // Обработка клика для увеличения картинки и выезда текста в ленте новостей
       document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
           var card = this.closest('.news-feed-card');
