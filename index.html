@@ -917,14 +917,30 @@
     @media (max-width: 768px) {
       .container {
         width: 100%;
-        padding: 8px;
+        padding: 6px;
       }
 
       .site-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
-        padding: 6px;
+        gap: 8px;
+        padding: 4px;
+      }
+
+      /* Немного уменьшаем название и логотип */
+      .brand-logo {
+        font-size: 30px;
+      }
+
+      .brand-logo-img {
+        height: 32px;
+      }
+
+      /* Сильно уменьшаем подпись под названием */
+      .brand-subtext {
+        font-size: 9px;
+        padding-left: 0;
+        margin-top: 0;
       }
 
       .header-right {
@@ -932,39 +948,60 @@
         justify-content: space-between;
         padding-right: 0;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
+      }
+
+      /* Скрываем красную плажку на мобилках */
+      .in-worldnews-badge {
+        display: none;
+      }
+
+      /* Убираем дату в срочных новостях, чтобы текст не сжимался */
+      .breaking-time {
+        display: none;
       }
 
       .main-three-cols {
         grid-template-columns: 1fr;
+        margin-bottom: 8px;
       }
 
-      /* На мобилке скрываем боковые колонки, оставляя на виду центральную новость */
       .top-news-panel,
       .right-column-stack {
         display: none;
       }
 
+      /* Делаем центральную новость компактнее по высоте, чтобы влезло всё остальное */
       .hero-stage {
-        min-height: 280px;
+        min-height: 220px;
       }
 
-      /* Делаем карусель Editor's Choice прокручиваемой по горизонтали, чтобы все 6+ картинок были доступны */
+      /* Компактная карусель Editor's Choice с горизонтальным свайпом */
+      .editors-section {
+        padding: 6px;
+        margin-bottom: 8px;
+      }
+
       .editors-cards-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 8px;
+        gap: 6px;
       }
 
       .editor-card {
-        flex: 0 0 130px;
+        flex: 0 0 115px;
         scroll-snap-align: start;
-        height: 130px;
+        height: 110px;
       }
 
       .carousel-arrow-btn {
-        display: none; /* на тач-устройствах стрелки не нужны, работает свайп */
+        display: none;
+      }
+
+      /* Показываем верхушку первого поста под каруселью (подсказку для прокрутки) */
+      .full-news-feed {
+        margin-top: 8px;
       }
     }
   </style>
@@ -1064,17 +1101,17 @@
               <div class="social-mini-brand"><strong>Phoenix</strong>News</div>
             </div>
             <div class="social-grid">
-              <a href="https://www.instagram.com/phx.fam?mdxt=YWNpbjdlYnc1NDBm" target="_blank" class="social-tile" data-social="Instagram">
+              <a href="https://instagram.com" target="_blank" class="social-tile" data-social="Instagram">
                 <div class="social-img-wrap"><img src="images/3.jpg" alt="Instagram"></div>
                 <span class="social-label">Instagram</span>
               </a>
-              <a href="https://vku.edu.kz/ru/" target="_blank" class="social-tile" data-social="University">
+              <a href="https://www.instagram.com" target="_blank" class="social-tile" data-social="University">
                 <div class="social-img-wrap"><img src="images/4.jpg" alt="University"></div>
                 <span class="social-label">University</span>
               </a>
-              <a href="https://www.tiktok.com/@phx.fam?_r=1&_t=ZS-9BU8iLvZnYy" target="_blank" class="social-tile" data-social="Twitter">
+              <a href="https://twitter.com" target="_blank" class="social-tile" data-social="Twitter">
                 <div class="social-img-wrap"><img src="images/5.jpg" alt="Twitter"></div>
-                <span class="social-label">TikTok</span>
+                <span class="social-label">Twitter</span>
               </a>
             </div>
           </div>
