@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -158,12 +158,17 @@
       font-size: 11.5px;
       color: #163b5c;
       text-align: left;
+      text-decoration: none;
       transition: color 0.15s ease;
     }
 
     .header-link-btn:hover {
       color: #e31b23;
       text-decoration: underline;
+    }
+
+    .header-link-btn.active-lang {
+      font-weight: 700;
     }
 
     .header-link-dot {
@@ -1026,14 +1031,14 @@
 
         <div class="header-right">
           <div class="header-links-grid">
-            <button type="button" class="header-link-btn" data-quick-index="0">
+            <a href="lang/ru.html" class="header-link-btn">
               <span class="header-link-dot"></span>
               <span>РУССКАЯ ВЕРСИЯ САЙТА</span>
-            </button>
-            <button type="button" class="header-link-btn" data-quick-index="1">
+            </a>
+            <a href="index.html" class="header-link-btn active-lang">
               <span class="header-link-dot"></span>
               <span>КАЗАХСКАЯ ВЕРСИЯ САЙТА</span>
-            </button>
+            </a>
           </div>
           <div class="in-worldnews-badge">
             IN THE<br>PHOENIX NEWS
@@ -1346,11 +1351,6 @@
         { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 1 Сентября 2026 15:10" }
       ];
 
-      var QUICK_HEADER_ARTICLES = [
-        { title: "CBC in Syria: Dispatches from the Northern Border", img: "images/1.jpg", paragraphs: ["Dispatch details..."] },
-        { title: "Detroit Auto Snow: Winter Testing for 2013 Concept Fleets", img: "images/9.jpg", paragraphs: ["Testing details..."] }
-      ];
-
       var COMMENT_ITEMS = [
         "О БОЖЕ! Я даже не думал что Назаров Ерасыл мог такое вытворить!",
         "уау Дана крашиха я влюбилась 😍😍 Аян краш 🔥🔥",
@@ -1589,13 +1589,6 @@
         showToast("Главная страница PhoenixNews обновлена");
       });
 
-      document.querySelectorAll(".header-link-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var idx = parseInt(btn.getAttribute("data-quick-index"), 10) || 0;
-          openArticleModal(QUICK_HEADER_ARTICLES[idx]);
-        });
-      });
-
       document.getElementById("breakingPrevBtn").addEventListener("click", function () {
         state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
         renderBreakingNews();
@@ -1662,7 +1655,6 @@
       renderCommunityBlog();
       renderEditorsChoice();
 
-      // Обработка клика для увеличения картинки и выезда текста в ленте новостей
       document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
           var card = this.closest('.news-feed-card');

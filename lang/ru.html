@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhoenixNews</title>
+  <style>
+    /* =========================================================================
+       БАЗОВЫЙ СБРОС И КАРКАС 980px С МАСШТАБИРОВАНИЕМ ПОД FULL HD
+       ========================================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f4f4f4;
+      background-image: linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%);
+      color: #333333;
+      font-family: Arial, Helvetica, Tahoma, sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .page-scaler {
+      width: 100%;
+    }
+
+    @media (min-width: 1280px) {
+      .page-scaler { zoom: 1.24; }
+    }
+
+    @media (min-width: 1440px) {
+      .page-scaler { zoom: 1.45; }
+    }
+
+    @media (min-width: 1800px) {
+      .page-scaler { zoom: 1.72; }
+    }
+
+    .container {
+      width: 980px;
+      margin: 0 auto;
+      padding: 12px 0 26px 0;
+    }
+
+    /* =========================================================================
+       1. ШАПКА ПОРТАЛА (HEADER)
+       ========================================================================= */
+    .site-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px 14px 4px;
+      overflow: hidden;
+    }
+
+    .site-header::before {
+      content: "";
+      position: absolute;
+      right: 90px;
+      top: -60px;
+      width: 340px;
+      height: 190px;
+      background: radial-gradient(ellipse at center, rgba(220, 224, 230, 0.55) 0%, rgba(255, 255, 255, 0) 72%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .brand-box {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .brand-logo {
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -1.4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand-logo .word-bold {
+      font-weight: 700;
+      color: #0e2d4c;
+    }
+
+    .brand-logo .word-light {
+      font-weight: 400;
+      color: #215382;
+    }
+
+    .brand-logo-img {
+      height: 40px;
+      width: auto;
+      margin-left: 12px;
+      border-radius: 4px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-subtext {
+      font-size: 11px;
+      color: #6b6b6b;
+      padding-left: 44px;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding-right: 12px;
+    }
+
+    .in-worldnews-badge {
+      background: linear-gradient(180deg, #ee1f27 0%, #d4131a 100%);
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+      letter-spacing: 0.4px;
+    }
+
+    .header-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      column-gap: 32px;
+      row-gap: 7px;
+    }
+
+    .header-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      color: #163b5c;
+      text-align: left;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .header-link-btn:hover {
+      color: #e31b23;
+      text-decoration: underline;
+    }
+
+    .header-link-btn.active-lang {
+      font-weight: 700;
+    }
+
+    .header-link-dot {
+      width: 4px;
+      height: 4px;
+      background-color: #e31b23;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================================
+       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (BREAKING NEWS)
+       ========================================================================= */
+    .breaking-bar {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 14px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .breaking-badge {
+      background: linear-gradient(180deg, #ee1f27 0%, #cf141b 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .breaking-track {
+      background: linear-gradient(180deg, #1b4673 0%, #123456 100%);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 10px 5px 14px;
+      color: #ffffff;
+      min-width: 0;
+    }
+
+    .breaking-text-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .breaking-text-wrap:hover .breaking-headline {
+      text-decoration: underline;
+    }
+
+    .breaking-headline {
+      font-weight: 700;
+      font-style: italic;
+      font-size: 11.5px;
+      color: #ffffff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .breaking-time {
+      font-style: italic;
+      font-size: 10.5px;
+      color: #9ec5eb;
+      flex-shrink: 0;
+    }
+
+    .breaking-controls {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 12px;
+      flex-shrink: 0;
+    }
+
+    .breaking-arrow {
+      width: 18px;
+      height: 18px;
+      color: #a9cdf2;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+    }
+
+    .breaking-arrow:hover {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+
+    /* =========================================================================
+       3. ГЛАВНАЯ ТРЕХКОЛОНОЧНАЯ СЕТКА (215px | 1fr | 265px)
+       ========================================================================= */
+    .main-three-cols {
+      display: grid;
+      grid-template-columns: 215px 1fr 265px;
+      gap: 14px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+
+    .panel-box {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+    }
+
+    /* --- ЛЕВАЯ КОЛОНКА: КОММЕНТАРИИ ЧИТАТЕЛЕЙ (ПЛАВНАЯ ПРОКРУТКА) --- */
+    .top-news-panel {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-news-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 7px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #d8d8d8;
+    }
+
+    .section-heading-condensed {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #222222;
+      letter-spacing: -0.2px;
+      line-height: 1;
+    }
+
+    .cool-pill {
+      background: linear-gradient(180deg, #b858e3 0%, #9b48c9 100%);
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      position: relative;
+      letter-spacing: 0.4px;
+      flex-shrink: 0;
+    }
+
+    .cool-pill::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 6px;
+      border-width: 4px 4px 0 0;
+      border-style: solid;
+      border-color: #9b48c9 transparent transparent transparent;
+    }
+
+    .comments-scroll-container {
+      height: 340px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .comments-scroll-track {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+
+    .comment-item {
+      border-bottom: 1px dashed #d2d2d2;
+      padding: 8px 0;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #163d66;
+      user-select: none;
+    }
+
+    /* --- ЦЕНТРАЛЬНАЯ КОЛОНКА: ЕДИНСТВЕННАЯ ГЛАВНАЯ НОВОСТЬ --- */
+    .hero-slider-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .hero-stage {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 350px;
+      background-color: #1c2c3d;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .hero-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.68);
+      padding: 12px 14px 14px 14px;
+      color: #ffffff;
+    }
+
+    .hero-meta {
+      font-size: 9.5px;
+      color: #cccccc;
+      margin-bottom: 2px;
+    }
+
+    .hero-title {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .hero-stage:hover .hero-title {
+      color: #9ecbff;
+    }
+
+    .hero-summary {
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: #e6e6e6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* --- ПРАВАЯ КОЛОНКА: COMMUNITY BLOG + STAY CONNECTED --- */
+    .right-column-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .blog-box-header {
+      background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+      border-bottom: 1px solid #dcdcdc;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .blog-title-text {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 16.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .blog-title-text .red-word {
+      color: #d61f26;
+    }
+
+    .blog-title-text .navy-word {
+      color: #163d66;
+    }
+
+    .blog-items-wrap {
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .blog-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .blog-thumb {
+      width: 82px;
+      height: 60px;
+      border: 1px solid #cccccc;
+      padding: 2px;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .blog-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .blog-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .blog-item-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #163d66;
+      margin-bottom: 3px;
+      line-height: 1.2;
+    }
+
+    .blog-card:hover .blog-item-title {
+      color: #d61f26;
+      text-decoration: underline;
+    }
+
+    .blog-item-excerpt {
+      font-size: 10.5px;
+      color: #555555;
+      line-height: 1.32;
+    }
+
+    /* Блок STAY CONNECTED WITH PhoenixNews */
+    .social-box {
+      padding: 9px 11px 11px 11px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .social-box-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 6px;
+      margin-bottom: 9px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .social-heading {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #163d66;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .social-mini-brand {
+      font-size: 10.5px;
+      color: #163d66;
+      letter-spacing: -0.2px;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 30px;
+      column-gap: 6px;
+      text-align: center;
+    }
+
+    .social-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+    }
+
+    .social-tile:hover .social-img-wrap {
+      transform: translateY(-1px);
+    }
+
+    .social-img-wrap {
+      width: 34px;
+      height: 34px;
+      transition: transform 0.3s ease;
+    }
+
+    .social-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .social-label {
+      font-size: 10px;
+      color: #444444;
+    }
+
+    .social-tile:hover .social-label {
+      color: #163d66;
+      text-decoration: underline;
+    }
+
+    /* Скрываем мобильный дубль соцсетей на десктопе */
+    .mobile-only-social {
+      display: none;
+    }
+
+    /* =========================================================================
+       4. НИЖНИЙ БЛОК: EDITOR'S CHOICE
+       ========================================================================= */
+    .editors-section {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+      padding: 10px 10px 12px 10px;
+    }
+
+    .editors-header {
+      padding-bottom: 7px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .editors-carousel-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .carousel-arrow-btn {
+      width: 16px;
+      height: 142px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #777777;
+      background-color: #f8f8f8;
+      border: 1px solid #e4e4e4;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .carousel-arrow-btn:hover {
+      background-color: #163d66;
+      color: #ffffff;
+      border-color: #163d66;
+    }
+
+    .editors-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      flex: 1;
+    }
+
+    .editor-card {
+      position: relative;
+      height: 142px;
+      border: 1px solid #cccccc;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #222222;
+    }
+
+    .editor-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .editor-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%);
+      padding: 5px 6px;
+      color: #ffffff;
+      font-size: 9.8px;
+      font-weight: 700;
+      line-height: 1.22;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .editor-card:hover .editor-caption {
+      color: #9ecbff;
+    }
+
+    /* =========================================================================
+       5. ФУТЕР И МОДАЛЬНОЕ ОКНО
+       ========================================================================= */
+    .site-footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #dcdcdc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: #777777;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-window {
+      background: #ffffff;
+      border: 1px solid #bbbbbb;
+      border-radius: 3px;
+      width: 680px;
+      max-width: 95vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+    }
+
+    .modal-top-bar {
+      background: #163d66;
+      color: #ffffff;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-cat-tag {
+      background: #e31b23;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-right: 8px;
+    }
+
+    .modal-close-x {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0 6px;
+    }
+
+    .modal-content-area {
+      padding: 18px 22px;
+      overflow-y: auto;
+    }
+
+    .modal-article-title {
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f2d4a;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .modal-article-meta {
+      font-size: 12px;
+      color: #777777;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .modal-illustration {
+      width: 100%;
+      height: 240px;
+      border: 1px solid #cccccc;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .modal-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-paragraphs p {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .modal-bottom-bar {
+      background: #f2f2f2;
+      border-top: 1px solid #dcdcdc;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-close-btn {
+      background: #163d66;
+      color: #ffffff;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+
+    .modal-close-btn:hover {
+      background: #0f2d4a;
+    }
+
+    .toast-notice {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #163d66;
+      color: #ffffff;
+      border: 1px solid #35679c;
+      padding: 10px 16px;
+      border-radius: 3px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 1100;
+    }
+
+    .toast-notice.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================================
+       ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ С УВЕЛИЧЕНИЕМ КАРТИНКИ И ВЫЕЗЖАЮЩИМ ТЕКСТОМ)
+       ========================================================================= */
+    .full-news-feed {
+      margin-top: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .news-feed-card {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .news-feed-trigger {
+      position: relative;
+      height: 160px;
+      cursor: pointer;
+      background-color: #222222;
+      transition: height 0.4s ease-in-out;
+    }
+
+    .news-feed-card.open .news-feed-trigger {
+      height: 420px;
+    }
+
+    .news-feed-trigger img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .news-feed-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%);
+      padding: 12px 16px;
+      color: #ffffff;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .news-feed-trigger:hover .news-feed-overlay {
+      color: #9ecbff;
+    }
+
+    .news-feed-dropdown {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+      background: #fafafa;
+      padding: 0 18px;
+    }
+
+    .news-feed-card.open .news-feed-dropdown {
+      max-height: 450px;
+      padding: 16px 18px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .news-feed-dropdown p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .news-feed-dropdown p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* =========================================================================
+       МОБИЛЬНАЯ АДАПТАЦИЯ (MOBILE RESPONSIVE STYLES)
+       ========================================================================= */
+    @media (max-width: 768px) {
+      .container {
+        width: 100%;
+        padding: 6px;
+      }
+
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 4px;
+      }
+
+      .brand-logo {
+        font-size: 30px;
+      }
+
+      .brand-logo-img {
+        height: 32px;
+      }
+
+      .brand-subtext {
+        font-size: 9px;
+        padding-left: 0;
+        margin-top: 0;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-right: 0;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .in-worldnews-badge {
+        display: none;
+      }
+
+      .breaking-time {
+        display: none;
+      }
+
+      .main-three-cols {
+        grid-template-columns: 1fr;
+        margin-bottom: 8px;
+      }
+
+      .top-news-panel,
+      .right-column-stack {
+        display: none;
+      }
+
+      .hero-stage {
+        min-height: 220px;
+      }
+
+      .editors-section {
+        padding: 6px;
+        margin-bottom: 8px;
+      }
+
+      .editors-cards-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 6px;
+      }
+
+      .editor-card {
+        flex: 0 0 115px;
+        scroll-snap-align: start;
+        height: 110px;
+      }
+
+      .carousel-arrow-btn {
+        display: none;
+      }
+
+      .full-news-feed {
+        margin-top: 8px;
+      }
+
+      /* Показываем блок соцсетей перед футером на мобильных устройствах */
+      .mobile-only-social {
+        display: flex;
+        margin-bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-scaler">
+    <div class="container">
+      <!-- 1. ШАПКА ПОРТАЛА -->
+      <header class="site-header">
+        <div class="brand-box" id="brandResetBtn" title="Вернуться на главную страницу">
+          <div class="brand-logo">
+            <span class="word-bold">Phoenix</span><span class="word-light">News</span>
+            <img src="../images/logo.jpg" alt="PhoenixNews Logo" class="brand-logo-img">
+          </div>
+          <div class="brand-subtext">Ноябрь 2026 AN</div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-links-grid">
+            <a href="ru.html" class="header-link-btn active-lang">
+              <span class="header-link-dot"></span>
+              <span>РУССКАЯ ВЕРСИЯ САЙТА</span>
+            </a>
+            <a href="../index.html" class="header-link-btn">
+              <span class="header-link-dot"></span>
+              <span>КАЗАХСКАЯ ВЕРСИЯ САЙТА</span>
+            </a>
+          </div>
+          <div class="in-worldnews-badge">
+            IN THE<br>PHOENIX NEWS
+          </div>
+        </div>
+      </header>
+
+      <!-- 2. СРОЧНЫЕ НОВОСТИ -->
+      <section class="breaking-bar" aria-label="Breaking News">
+        <div class="breaking-badge">Срочные новости</div>
+        <div class="breaking-track">
+          <div class="breaking-text-wrap" id="breakingTextTrigger">
+            <span class="breaking-headline" id="breakingHeadlineText">
+              В Аманжолове выступает творческий коллектив Фенис.
+            </span>
+            <span class="breaking-time" id="breakingTimeText">
+              - Четверг, 25 Ноября 2026 18:00
+            </span>
+          </div>
+          <div class="breaking-controls">
+            <button type="button" class="breaking-arrow" id="breakingPrevBtn" title="Предыдущая новость"><</button>
+            <button type="button" class="breaking-arrow" id="breakingNextBtn" title="Следующая новость">></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. ГЛАВНАЯ ТРЕХКОЛОНОЧНАЯ СЕТКА -->
+      <main class="main-three-cols">
+        <!-- ЛЕВЫЙ БЛОК: КОММЕНТАРИИ ЧИТАТЕЛЕЙ -->
+        <aside class="panel-box top-news-panel">
+          <div class="top-news-header">
+            <h2 class="section-heading-condensed">Комментарии читателей</h2>
+            <span class="cool-pill">LIVE</span>
+          </div>
+          <div class="comments-scroll-container">
+            <div class="comments-scroll-track" id="commentsScrollTrack"></div>
+          </div>
+        </aside>
+
+        <!-- ЦЕНТРАЛЬНЫЙ БЛОК: ЕДИНСТВЕННАЯ ГЛАВНАЯ НОВОСТЬ -->
+        <section class="panel-box hero-slider-panel" id="heroSliderPanel">
+          <div class="hero-stage" id="heroStage">
+            <img src="../images/1.jpg" alt="Главная новость" id="heroImg">
+            <div class="hero-overlay">
+              <div class="hero-meta" id="heroMeta">Обновлено 25 Ноября 2026</div>
+              <h1 class="hero-title" id="heroTitle">В АМАНЖОЛОВЕ ВЫСТУПАЮТ ФЕНИТ</h1>
+              <p class="hero-summary" id="heroSummary">
+                Etiam vitae commodo dolor. Ut quis urna nisl. Nulla eu purus odio, at aliquet orci. Nulla est justo, commodo id facilisis ac, viverra non lectus. Mauris euismod elit
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ПРАВЫЙ БЛОК: COMMUNITY BLOG + STAY CONNECTED -->
+        <aside class="right-column-stack">
+          <div class="panel-box">
+            <div class="blog-box-header">
+              <h2 class="blog-title-text">
+                <span class="red-word">COMMUNITY</span> <span class="navy-word">BLOG</span>
+              </h2>
+            </div>
+            <div class="blog-items-wrap" id="blogItemsWrap"></div>
+          </div>
+
+          <!-- СЕТЬ СОЦСЕТЕЙ (КЛИКАБЕЛЬНЫЕ ССЫЛКИ ДЛЯ ДЕСКТОПА) -->
+          <div class="panel-box social-box">
+            <div class="social-box-header">
+              <h3 class="social-heading">ОСТАВАЙТЕСЬ НА СВЯЗИ</h3>
+              <div class="social-mini-brand"><strong>Phoenix</strong>News</div>
+            </div>
+            <div class="social-grid">
+              <a href="https://instagram.com" target="_blank" class="social-tile" data-social="Instagram">
+                <div class="social-img-wrap"><img src="../images/3.jpg" alt="Instagram"></div>
+                <span class="social-label">Instagram</span>
+              </a>
+              <a href="https://www.instagram.com" target="_blank" class="social-tile" data-social="University">
+                <div class="social-img-wrap"><img src="../images/4.jpg" alt="University"></div>
+                <span class="social-label">University</span>
+              </a>
+              <a href="https://twitter.com" target="_blank" class="social-tile" data-social="Twitter">
+                <div class="social-img-wrap"><img src="../images/5.jpg" alt="Twitter"></div>
+                <span class="social-label">Twitter</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <!-- 4. НИЖНИЙ БЛОК: EDITOR'S CHOICE -->
+      <section class="editors-section" aria-label="Editor's Choice">
+        <div class="editors-header">
+          <h2 class="section-heading-condensed">EDITOR'S CHOICE</h2>
+        </div>
+        <div class="editors-carousel-row">
+          <button type="button" class="carousel-arrow-btn" id="editorsPrevBtn" title="Прокрутить влево"><</button>
+          <div class="editors-cards-grid" id="editorsCardsGrid"></div>
+          <button type="button" class="carousel-arrow-btn" id="editorsNextBtn" title="Прокрутить вправо">></button>
+        </div>
+      </section>
+
+      <!-- ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ) -->
+      <section class="full-news-feed" aria-label="News Feed">
+        <!-- Элемент 1 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/17.jpg" alt="Новость 1">
+            <div class="news-feed-overlay">Заголовок первой новости: Пролог «Адалсыздықтың құны»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Здесь располагается основной текст статьи первой новости. При клике на картинку этот блок плавно выдвигается из-под нее, а сама картинка увеличивается в высоту.</p>
+            <p>Повторный клик по изображению затягивает текст обратно и возвращает исходный размер фотографии.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 2 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/18.jpg" alt="Новость 2">
+            <div class="news-feed-overlay">Заголовок второй новости: Эстрадный танец «Are you gonna be my girl?»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Основной текст статьи второй новости. Текст написан специально для демонстрации работы интерактивного выпадающего списка.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 3 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/19.jpg" alt="Новость 3">
+            <div class="news-feed-overlay">Заголовок третьей новости: Вокальный номер «Доп»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст третьей новости. Вы можете добавлять сюда сколько угодно абзацев, верстка автоматически адаптируется.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 4 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/20.jpg" alt="Новость 4">
+            <div class="news-feed-overlay">Заголовок четвёртой новости: Жайдарман</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст четвертой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 5 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/21.jpg" alt="Новость 5">
+            <div class="news-feed-overlay">Заголовок пятой новости: Народный танец «Ağ çiçəyim»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст пятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 6 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/22.jpg" alt="Новость 6">
+            <div class="news-feed-overlay">Заголовок шестой новости: Вокальный соло «Training season»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст шестой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 7 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/23.jpg" alt="Новость 7">
+            <div class="news-feed-overlay">Заголовок седьмой новости: Патриотический номер</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст седьмой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 8 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/24.jpg" alt="Новость 8">
+            <div class="news-feed-overlay">Заголовок восьмой новости: Профориентационный ролик</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст восьмой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 9 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/25.jpg" alt="Новость 9">
+            <div class="news-feed-overlay">Заголовок девятой новости: Сюжетный танец «Lucent»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст девятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 10 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/26.jpg" alt="Новость 10">
+            <div class="news-feed-overlay">Заголовок десятой новости: Художественное слово Адал азамат</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст десятой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 11 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/27.jpg" alt="Новость 11">
+            <div class="news-feed-overlay">Заголовок одиннадцатой новости: Оригинальный номер. «Every breath you take»</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст одиннадцатой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 12 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/28.jpg" alt="Новость 12">
+            <div class="news-feed-overlay">Заголовок двенадцатой новости: Современный танец</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст двенадцатой новости.</p>
+          </div>
+        </article>
+
+        <!-- Элемент 13 -->
+        <article class="news-feed-card">
+          <div class="news-feed-trigger">
+            <img src="../images/29.jpg" alt="Новость 13">
+            <div class="news-feed-overlay">Заголовок тринадцатой новости:</div>
+          </div>
+          <div class="news-feed-dropdown">
+            <p>Текст тринадцатой новости.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- МОБИЛЬНЫЙ БЛОК СОЦСЕТЕЙ (ВИДЕН ТОЛЬКО НА ТЕЛЕФОНАХ ПЕРЕД ФУТЕРОМ) -->
+      <div class="panel-box social-box mobile-only-social">
+        <div class="social-box-header">
+          <h3 class="social-heading">ОСТАВАЙТЕСЬ НА СВЯЗИ</h3>
+          <div class="social-mini-brand"><strong>Phoenix</strong>News</div>
+        </div>
+        <div class="social-grid">
+          <a href="https://instagram.com" target="_blank" class="social-tile" data-social="Instagram">
+            <div class="social-img-wrap"><img src="../images/3.jpg" alt="Instagram"></div>
+            <span class="social-label">Instagram</span>
+          </a>
+          <a href="https://www.instagram.com" target="_blank" class="social-tile" data-social="University">
+            <div class="social-img-wrap"><img src="../images/4.jpg" alt="University"></div>
+            <span class="social-label">University</span>
+          </a>
+          <a href="https://twitter.com" target="_blank" class="social-tile" data-social="Twitter">
+            <div class="social-img-wrap"><img src="../images/5.jpg" alt="Twitter"></div>
+            <span class="social-label">Twitter</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. ФУТЕР -->
+      <footer class="site-footer">
+        <div>Copyright © 2026 <strong>Rostislav K</strong>. All Rights Reserved.</div>
+        <div>Создано специально для коллектива Фенит. Все имена вымышлены, все совпадения случайны.</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО -->
+  <div class="modal-backdrop" id="articleModal" role="dialog" aria-modal="true">
+    <div class="modal-window">
+      <div class="modal-top-bar">
+        <div>
+          <span class="modal-cat-tag" id="modalCategory">PHOENIX NEWS</span>
+          <span style="font-size:12px; color:#c8def5;">PHOENIX NEWS</span>
+        </div>
+        <button type="button" class="modal-close-x" id="modalCloseTopBtn" title="Закрыть">×</button>
+      </div>
+      <div class="modal-content-area">
+        <h2 class="modal-article-title" id="modalTitle">Заголовок статьи</h2>
+        <div class="modal-article-meta" id="modalMeta">Обновлено 25 Ноября 2026 • Written by Editor</div>
+        <div class="modal-illustration" id="modalImgBox"></div>
+        <div class="modal-paragraphs" id="modalBody"></div>
+      </div>
+      <div class="modal-bottom-bar">
+        <button type="button" class="modal-close-btn" id="modalCloseBottomBtn">Закрыть окно</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ -->
+  <div class="toast-notice" id="toastNotice"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var BREAKING_NEWS = [
+        { headline: "В Аманжолове выступают активисты ВШITиЕН.", time: "- 19 Ноября 2026 17:29" },
+        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- 10 Ноября 2026 16:45" },
+        { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 1 Сентября 2026 15:10" }
+      ];
+
+      var COMMENT_ITEMS = [
+        "О БОЖЕ! Я даже не думал что Назаров Ерасыл мог такое вытворить!",
+        "уау Дана крашиха я влюбилась 😍😍 Аян краш 🔥🔥",
+        "Да тут и так было кто такой этот Назаров Ерасыл.",
+        "Наконец-то ВШITиЕН выступят 🔥🔥🔥",
+        "Я знаю Назарова, его подставили!",
+        "Как кто-то смог набрать 123 балла? Я тоже так хочу😤!",
+        "А на выступлении будет Архат?",
+        "УЭЭЭЭЭЭЭЭЭ"
+      ];
+
+      var SINGLE_HERO_SLIDE = {
+        meta: "Обновлено 25 Ноября 2026",
+        title: "В АМАНЖОЛОВЕ ВЫСТУПАЕТ ВЫСШАЯ ШКОЛА IT И ЕСТЕСТВЕННЫХ НАУК",
+        summary: "Грядет лучшее выступление творческого коллектива в этом году",
+        img: "../images/1.jpg",
+        paragraphs: ["Флекс", "Флекс лютый"]
+      };
+
+      var COMMUNITY_BLOG_ITEMS = [
+        {
+          title: "Перваши повелись",
+          excerpt: "Первашей опять затролили старшаки",
+          meta: "Нояб 22 2026 • Community Blog",
+          img: "../images/2.jpg",
+          paragraphs: ["Первашей опять затролили старшаки"]
+        },
+        {
+          title: "Перваши стали первашами",
+          excerpt: "Никогда такого не было, и вот опять",
+          meta: "Обновлено 25 Ноября 2026 • Community Blog",
+          img: "../images/9.jpg",
+          paragraphs: ["Никогда такого не было, и вот опять"]
+        },
+        {
+          title: "Четвертый курс принял первашей",
+          excerpt: "Наследие университета сохранено",
+          meta: "Обновлено 25 Ноября 2026 • Community Blog",
+          img: "../images/6.jpg",
+          paragraphs: ["Наследие университета сохранено"]
+        }
+      ];
+
+      var EDITORS_CHOICE_ITEMS = [
+        { title: "В Аманжолове девочка поступила на грант со 123 баллами", meta: "Сен 1 2026", img: "../images/10.jpg", paragraphs: ["Detail text..."] },
+        { title: "За коррупцию арестовали известного бизнесмена Назарова Ерасыла", meta: "Нояб 2 2026", img: "../images/11.jpg", paragraphs: ["Detail text..."] },
+        { title: "PhoenixNews лучшие новости в которых лучшие перакурсники", meta: "Нояб 9 2026", img: "../images/12.jpg", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове 24-25 Ноября выступают активисты", meta: "Нояб 5 2026", img: "../images/13.jpg", paragraphs: ["Detail text..."] },
+        { title: "Девочка набравшая 123 балла оказалась дочерью Назарова Ерасыла", meta: "Нояб 9 2026", img: "../images/14.jpg", paragraphs: ["Detail text..."] },
+        { title: "Назаров Ерасыл подозревается во взятке и угрозах конкурентам", meta: "Нояб 10 2026", img: "../images/15.jpg", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове планируются крупные события", meta: "Нояб 20 2026", img: "../images/16.jpg", paragraphs: ["Detail text..."] }
+      ];
+
+      var state = {
+        breakingIndex: 0,
+        editorsOffset: 0,
+        toastTimer: null,
+        commentsTimer: null,
+        breakingTimer: null
+      };
+
+      function showToast(message) {
+        var toastEl = document.getElementById("toastNotice");
+        toastEl.textContent = message;
+        toastEl.classList.add("visible");
+        clearTimeout(state.toastTimer);
+        state.toastTimer = setTimeout(function () {
+          toastEl.classList.remove("visible");
+        }, 2600);
+      }
+
+      function openArticleModal(article) {
+        document.getElementById("modalCategory").textContent = article.category || "PHOENIX NEWS";
+        document.getElementById("modalTitle").textContent = article.title;
+        document.getElementById("modalMeta").textContent = article.meta || "Обновлено 23 Ноября 2026 • AmanzholovNews Desk";
+
+        var modalImgBox = document.getElementById("modalImgBox");
+        modalImgBox.innerHTML = "";
+        var img = document.createElement("img");
+        img.src = article.img || "../images/1.jpg";
+        img.alt = article.title;
+        modalImgBox.appendChild(img);
+
+        var bodyEl = document.getElementById("modalBody");
+        bodyEl.innerHTML = "";
+        (article.paragraphs || ["Текст статьи..."]).forEach(function (text) {
+          var p = document.createElement("p");
+          p.textContent = text;
+          bodyEl.appendChild(p);
+        });
+
+        document.getElementById("articleModal").classList.add("open");
+      }
+
+      function closeArticleModal() {
+        document.getElementById("articleModal").classList.remove("open");
+      }
+
+      function renderBreakingNews() {
+        var item = BREAKING_NEWS[state.breakingIndex];
+        document.getElementById("breakingHeadlineText").textContent = item.headline;
+        document.getElementById("breakingTimeText").textContent = item.time;
+      }
+
+      function startBreakingAutoplay() {
+        clearInterval(state.breakingTimer);
+        state.breakingTimer = setInterval(function () {
+          state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
+          renderBreakingNews();
+        }, 4000);
+      }
+
+      function initCommentsTicker() {
+        var track = document.getElementById("commentsScrollTrack");
+        track.innerHTML = "";
+
+        var displayItems = COMMENT_ITEMS.concat(COMMENT_ITEMS);
+        displayItems.forEach(function (text) {
+          var div = document.createElement("div");
+          div.className = "comment-item";
+          div.textContent = text;
+          track.appendChild(div);
+        });
+
+        clearInterval(state.commentsTimer);
+        state.commentsTimer = setInterval(function () {
+          var firstChild = track.firstElementChild;
+          if (!firstChild) return;
+
+          var stepHeight = firstChild.offsetHeight;
+          track.style.transition = "transform 0.45s ease-in-out";
+          track.style.transform = "translateY(-" + stepHeight + "px)";
+
+          setTimeout(function () {
+            track.style.transition = "none";
+            track.appendChild(firstChild);
+            track.style.transform = "translateY(0px)";
+          }, 460);
+        }, 2300);
+      }
+
+      function renderHero() {
+        document.getElementById("heroImg").src = SINGLE_HERO_SLIDE.img;
+        document.getElementById("heroMeta").textContent = SINGLE_HERO_SLIDE.meta;
+        document.getElementById("heroTitle").textContent = SINGLE_HERO_SLIDE.title;
+        document.getElementById("heroSummary").textContent = SINGLE_HERO_SLIDE.summary;
+      }
+
+      function renderCommunityBlog() {
+        var wrapEl = document.getElementById("blogItemsWrap");
+        wrapEl.innerHTML = "";
+
+        COMMUNITY_BLOG_ITEMS.forEach(function (post) {
+          var card = document.createElement("article");
+          card.className = "blog-card";
+
+          var thumb = document.createElement("div");
+          thumb.className = "blog-thumb";
+          var img = document.createElement("img");
+          img.src = post.img;
+          img.alt = post.title;
+          thumb.appendChild(img);
+
+          var info = document.createElement("div");
+          info.className = "blog-info";
+
+          var titleEl = document.createElement("h3");
+          titleEl.className = "blog-item-title";
+          titleEl.textContent = post.title;
+
+          var excerptEl = document.createElement("p");
+          excerptEl.className = "blog-item-excerpt";
+          excerptEl.textContent = post.excerpt;
+
+          info.appendChild(titleEl);
+          info.appendChild(excerptEl);
+          card.appendChild(thumb);
+          card.appendChild(info);
+
+          card.addEventListener("click", function () {
+            openArticleModal({
+              title: post.title,
+              meta: post.meta,
+              category: "COMMUNITY BLOG",
+              img: post.img,
+              paragraphs: post.paragraphs
+            });
+          });
+
+          wrapEl.appendChild(card);
+        });
+      }
+
+      function renderEditorsChoice() {
+        var gridEl = document.getElementById("editorsCardsGrid");
+        gridEl.innerHTML = "";
+        var total = EDITORS_CHOICE_ITEMS.length;
+
+        for (var i = 0; i < 6; i++) {
+          var item = EDITORS_CHOICE_ITEMS[(state.editorsOffset + i) % total];
+          (function (currentItem) {
+            var card = document.createElement("article");
+            card.className = "editor-card";
+
+            var img = document.createElement("img");
+            img.src = currentItem.img;
+            img.alt = currentItem.title;
+            card.appendChild(img);
+
+            var caption = document.createElement("div");
+            caption.className = "editor-caption";
+            caption.textContent = currentItem.title;
+
+            card.appendChild(caption);
+            card.addEventListener("click", function () {
+              openArticleModal({
+                title: currentItem.title,
+                meta: currentItem.meta,
+                category: "EDITOR'S CHOICE",
+                img: currentItem.img,
+                paragraphs: currentItem.paragraphs
+              });
+            });
+
+            gridEl.appendChild(card);
+          })(item);
+        }
+      }
+
+      document.getElementById("brandResetBtn").addEventListener("click", function () {
+        state.breakingIndex = 0;
+        renderBreakingNews();
+        startBreakingAutoplay();
+        state.editorsOffset = 0;
+        renderEditorsChoice();
+        showToast("Главная страница PhoenixNews обновлена");
+      });
+
+      document.getElementById("breakingPrevBtn").addEventListener("click", function () {
+        state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
+        renderBreakingNews();
+        startBreakingAutoplay();
+      });
+
+      document.getElementById("breakingNextBtn").addEventListener("click", function () {
+        state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
+        renderBreakingNews();
+        startBreakingAutoplay();
+      });
+
+      document.getElementById("breakingTextTrigger").addEventListener("click", function () {
+        var current = BREAKING_NEWS[state.breakingIndex];
+        openArticleModal({
+          title: current.headline,
+          meta: "Breaking News " + current.time,
+          category: "BREAKING NEWS",
+          img: "../images/1.jpg",
+          paragraphs: [current.headline]
+        });
+      });
+
+      document.getElementById("heroStage").addEventListener("click", function () {
+        openArticleModal({
+          title: SINGLE_HERO_SLIDE.title,
+          meta: SINGLE_HERO_SLIDE.meta,
+          category: "FEATURED STORY",
+          img: SINGLE_HERO_SLIDE.img,
+          paragraphs: SINGLE_HERO_SLIDE.paragraphs
+        });
+      });
+
+      document.getElementById("editorsPrevBtn").addEventListener("click", function () {
+        var total = EDITORS_CHOICE_ITEMS.length;
+        state.editorsOffset = (state.editorsOffset - 1 + total) % total;
+        renderEditorsChoice();
+      });
+
+      document.getElementById("editorsNextBtn").addEventListener("click", function () {
+        var total = EDITORS_CHOICE_ITEMS.length;
+        state.editorsOffset = (state.editorsOffset + 1) % total;
+        renderEditorsChoice();
+      });
+
+      document.getElementById("modalCloseTopBtn").addEventListener("click", closeArticleModal);
+      document.getElementById("modalCloseBottomBtn").addEventListener("click", closeArticleModal);
+      document.getElementById("articleModal").addEventListener("click", function (e) {
+        if (e.target === this) {
+          closeArticleModal();
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeArticleModal();
+        }
+      });
+
+      renderBreakingNews();
+      startBreakingAutoplay();
+      initCommentsTicker();
+      renderHero();
+      renderCommunityBlog();
+      renderEditorsChoice();
+
+      document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+          var card = this.closest('.news-feed-card');
+          card.classList.toggle('open');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
