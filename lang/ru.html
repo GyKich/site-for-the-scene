@@ -180,7 +180,7 @@
     }
 
     /* =========================================================================
-       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (BREAKING NEWS)
+       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (БЕГУЩАЯ СТРОКА)
        ========================================================================= */
     .breaking-bar {
       display: flex;
@@ -201,6 +201,7 @@
       align-items: center;
       white-space: nowrap;
       flex-shrink: 0;
+      z-index: 2;
     }
 
     .breaking-track {
@@ -209,21 +210,40 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 5px 10px 5px 14px;
+      padding: 5px 10px 5px 12px;
       color: #ffffff;
       min-width: 0;
+      overflow: hidden;
     }
 
-    .breaking-text-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
+    .breaking-marquee-viewport {
+      position: relative;
+      flex: 1;
+      height: 18px;
       overflow: hidden;
-      white-space: nowrap;
+      min-width: 0;
       cursor: pointer;
     }
 
-    .breaking-text-wrap:hover .breaking-headline {
+    .breaking-marquee-stage {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    .breaking-marquee-item {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .breaking-marquee-viewport:hover .breaking-headline {
       text-decoration: underline;
     }
 
@@ -232,8 +252,6 @@
       font-style: italic;
       font-size: 11.5px;
       color: #ffffff;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .breaking-time {
@@ -247,8 +265,11 @@
       display: flex;
       align-items: center;
       gap: 3px;
-      margin-left: 12px;
+      margin-left: 10px;
+      padding-left: 6px;
+      background: #14385c;
       flex-shrink: 0;
+      z-index: 2;
     }
 
     .breaking-arrow {
@@ -266,6 +287,74 @@
     .breaking-arrow:hover {
       background-color: rgba(255, 255, 255, 0.14);
       color: #ffffff;
+    }
+
+    /* =========================================================================
+       ПУНКТИК ПРОСМОТРОВ (СЕРЫЙ БЕЙДЖ У НОВОСТЕЙ)
+       ========================================================================= */
+    .views-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 400;
+      font-style: normal;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #888888;
+      background-color: #f1f1f1;
+      border: 1px solid #e0e0e0;
+      border-radius: 2px;
+      padding: 1px 6px;
+      line-height: 1.3;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .views-badge svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    .hero-overlay .views-badge,
+    .news-feed-overlay .views-badge {
+      color: #d4d4d4;
+      background-color: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.22);
+      margin-left: 6px;
+    }
+
+    .editor-card .views-badge {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: #e6e6e6;
+      background-color: rgba(0, 0, 0, 0.65);
+      border-color: rgba(255, 255, 255, 0.2);
+      font-size: 9.5px;
+      padding: 1px 5px;
+    }
+
+    .blog-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .blog-footer-row .blog-item-excerpt {
+      margin-bottom: 0;
+    }
+
+    .modal-article-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     /* =========================================================================
@@ -395,6 +484,10 @@
       font-size: 9.5px;
       color: #cccccc;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .hero-title {
@@ -585,8 +678,10 @@
       text-decoration: underline;
     }
 
-    /* Скрываем мобильный дубль соцсетей на десктопе */
-    .mobile-only-social {
+    /* Скрываем мобильный блок соцсетей и мобильных комментариев на десктопе */
+    .mobile-only-social,
+    .mobile-only-comments,
+    .mobile-ad-banner {
       display: none;
     }
 
@@ -856,6 +951,7 @@
       border-radius: 2px;
       overflow: hidden;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      scroll-margin-top: 14px;
     }
 
     .news-feed-trigger {
@@ -890,6 +986,10 @@
       font-weight: 700;
       text-transform: uppercase;
       line-height: 1.25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .news-feed-trigger:hover .news-feed-overlay {
@@ -905,7 +1005,7 @@
     }
 
     .news-feed-card.open .news-feed-dropdown {
-      max-height: 450px;
+      max-height: 900px;
       padding: 16px 18px;
       border-top: 1px solid #e0e0e0;
     }
@@ -915,6 +1015,18 @@
       line-height: 1.6;
       color: #333333;
       margin-bottom: 10px;
+    }
+    .news-feed-gif {
+      display: block;
+      max-width: 100%;
+      width: 560px;
+      height: auto;
+      max-height: 280px;
+      object-fit: cover;
+      margin: 0 auto 12px auto;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
+      background-color: #111111;
     }
 
     .news-feed-dropdown p:last-child {
@@ -927,7 +1039,7 @@
     @media (max-width: 768px) {
       .container {
         width: 100%;
-        padding: 6px;
+        padding: 6px 6px 76px 6px;
       }
 
       .site-header {
@@ -963,8 +1075,9 @@
         display: none;
       }
 
-      .breaking-time {
-        display: none;
+      .breaking-badge {
+        padding: 7px 10px;
+        font-size: 11px;
       }
 
       .main-three-cols {
@@ -1007,10 +1120,130 @@
         margin-top: 8px;
       }
 
-      /* Показываем блок соцсетей перед футером на мобильных устройствах */
+      /* Показываем блок соцсетей и комментарии под ним только на мобильных устройствах */
       .mobile-only-social {
         display: flex;
+        margin-bottom: 10px;
+      }
+
+      .mobile-only-comments {
+        display: flex;
+        padding: 10px 12px;
+        flex-direction: column;
         margin-bottom: 12px;
+      }
+
+      .mobile-only-comments .comments-scroll-container {
+        height: 210px;
+      }
+
+      /* Выезжающая снизу панель-имитация рекламы (только на мобильных) */
+      .mobile-ad-banner {
+        display: flex;
+        align-items: stretch;
+        position: fixed;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        background: #ffffff;
+        border: 1px solid #163d66;
+        border-top: 2px solid #ee1f27;
+        border-radius: 3px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+        z-index: 950;
+        transform: translateY(calc(100% + 20px));
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+        overflow: hidden;
+      }
+
+      .mobile-ad-banner.visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .mobile-ad-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 8px;
+        cursor: pointer;
+        min-width: 0;
+      }
+
+      .mobile-ad-thumb {
+        width: 52px;
+        height: 44px;
+        object-fit: cover;
+        border-radius: 2px;
+        border: 1px solid #cccccc;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-text-wrap {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .mobile-ad-top-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 2px;
+      }
+
+      .mobile-ad-tag {
+        background: #f0f0f0;
+        color: #777777;
+        border: 1px solid #dcdcdc;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0 4px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-title {
+        font-family: "Arial Narrow", Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: #163d66;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .mobile-ad-snippet {
+        font-size: 10.5px;
+        line-height: 1.28;
+        color: #444444;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mobile-ad-close {
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: #666666;
+        background: #f7f7f7;
+        border-left: 1px solid #e4e4e4;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-close:hover {
+        background: #e31b23;
+        color: #ffffff;
       }
     }
   </style>
@@ -1046,17 +1279,12 @@
         </div>
       </header>
 
-      <!-- 2. СРОЧНЫЕ НОВОСТИ -->
+      <!-- 2. СРОЧНЫЕ НОВОСТИ (БЕГУЩАЯ СТРОКА) -->
       <section class="breaking-bar" aria-label="Breaking News">
         <div class="breaking-badge">Срочные новости</div>
         <div class="breaking-track">
-          <div class="breaking-text-wrap" id="breakingTextTrigger">
-            <span class="breaking-headline" id="breakingHeadlineText">
-              В Аманжолове выступает творческий коллектив Фенис.
-            </span>
-            <span class="breaking-time" id="breakingTimeText">
-              - Четверг, 25 Ноября 2026 18:00
-            </span>
+          <div class="breaking-marquee-viewport" id="breakingTextTrigger">
+            <div class="breaking-marquee-stage" id="breakingMarqueeStage"></div>
           </div>
           <div class="breaking-controls">
             <button type="button" class="breaking-arrow" id="breakingPrevBtn" title="Предыдущая новость"><</button>
@@ -1067,14 +1295,14 @@
 
       <!-- 3. ГЛАВНАЯ ТРЕХКОЛОНОЧНАЯ СЕТКА -->
       <main class="main-three-cols">
-        <!-- ЛЕВЫЙ БЛОК: КОММЕНТАРИИ ЧИТАТЕЛЕЙ -->
+        <!-- ЛЕВЫЙ БЛОК: КОММЕНТАРИИ ЧИТАТЕЛЕЙ (ДЕСКТОП) -->
         <aside class="panel-box top-news-panel">
           <div class="top-news-header">
             <h2 class="section-heading-condensed">Комментарии читателей</h2>
             <span class="cool-pill">LIVE</span>
           </div>
           <div class="comments-scroll-container">
-            <div class="comments-scroll-track" id="commentsScrollTrack"></div>
+            <div class="comments-scroll-track" id="commentsScrollTrackDesktop"></div>
           </div>
         </aside>
 
@@ -1140,12 +1368,14 @@
       </section>
 
       <!-- ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ) -->
-      <section class="full-news-feed" aria-label="News Feed">
+      <section class="full-news-feed" id="fullNewsFeed" aria-label="News Feed">
         <!-- Элемент 1 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-1">
           <div class="news-feed-trigger">
             <img src="../images/17.jpg" alt="Новость 1">
-            <div class="news-feed-overlay">Номер 1: Пролог «Цена бесчестия»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 1: Пролог «Цена бесчестия»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Постановка начинается с истории девушки по имени Дана, которая вместе с одноклассниками готовится к школьному выпускному вечеру. Однако вместо радостного ожидания праздника её тревожит поведение отца: накануне он неожиданно разбудил её среди ночи, передал конверт с деньгами и поспешно ушёл, попросив никому не доверять. Вскоре становится известно, что отец Даны задержан за незаконные действия. Для девушки эта новость становится настоящим потрясением. Несмотря на оправдания отца, который утверждает, что пошёл на такой шаг ради благополучия семьи, Дана отвергает деньги, полученные нечестным путём. Она признаётся, что мечтала не о богатстве, а о том, чтобы быть дочерью честного и достойного человека.</p>
@@ -1154,146 +1384,171 @@
         </article>
 
         <!-- Элемент 2 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-2">
           <div class="news-feed-trigger">
             <img src="../images/18.jpg" alt="Новость 2">
-            <div class="news-feed-overlay">Номер 2: Эстрадный танец «Are you gonna be my girl?»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 2: Эстрадный танец «Are you gonna be my girl?»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>После событий пролога на сцене появляется журналистка, которая сообщает о задержании отца Даны. Эта новость быстро распространяется среди учеников и окружающих. Одноклассники начинают обсуждать произошедшее, кто-то осуждает девушку, а кто-то с сожалением наблюдает за её положением. Оказавшись в центре чужих пересудов и осуждения, Дана испытывает боль и растерянность. Следующий эстрадный танец меняет эмоциональный ритм постановки, наполняя сцену молодёжной энергией и динамикой.</p>
-	    <p>Основная идея: Номер передаёт атмосферу молодости, свободы и взаимоотношений между людьми. Вместе с тем он напоминает о том, как важно не судить человека по обстоятельствам его семьи, а стараться понять его внутренний мир.</p>
+            <p>Основная идея: Номер передаёт атмосферу молодости, свободы и взаимоотношений между людьми. Вместе с тем он напоминает о том, как важно не судить человека по обстоятельствам его семьи, а стараться понять его внутренний мир.</p>
           </div>
         </article>
 
         <!-- Элемент 3 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-3">
           <div class="news-feed-trigger">
             <img src="../images/19.jpg" alt="Новость 3">
-            <div class="news-feed-overlay">Номер 3: Вокальный номер «Доп»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 3: Вокальный номер «Доп»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>В этой части зрители знакомятся с историей школьника по имени Аян. В школе одноклассники насмехаются над его внешностью, заставляя мальчика чувствовать себя неловко и неуверенно. В трудный момент его друг Жанибек не остаётся в стороне и заступается за него. Несмотря на пережитое смущение, благодаря разговору с бабушкой Аян постепенно осознаёт настоящую ценность дружбы. После этой истории звучит песня «Доп», передающая искренность детских чувств и теплоту дружеских отношений.</p>
-	    <p>Основная идея: Внешность и мнение окружающих не определяют ценность человека. Настоящий друг не оставит в беде, поддержит в трудную минуту и примет таким, какой ты есть. Основа дружбы — взаимное уважение, понимание и верность.</p>
+            <p>Основная идея: Внешность и мнение окружающих не определяют ценность человека. Настоящий друг не оставит в беде, поддержит в трудную минуту и примет таким, какой ты есть. Основа дружбы — взаимное уважение, понимание и верность.</p>
           </div>
         </article>
 
         <!-- Элемент 4 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-4">
           <div class="news-feed-trigger">
             <img src="../images/20.jpg" alt="Новость 4">
-            <div class="news-feed-overlay">Номер 4: Жайдарман</div>
+            <div class="news-feed-overlay">
+              <span>Номер 4: Жайдарман</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Этот эпизод привносит в постановку лёгкость, юмор и непринуждённую атмосферу. После семейного кризиса Дана решает найти работу, чтобы хоть немного помочь матери, и устраивается уборщицей в танцевальную студию. Однажды Аян замечает, как девушка танцует во время уборки, и неожиданно для неё открывает её талант. Он предлагает Дане принять участие в прослушивании. Таким образом, перед героиней открывается новая возможность проявить себя. Номер Жайдарман оживляет сценическое действие и дарит зрителям положительные эмоции.</p>
-	    <p>Основная идея: Даже в непростых жизненных обстоятельствах важно не терять веру в себя и продолжать двигаться вперёд. Иногда самая неожиданная возможность становится началом больших перемен.</p>
+            <p>Основная идея: Даже в непростых жизненных обстоятельствах важно не терять веру в себя и продолжать двигаться вперёд. Иногда самая неожиданная возможность становится началом больших перемен.</p>
           </div>
         </article>
 
         <!-- Элемент 5 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-5">
           <div class="news-feed-trigger">
             <img src="../images/21.jpg" alt="Новость 5">
-            <div class="news-feed-overlay">Номер 5: Народный танец «Ağ çiçəyim»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 5: Народный танец «Ağ çiçəyim»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>После успешного прохождения кастинга Дана доказывает, что её способности и достижения — результат собственного таланта и старания. Вскоре Аян предлагает проводить её домой, и между молодыми людьми завязывается непринуждённая беседа. На этом фоне зрителям представляется азербайджанский танец, знакомящий их с национальным танцевальным искусством этого народа. Изящные движения, выразительная пластика и национальный колорит раскрывают красоту и самобытность азербайджанской культуры.</p>
-	    <p>Основная идея: Искусство является важной частью духовного наследия каждого народа. Знакомство с культурой других стран воспитывает уважение к национальным традициям, укрепляет дружбу и взаимопонимание между народами.</p>
+            <p>Основная идея: Искусство является важной частью духовного наследия каждого народа. Знакомство с культурой других стран воспитывает уважение к национальным традициям, укрепляет дружбу и взаимопонимание между народами.</p>
           </div>
         </article>
 
         <!-- Элемент 6 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-6">
           <div class="news-feed-trigger">
             <img src="../images/22.jpg" alt="Новость 6">
-            <div class="news-feed-overlay">Номер 6: Вокальный соло «Training season»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 6: Вокальный соло «Training season»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>После выступления Аян провожает Дану домой. По дороге молодые люди беседуют, постепенно узнавая друг друга ближе. Аян восхищается её талантом и предлагает продолжить общение. Перед расставанием он просит её аккаунт в социальных сетях, однако Дана признаётся, что удалила все приложения, чтобы сосредоточиться на подготовке к ЕНТ. Вместо этого она оставляет ему свой номер телефона. Следующий вокальный номер «Training Season» дополняет эту сцену, передавая настроение первых чувств, симпатии и зарождающейся близости.</p>
-	    <p>Основная идея: Искренние отношения строятся на взаимном уважении и доверии. Важно не только испытывать чувства, но и понимать стремления другого человека, уважать его личный выбор и поддерживать его цели.</p>
+            <p>Основная идея: Искренние отношения строятся на взаимном уважении и доверии. Важно не только испытывать чувства, но и понимать стремления другого человека, уважать его личный выбор и поддерживать его цели.</p>
           </div>
         </article>
 
         <!-- Элемент 7 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-7">
           <div class="news-feed-trigger">
             <img src="../images/23.jpg" alt="Новость 7">
-            <div class="news-feed-overlay">Номер 7: Патриотический номер</div>
+            <div class="news-feed-overlay">
+              <span>Номер 7: Патриотический номер</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Готовясь к ЕНТ, Дана повторяет одну из самых трагических страниц истории казахского народа — события «Ақтабан шұбырынды, Алқакөл сұлама». Она вспоминает тяжёлый период 1723–1727 годов и последствия политической разобщённости после смерти Тауке-хана, ослабившей Казахское ханство. В следующей сцене Аян обсуждает с бабушкой своё будущее и возможность уехать жить за границу. Бабушка напоминает ему о подвиге предков, сохранивших родную землю, и объясняет, что любовь к Родине проявляется не только в словах, но и в стремлении приносить пользу своей стране. Эти мысли находят продолжение в патриотическом номере.</p>
-	    <p>Основная идея: Быть преданным своей Родине — значит не только любить родную землю, но и уважать её историю, ценить наследие предков и заботиться о будущем страны. Настоящий патриотизм проявляется в знаниях, честном труде и конкретных поступках.</p>
+            <p>Основная идея: Быть преданным своей Родине — значит не только любить родную землю, но и уважать её историю, ценить наследие предков и заботиться о будущем страны. Настоящий патриотизм проявляется в знаниях, честном труде и конкретных поступках.</p>
           </div>
         </article>
 
         <!-- Элемент 8 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" id="newsFeedItem8" data-views-key="feed-8">
           <div class="news-feed-trigger">
             <img src="../images/24.jpg" alt="Новость 8">
-            <div class="news-feed-overlay">Номер 8: Профориентационный ролик</div>
+            <div class="news-feed-overlay">
+              <span>Номер 8: Профориентационный ролик</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
+	    <img src="../images/24.gif" alt="Новость 8 гифка" class="news-feed-gif">
             <p>Дана успешно сдаёт ЕНТ, набрав 123 балла. Несмотря на высокие результаты, она продолжает переживать, сможет ли поступить в университет. Вскоре её тревога сменяется долгожданной радостью: девушка получает известие о зачислении на грант. Это достижение становится результатом её упорства, самостоятельности и многолетнего труда. Следующий профориентационный ролик раскрывает важность образования, осознанного выбора будущей профессии и стремления к поставленным целям.</p>
-	    <p>Основная идея: Будущее человека во многом зависит от его собственных решений и усилий. Стремление к знаниям, трудолюбие и настойчивость помогают преодолевать трудности. Настоящая победа — это достижение, к которому человек пришёл благодаря собственным силам.</p>
+            <p>Основная идея: Будущее человека во многом зависит от его собственных решений и усилий. Стремление к знаниям, трудолюбие и настойчивость помогают преодолевать трудности. Настоящая победа — это достижение, к которому человек пришёл благодаря собственным силам.</p>
           </div>
         </article>
 
         <!-- Элемент 9 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-9">
           <div class="news-feed-trigger">
             <img src="../images/25.jpg" alt="Новость 9">
-            <div class="news-feed-overlay">Номер 9: Сюжетный танец «Lucent»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 9: Сюжетный танец «Lucent»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>В день рождения Даны мать передаёт ей подарок от отца. В небольшой коробке девушка находит синий воздушный шар и письмо, написанное от руки. В нём отец признаётся, что за время разлуки многое переосмыслил и осознал свои ошибки. Он понимает, что, стремясь обеспечить семью, выбрал лёгкий и нечестный путь, забыв о главном — доверии, которое должно лежать в основе семейного благополучия. Отец просит у дочери прощения и надеется, что его ошибки не станут частью её судьбы. Он желает, чтобы Дана сохранила собственную честь и никогда не отступала от принципов честности. После прочтения письма начинается танец «Lucent», передающий внутренние переживания героев, их сожаление и духовное преображение.</p>
-	    <p>Основная идея: Человек должен уметь признавать свои ошибки и извлекать из них уроки. Потерять доверие можно одним поступком, но вернуть его гораздо сложнее. Этот номер раскрывает темы раскаяния, прощения и нравственного выбора.</p>
+            <p>Основная идея: Человек должен уметь признавать свои ошибки и извлекать из них уроки. Потерять доверие можно одним поступком, но вернуть его гораздо сложнее. Этот номер раскрывает темы раскаяния, прощения и нравственного выбора.</p>
           </div>
         </article>
 
         <!-- Элемент 10 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-10">
           <div class="news-feed-trigger">
             <img src="../images/26.jpg" alt="Новость 10">
-            <div class="news-feed-overlay">Номер 10: Художественное слово Адал азамат</div>
+            <div class="news-feed-overlay">
+              <span>Номер 10: Художественное слово Адал азамат</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Действие переносит зрителей на семь лет вперёд. Перед нами уже повзрослевшая Дана, которая сумела найти своё место в жизни и добиться признания в литературном мире. Она становится молодой писательницей, поэтессой и историком. Во время телевизионного интервью Дана рассказывает о начале своего творческого пути, любви к литературе и интересе к истории родного народа. В завершение беседы она исполняет одно из своих любимых стихотворений. Этот эпизод показывает, как героиня, несмотря на пережитые трудности, сумела реализовать себя через знания, творчество и упорный труд.</p>
-	    <p>Основная идея: Быть достойным гражданином — значит не только оставаться честным в личной жизни, но и приносить пользу обществу, ответственно относиться к своему делу. Знания, талант и труд человека могут стать важным вкладом в духовное развитие страны.</p>
+            <p>Основная идея: Быть достойным гражданином — значит не только оставаться честным в личной жизни, но и приносить пользу обществу, ответственно относиться к своему делу. Знания, талант и труд человека могут стать важным вкладом в духовное развитие страны.</p>
           </div>
         </article>
 
         <!-- Элемент 11 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-11">
           <div class="news-feed-trigger">
             <img src="../images/27.jpg" alt="Новость 11">
-            <div class="news-feed-overlay">Номер 11: Оригинальный номер. «Every breath you take»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 11: Оригинальный номер. «Every breath you take»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>После беседы с Даной зрителям представляется музыкальный номер, подготовленный в её честь. Под композицию «Young and Beautiful» демонстрируется видеоряд, в котором героиня проходит путь от юности до преклонного возраста. Постепенно меняется её образ, напоминая зрителям о быстротечности времени и неизбежности жизненных перемен. Этот номер становится своеобразным размышлением о молодости, красоте и ценностях, которые остаются с человеком на протяжении всей жизни.</p>
-	    <p>Основная идея: Время неумолимо движется вперёд, а молодость и внешняя красота не вечны. Однако добрые поступки, честное имя и духовное наследие человека способны сохранить свою ценность даже спустя многие годы.</p>
+            <p>Основная идея: Время неумолимо движется вперёд, а молодость и внешняя красота не вечны. Однако добрые поступки, честное имя и духовное наследие человека способны сохранить свою ценность даже спустя многие годы.</p>
           </div>
         </article>
 
         <!-- Элемент 12 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-12">
           <div class="news-feed-trigger">
             <img src="../images/28.jpg" alt="Новость 12">
-            <div class="news-feed-overlay">Номер 12: Современный танец</div>
+            <div class="news-feed-overlay">
+              <span>Номер 12: Современный танец</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>В заключительной части бабушка Аяна подводит итог всей истории и делится с внуком жизненной мудростью. Она говорит о том, что человек должен быть честен перед своей семьёй, друзьями, любимыми людьми, историей и Родиной. Однако самое главное — не предавать собственные мечты, не отказываться от поставленных целей и, прежде всего, оставаться верным самому себе. Именно эти слова становятся смысловым завершением постановки, после которого начинается современный танец. Его динамика и энергия символизируют молодость, движение вперёд и открытость новым возможностям.</p>
-	    <p>Основная идея: Честность — это ценность, которая должна сопровождать человека на протяжении всей жизни. Быть искренним с окружающими невозможно, не научившись быть честным с самим собой. Необходимо верить в свои мечты, следовать выбранному пути и сохранять собственные принципы.</p>
+            <p>Основная идея: Честность — это ценность, которая должна сопровождать человека на протяжении всей жизни. Быть искренним с окружающими невозможно, не научившись быть честным с самим собой. Необходимо верить в свои мечты, следовать выбранному пути и сохранять собственные принципы.</p>
           </div>
         </article>
 
         <!-- Элемент 13 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-13">
           <div class="news-feed-trigger">
             <img src="../images/29.jpg" alt="Новость 13">
-            <div class="news-feed-overlay">Заключительная идея концерта</div>
+            <div class="news-feed-overlay">
+              <span>Заключительная идея концерта</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>«BORN TO BE TRUE» («Рождённые быть верными себе») — это история о жизненном выборе человека, его ошибках, сожалениях, поиске своего пути и достижении целей. Каждый номер является частью единой истории, раскрывающей многогранное понятие честности. Через семейные отношения, дружбу, любовь, образование, искусство и патриотизм постановка показывает, что верность своим принципам должна оставаться неизменной при любых жизненных обстоятельствах.</p>
-	    <p>Главная мысль концерта заключается в том, что, каких бы высот ни достиг человек, он не должен терять своё достоинство и забывать о нравственных ценностях. Ведь всё начинается с честности перед самим собой.</p>
+            <p>Главная мысль концерта заключается в том, что, каких бы высот ни достиг человек, он не должен терять своё достоинство и забывать о нравственных ценностях. Ведь всё начинается с честности перед самим собой.</p>
           </div>
         </article>
       </section>
@@ -1320,12 +1575,40 @@
         </div>
       </div>
 
+      <!-- МОБИЛЬНЫЙ БЛОК КОММЕНТАРИЕВ ЧИТАТЕЛЕЙ (ПОД СОЦСЕТЯМИ ТОЛЬКО НА МОБИЛЬНЫХ) -->
+      <aside class="panel-box mobile-only-comments">
+        <div class="top-news-header">
+          <h2 class="section-heading-condensed">Комментарии читателей</h2>
+          <span class="cool-pill">LIVE</span>
+        </div>
+        <div class="comments-scroll-container">
+          <div class="comments-scroll-track" id="commentsScrollTrackMobile"></div>
+        </div>
+      </aside>
+
       <!-- 5. ФУТЕР -->
       <footer class="site-footer">
         <div>Copyright © 2026 <strong>Gykich</strong>. All Rights Reserved.</div>
         <div>Создано специально для коллектива Фенит. Все имена вымышлены, все совпадения случайны.</div>
       </footer>
     </div>
+  </div>
+
+  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (ТЕКСТ ИЗ 8 НОМЕРА, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
+  <div class="mobile-ad-banner" id="mobileAdBanner" role="region" aria-label="Рекламный блок">
+    <div class="mobile-ad-content" id="mobileAdOpenTrigger">
+      <img src="../images/24.jpg" alt="Номер 8: Профориентационный ролик" class="mobile-ad-thumb">
+      <div class="mobile-ad-text-wrap">
+        <div class="mobile-ad-top-row">
+          <span class="mobile-ad-tag">Реклама</span>
+          <span class="mobile-ad-title">Номер 8: Профориентационный ролик</span>
+        </div>
+        <div class="mobile-ad-snippet">
+          Дана успешно сдаёт ЕНТ, набрав 123 балла. Несмотря на высокие результаты, она продолжает переживать, сможет ли поступить в университет.
+        </div>
+      </div>
+    </div>
+    <button type="button" class="mobile-ad-close" id="mobileAdCloseBtn" title="Закрыть">×</button>
   </div>
 
   <!-- МОДАЛЬНОЕ ОКНО -->
@@ -1358,9 +1641,9 @@
       "use strict";
 
       var BREAKING_NEWS = [
-        { headline: "В Аманжолове выступают активисты ВШITиЕН.", time: "- 19 Ноября 2026 17:29" },
-        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- 10 Ноября 2026 16:45" },
-        { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 15 Июнь 2026 15:10" }
+        { headline: "В Аманжолове выступают активисты ВШITиЕН.", time: "- 19 Ноября 2026 17:29", views: "4.8к" },
+        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- 10 Ноября 2026 16:45", views: "7.3к" },
+        { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 15 Июнь 2026 15:10", views: "8.6к" }
       ];
 
       var COMMENT_ITEMS = [
@@ -1371,7 +1654,8 @@
         "Я знаю Назарова, его подставили!",
         "Как кто-то смог набрать 123 балла? Я тоже так хочу😤!",
         "А на выступлении будет Архат?",
-        "УЭЭЭЭЭЭЭЭЭ"
+	"Ребята из 🔥фенит🔥 просто огонь😍",
+        "Не могу дождаться концерта 🔥"
       ];
 
       var SINGLE_HERO_SLIDE = {
@@ -1379,6 +1663,7 @@
         title: "В АМАНЖОЛОВЕ ВЫСТУПАЕТ ВЫСШАЯ ШКОЛА IT И ЕСТЕСТВЕННЫХ НАУК",
         summary: "Грядет лучшее выступление творческого коллектива в этом году",
         img: "../images/1.jpg",
+        views: "6.4к",
         paragraphs: ["Флекс", "Флекс лютый"]
       };
 
@@ -1388,6 +1673,7 @@
           excerpt: "Первашей опять затролили старшаки",
           meta: "Нояб 22 2026 • Community Blog",
           img: "../images/2.jpg",
+          views: "2.9к",
           paragraphs: ["Первашей опять затролили старшаки"]
         },
         {
@@ -1395,6 +1681,7 @@
           excerpt: "Никогда такого не было, и вот опять",
           meta: "Обновлено 25 Ноября 2026 • Community Blog",
           img: "../images/9.jpg",
+          views: "3.7к",
           paragraphs: ["Никогда такого не было, и вот опять"]
         },
         {
@@ -1402,28 +1689,174 @@
           excerpt: "Наследие университета сохранено",
           meta: "Обновлено 25 Ноября 2026 • Community Blog",
           img: "../images/6.jpg",
+          views: "2.2к",
           paragraphs: ["Наследие университета сохранено"]
         }
       ];
 
       var EDITORS_CHOICE_ITEMS = [
-        { title: "В Аманжолове девочка поступила на грант со 123 баллами", meta: "Июн 15 2026", img: "../images/10.jpg", paragraphs: ["Detail text..."] },
-	{ title: "Назаров Ерасыл подозревается во взятке и угрозах конкурентам", meta: "Авг 1 2026", img: "../images/15.jpg", paragraphs: ["Detail text..."] },
-        { title: "За коррупцию арестовали известного бизнесмена Назарова Ерасыла", meta: "Авг 20 2026", img: "../images/11.jpg", paragraphs: ["Detail text..."] },
-        { title: "PhoenixNews лучшие новости в которых лучшие первокурсники", meta: "Авг 24 2026", img: "../images/12.jpg", paragraphs: ["Detail text..."] },
-	{ title: "Девочка набравшая 123 балла оказалась дочерью Назарова Ерасыла", meta: "Авг 29 2026", img: "../images/14.jpg", paragraphs: ["Detail text..."] },
-        { title: "В Аманжолове 24-25 Ноября выступают активисты", meta: "Окт 5 2026", img: "../images/13.jpg", paragraphs: ["Detail text..."] },
-        { title: "В Аманжолове планируются крупные события", meta: "Нояб 20 2026", img: "../images/16.jpg", paragraphs: ["Detail text..."] }
+        { title: "В Аманжолове девочка поступила на грант со 123 баллами", meta: "Июн 15 2026", img: "../images/10.jpg", views: "8.1к", paragraphs: ["Detail text..."] },
+        { title: "Назаров Ерасыл подозревается во взятке и угрозах конкурентам", meta: "Авг 1 2026", img: "../images/15.jpg", views: "5.5к", paragraphs: ["Detail text..."] },
+        { title: "За коррупцию арестовали известного бизнесмена Назарова Ерасыла", meta: "Авг 20 2026", img: "../images/11.jpg", views: "6.9к", paragraphs: ["Detail text..."] },
+        { title: "PhoenixNews лучшие новости в которых лучшие первокурсники", meta: "Авг 24 2026", img: "../images/12.jpg", views: "3.4к", paragraphs: ["Detail text..."] },
+        { title: "Девочка набравшая 123 балла оказалась дочерью Назарова Ерасыла", meta: "Авг 29 2026", img: "../images/14.jpg", views: "7.8к", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове 24-25 Ноября выступают активисты", meta: "Окт 5 2026", img: "../images/13.jpg", views: "4.1к", paragraphs: ["Detail text..."] },
+        { title: "В Аманжолове планируются крупные события", meta: "Нояб 20 2026", img: "../images/16.jpg", views: "5.2к", paragraphs: ["Detail text..."] }
       ];
+
+      var FEED_VIEWS_POOL = [
+        "5.1к", "3.8к", "4.4к", "2.7к", "6.2к", "3.1к",
+        "4.9к", "7.5к", "5.8к", "6.7к", "2.4к", "3.9к", "8.4к"
+      ];
+
+      function generateRandomViews() {
+        var tenths = Math.floor(Math.random() * 74) + 17; // 17..90 -> 1.7..9.0
+        return (tenths / 10).toFixed(1) + "к";
+      }
+
+      function createViewsBadge(viewsText) {
+        var span = document.createElement("span");
+        span.className = "views-badge";
+        span.title = "Просмотры";
+        span.innerHTML =
+          '<svg viewBox="0 0 16 16" aria-hidden="true">' +
+          '<path d="M8 3.5c-3.1 0-5.7 1.9-6.8 4.5 1.1 2.6 3.7 4.5 6.8 4.5s5.7-1.9 6.8-4.5C13.7 5.4 11.1 3.5 8 3.5zm0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8zm0-1.6a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z"/>' +
+          '</svg>' +
+          '<span>' + viewsText + "</span>";
+        return span;
+      }
 
       var state = {
         breakingIndex: 0,
         editorsOffset: 0,
         toastTimer: null,
-        commentsTimer: null,
-        breakingTimer: null
+        commentsTimers: []
       };
 
+      /* =====================================================================
+         БЕГУЩАЯ СТРОКА СРОЧНЫХ НОВОСТЕЙ (ПЛАВНЫЙ БЕГ + ПАУЗА 3 СЕК ПРИ КЛИКЕ)
+         ===================================================================== */
+      var marquee = {
+        viewport: null,
+        stage: null,
+        activeEl: null,
+        nextEl: null,
+        activeIndex: 0,
+        nextIndex: 1,
+        activeX: 0,
+        nextX: 0,
+        nextSpawned: false,
+        pauseUntil: 0,
+        lastTs: null,
+        rafId: null,
+        speedPxPerSec: 68,
+        gapPx: 48
+      };
+
+      function buildBreakingItemEl(item) {
+        var el = document.createElement("div");
+        el.className = "breaking-marquee-item";
+
+        var headline = document.createElement("span");
+        headline.className = "breaking-headline";
+        headline.textContent = item.headline;
+
+        var time = document.createElement("span");
+        time.className = "breaking-time";
+        time.textContent = item.time;
+
+        el.appendChild(headline);
+        el.appendChild(time);
+        return el;
+      }
+
+      function placeBreakingAtIndex(index, pauseMs) {
+        if (!marquee.stage) return;
+        var count = BREAKING_NEWS.length;
+        marquee.activeIndex = ((index % count) + count) % count;
+        marquee.nextIndex = (marquee.activeIndex + 1) % count;
+        state.breakingIndex = marquee.activeIndex;
+
+        marquee.stage.innerHTML = "";
+        marquee.activeEl = buildBreakingItemEl(BREAKING_NEWS[marquee.activeIndex]);
+        marquee.stage.appendChild(marquee.activeEl);
+        marquee.activeX = 0;
+        marquee.activeEl.style.transform = "translate3d(0px, -50%, 0)";
+
+        marquee.nextEl = null;
+        marquee.nextX = 0;
+        marquee.nextSpawned = false;
+
+        if (pauseMs && pauseMs > 0) {
+          marquee.pauseUntil = performance.now() + pauseMs;
+        } else {
+          marquee.pauseUntil = 0;
+        }
+        marquee.lastTs = performance.now();
+      }
+
+      function tickBreakingMarquee(now) {
+        if (marquee.lastTs === null) {
+          marquee.lastTs = now;
+        }
+        var dt = (now - marquee.lastTs) / 1000;
+        marquee.lastTs = now;
+        if (dt > 0.1) dt = 0.1;
+
+        var viewportWidth = marquee.viewport ? marquee.viewport.clientWidth : 600;
+
+        if (marquee.activeEl && now >= marquee.pauseUntil) {
+          var activeWidth = marquee.activeEl.offsetWidth || 0;
+          marquee.activeX -= marquee.speedPxPerSec * dt;
+          marquee.activeEl.style.transform = "translate3d(" + marquee.activeX.toFixed(1) + "px, -50%, 0)";
+
+          var activeRightEdge = marquee.activeX + activeWidth;
+
+          if (!marquee.nextSpawned && activeRightEdge <= viewportWidth) {
+            marquee.nextSpawned = true;
+            marquee.nextEl = buildBreakingItemEl(BREAKING_NEWS[marquee.nextIndex]);
+            marquee.stage.appendChild(marquee.nextEl);
+            marquee.nextX = Math.max(viewportWidth, activeRightEdge + marquee.gapPx);
+            marquee.nextEl.style.transform = "translate3d(" + marquee.nextX.toFixed(1) + "px, -50%, 0)";
+          }
+
+          if (marquee.nextEl) {
+            marquee.nextX -= marquee.speedPxPerSec * dt;
+            marquee.nextEl.style.transform = "translate3d(" + marquee.nextX.toFixed(1) + "px, -50%, 0)";
+          }
+
+          if (activeRightEdge <= 0) {
+            if (marquee.activeEl && marquee.activeEl.parentNode) {
+              marquee.activeEl.parentNode.removeChild(marquee.activeEl);
+            }
+            marquee.activeEl = marquee.nextEl;
+            marquee.activeX = marquee.nextX;
+            marquee.activeIndex = marquee.nextIndex;
+            state.breakingIndex = marquee.activeIndex;
+            marquee.nextIndex = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+
+            marquee.nextEl = null;
+            marquee.nextX = 0;
+            marquee.nextSpawned = false;
+          }
+        }
+
+        marquee.rafId = requestAnimationFrame(tickBreakingMarquee);
+      }
+
+      function initBreakingMarquee() {
+        marquee.viewport = document.getElementById("breakingTextTrigger");
+        marquee.stage = document.getElementById("breakingMarqueeStage");
+        placeBreakingAtIndex(0, 0);
+        if (marquee.rafId) {
+          cancelAnimationFrame(marquee.rafId);
+        }
+        marquee.rafId = requestAnimationFrame(tickBreakingMarquee);
+      }
+
+      /* =====================================================================
+         ОСТАЛЬНЫЕ ФУНКЦИИ ПОРТАЛА
+         ===================================================================== */
       function showToast(message) {
         var toastEl = document.getElementById("toastNotice");
         toastEl.textContent = message;
@@ -1435,9 +1868,16 @@
       }
 
       function openArticleModal(article) {
+        var viewsVal = article.views || generateRandomViews();
         document.getElementById("modalCategory").textContent = article.category || "PHOENIX NEWS";
         document.getElementById("modalTitle").textContent = article.title;
-        document.getElementById("modalMeta").textContent = article.meta || "Обновлено 23 Ноября 2026 • AmanzholovNews Desk";
+
+        var metaEl = document.getElementById("modalMeta");
+        metaEl.textContent = "";
+        var metaText = document.createElement("span");
+        metaText.textContent = article.meta || "Обновлено 23 Ноября 2026 • AmanzholovNews Desk";
+        metaEl.appendChild(metaText);
+        metaEl.appendChild(createViewsBadge(viewsVal));
 
         var modalImgBox = document.getElementById("modalImgBox");
         modalImgBox.innerHTML = "";
@@ -1461,22 +1901,9 @@
         document.getElementById("articleModal").classList.remove("open");
       }
 
-      function renderBreakingNews() {
-        var item = BREAKING_NEWS[state.breakingIndex];
-        document.getElementById("breakingHeadlineText").textContent = item.headline;
-        document.getElementById("breakingTimeText").textContent = item.time;
-      }
-
-      function startBreakingAutoplay() {
-        clearInterval(state.breakingTimer);
-        state.breakingTimer = setInterval(function () {
-          state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
-          renderBreakingNews();
-        }, 4000);
-      }
-
-      function initCommentsTicker() {
-        var track = document.getElementById("commentsScrollTrack");
+      function setupSingleCommentsTrack(trackId, delayOffset) {
+        var track = document.getElementById(trackId);
+        if (!track) return;
         track.innerHTML = "";
 
         var displayItems = COMMENT_ITEMS.concat(COMMENT_ITEMS);
@@ -1487,10 +1914,9 @@
           track.appendChild(div);
         });
 
-        clearInterval(state.commentsTimer);
-        state.commentsTimer = setInterval(function () {
+        var timerId = setInterval(function () {
           var firstChild = track.firstElementChild;
-          if (!firstChild) return;
+          if (!firstChild || firstChild.offsetHeight === 0) return;
 
           var stepHeight = firstChild.offsetHeight;
           track.style.transition = "transform 0.45s ease-in-out";
@@ -1501,12 +1927,30 @@
             track.appendChild(firstChild);
             track.style.transform = "translateY(0px)";
           }, 460);
-        }, 2300);
+        }, 2300 + (delayOffset || 0));
+
+        state.commentsTimers.push(timerId);
+      }
+
+      function initCommentsTicker() {
+        state.commentsTimers.forEach(function (id) {
+          clearInterval(id);
+        });
+        state.commentsTimers = [];
+        setupSingleCommentsTrack("commentsScrollTrackDesktop", 0);
+        setupSingleCommentsTrack("commentsScrollTrackMobile", 150);
       }
 
       function renderHero() {
         document.getElementById("heroImg").src = SINGLE_HERO_SLIDE.img;
-        document.getElementById("heroMeta").textContent = SINGLE_HERO_SLIDE.meta;
+
+        var heroMetaEl = document.getElementById("heroMeta");
+        heroMetaEl.textContent = "";
+        var dateSpan = document.createElement("span");
+        dateSpan.textContent = SINGLE_HERO_SLIDE.meta;
+        heroMetaEl.appendChild(dateSpan);
+        heroMetaEl.appendChild(createViewsBadge(SINGLE_HERO_SLIDE.views));
+
         document.getElementById("heroTitle").textContent = SINGLE_HERO_SLIDE.title;
         document.getElementById("heroSummary").textContent = SINGLE_HERO_SLIDE.summary;
       }
@@ -1533,12 +1977,18 @@
           titleEl.className = "blog-item-title";
           titleEl.textContent = post.title;
 
+          var footerRow = document.createElement("div");
+          footerRow.className = "blog-footer-row";
+
           var excerptEl = document.createElement("p");
           excerptEl.className = "blog-item-excerpt";
           excerptEl.textContent = post.excerpt;
 
+          footerRow.appendChild(excerptEl);
+          footerRow.appendChild(createViewsBadge(post.views));
+
           info.appendChild(titleEl);
-          info.appendChild(excerptEl);
+          info.appendChild(footerRow);
           card.appendChild(thumb);
           card.appendChild(info);
 
@@ -1548,6 +1998,7 @@
               meta: post.meta,
               category: "COMMUNITY BLOG",
               img: post.img,
+              views: post.views,
               paragraphs: post.paragraphs
             });
           });
@@ -1572,6 +2023,8 @@
             img.alt = currentItem.title;
             card.appendChild(img);
 
+            card.appendChild(createViewsBadge(currentItem.views));
+
             var caption = document.createElement("div");
             caption.className = "editor-caption";
             caption.textContent = currentItem.title;
@@ -1583,6 +2036,7 @@
                 meta: currentItem.meta,
                 category: "EDITOR'S CHOICE",
                 img: currentItem.img,
+                views: currentItem.views,
                 paragraphs: currentItem.paragraphs
               });
             });
@@ -1592,34 +2046,72 @@
         }
       }
 
+      function initFeedViews() {
+        var cards = document.querySelectorAll(".full-news-feed .news-feed-card");
+        cards.forEach(function (card, idx) {
+          var overlay = card.querySelector(".news-feed-overlay");
+          if (!overlay || overlay.querySelector(".views-badge")) return;
+          var viewsVal = FEED_VIEWS_POOL[idx] || generateRandomViews();
+          card.dataset.views = viewsVal;
+          overlay.appendChild(createViewsBadge(viewsVal));
+        });
+      }
+
+      function initMobileAdBanner() {
+        var adBanner = document.getElementById("mobileAdBanner");
+        var closeBtn = document.getElementById("mobileAdCloseBtn");
+        var openTrigger = document.getElementById("mobileAdOpenTrigger");
+        var targetCard = document.getElementById("newsFeedItem8");
+
+        if (!adBanner || !closeBtn || !openTrigger || !targetCard) return;
+
+        function hideAd() {
+          adBanner.classList.remove("visible");
+        }
+
+        setTimeout(function () {
+          if (window.innerWidth <= 768) {
+            adBanner.classList.add("visible");
+          }
+        }, 2000);
+
+        closeBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          hideAd();
+        });
+
+        openTrigger.addEventListener("click", function () {
+          hideAd();
+          targetCard.classList.add("open");
+          targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
       document.getElementById("brandResetBtn").addEventListener("click", function () {
-        state.breakingIndex = 0;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        placeBreakingAtIndex(0, 0);
         state.editorsOffset = 0;
         renderEditorsChoice();
         showToast("Главная страница PhoenixNews обновлена");
       });
 
       document.getElementById("breakingPrevBtn").addEventListener("click", function () {
-        state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        var nextIdx = (marquee.activeIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
+        placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingNextBtn").addEventListener("click", function () {
-        state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        var nextIdx = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+        placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingTextTrigger").addEventListener("click", function () {
-        var current = BREAKING_NEWS[state.breakingIndex];
+        var current = BREAKING_NEWS[marquee.activeIndex];
         openArticleModal({
           title: current.headline,
           meta: "Breaking News " + current.time,
           category: "BREAKING NEWS",
           img: "../images/1.jpg",
+          views: current.views,
           paragraphs: [current.headline]
         });
       });
@@ -1630,6 +2122,7 @@
           meta: SINGLE_HERO_SLIDE.meta,
           category: "FEATURED STORY",
           img: SINGLE_HERO_SLIDE.img,
+          views: SINGLE_HERO_SLIDE.views,
           paragraphs: SINGLE_HERO_SLIDE.paragraphs
         });
       });
@@ -1657,20 +2150,23 @@
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           closeArticleModal();
+          var adBanner = document.getElementById("mobileAdBanner");
+          if (adBanner) adBanner.classList.remove("visible");
         }
       });
 
-      renderBreakingNews();
-      startBreakingAutoplay();
+      initBreakingMarquee();
       initCommentsTicker();
       renderHero();
       renderCommunityBlog();
       renderEditorsChoice();
+      initFeedViews();
+      initMobileAdBanner();
 
-      document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
-        trigger.addEventListener('click', function() {
-          var card = this.closest('.news-feed-card');
-          card.classList.toggle('open');
+      document.querySelectorAll(".news-feed-trigger").forEach(function (trigger) {
+        trigger.addEventListener("click", function () {
+          var card = this.closest(".news-feed-card");
+          card.classList.toggle("open");
         });
       });
     })();

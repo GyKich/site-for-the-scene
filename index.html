@@ -180,7 +180,7 @@
     }
 
     /* =========================================================================
-       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (BREAKING NEWS)
+       2. СТРОКА СРОЧНЫХ НОВОСТЕЙ (БЕГУЩАЯ СТРОКА)
        ========================================================================= */
     .breaking-bar {
       display: flex;
@@ -201,6 +201,7 @@
       align-items: center;
       white-space: nowrap;
       flex-shrink: 0;
+      z-index: 2;
     }
 
     .breaking-track {
@@ -209,21 +210,40 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 5px 10px 5px 14px;
+      padding: 5px 10px 5px 12px;
       color: #ffffff;
       min-width: 0;
+      overflow: hidden;
     }
 
-    .breaking-text-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
+    .breaking-marquee-viewport {
+      position: relative;
+      flex: 1;
+      height: 18px;
       overflow: hidden;
-      white-space: nowrap;
+      min-width: 0;
       cursor: pointer;
     }
 
-    .breaking-text-wrap:hover .breaking-headline {
+    .breaking-marquee-stage {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    .breaking-marquee-item {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .breaking-marquee-viewport:hover .breaking-headline {
       text-decoration: underline;
     }
 
@@ -232,8 +252,6 @@
       font-style: italic;
       font-size: 11.5px;
       color: #ffffff;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .breaking-time {
@@ -247,8 +265,11 @@
       display: flex;
       align-items: center;
       gap: 3px;
-      margin-left: 12px;
+      margin-left: 10px;
+      padding-left: 6px;
+      background: #14385c;
       flex-shrink: 0;
+      z-index: 2;
     }
 
     .breaking-arrow {
@@ -266,6 +287,74 @@
     .breaking-arrow:hover {
       background-color: rgba(255, 255, 255, 0.14);
       color: #ffffff;
+    }
+
+    /* =========================================================================
+       ПУНКТИК ПРОСМОТРОВ (СЕРЫЙ БЕЙДЖ У НОВОСТЕЙ)
+       ========================================================================= */
+    .views-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 400;
+      font-style: normal;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #888888;
+      background-color: #f1f1f1;
+      border: 1px solid #e0e0e0;
+      border-radius: 2px;
+      padding: 1px 6px;
+      line-height: 1.3;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .views-badge svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    .hero-overlay .views-badge,
+    .news-feed-overlay .views-badge {
+      color: #d4d4d4;
+      background-color: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.22);
+      margin-left: 6px;
+    }
+
+    .editor-card .views-badge {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: #e6e6e6;
+      background-color: rgba(0, 0, 0, 0.65);
+      border-color: rgba(255, 255, 255, 0.2);
+      font-size: 9.5px;
+      padding: 1px 5px;
+    }
+
+    .blog-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .blog-footer-row .blog-item-excerpt {
+      margin-bottom: 0;
+    }
+
+    .modal-article-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     /* =========================================================================
@@ -395,6 +484,10 @@
       font-size: 9.5px;
       color: #cccccc;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .hero-title {
@@ -585,8 +678,10 @@
       text-decoration: underline;
     }
 
-    /* Скрываем мобильный дубль соцсетей на десктопе */
-    .mobile-only-social {
+    /* Скрываем мобильный блок соцсетей, мобильных комментариев и баннер на десктопе */
+    .mobile-only-social,
+    .mobile-only-comments,
+    .mobile-ad-banner {
       display: none;
     }
 
@@ -856,6 +951,7 @@
       border-radius: 2px;
       overflow: hidden;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      scroll-margin-top: 14px;
     }
 
     .news-feed-trigger {
@@ -890,6 +986,10 @@
       font-weight: 700;
       text-transform: uppercase;
       line-height: 1.25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .news-feed-trigger:hover .news-feed-overlay {
@@ -905,7 +1005,7 @@
     }
 
     .news-feed-card.open .news-feed-dropdown {
-      max-height: 450px;
+      max-height: 1100px;
       padding: 16px 18px;
       border-top: 1px solid #e0e0e0;
     }
@@ -915,6 +1015,17 @@
       line-height: 1.6;
       color: #333333;
       margin-bottom: 10px;
+    }
+
+    .news-feed-gif {
+      display: block;
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+      object-fit: cover;
+      margin: 0 auto 12px auto;
+      border: 1px solid #dcdcdc;
+      border-radius: 2px;
     }
 
     .news-feed-dropdown p:last-child {
@@ -927,7 +1038,7 @@
     @media (max-width: 768px) {
       .container {
         width: 100%;
-        padding: 6px;
+        padding: 6px 6px 76px 6px;
       }
 
       .site-header {
@@ -963,8 +1074,9 @@
         display: none;
       }
 
-      .breaking-time {
-        display: none;
+      .breaking-badge {
+        padding: 7px 10px;
+        font-size: 11px;
       }
 
       .main-three-cols {
@@ -1007,10 +1119,134 @@
         margin-top: 8px;
       }
 
-      /* Показываем блок соцсетей перед футером на мобильных устройствах */
+      .news-feed-card.open .news-feed-dropdown {
+        max-height: 1300px;
+      }
+
+      /* Показываем блок соцсетей и комментарии под ним только на мобильных устройствах */
       .mobile-only-social {
         display: flex;
+        margin-bottom: 10px;
+      }
+
+      .mobile-only-comments {
+        display: flex;
+        padding: 10px 12px;
+        flex-direction: column;
         margin-bottom: 12px;
+      }
+
+      .mobile-only-comments .comments-scroll-container {
+        height: 210px;
+      }
+
+      /* Выезжающая снизу панель-имитация рекламы (только на мобильных) */
+      .mobile-ad-banner {
+        display: flex;
+        align-items: stretch;
+        position: fixed;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        background: #ffffff;
+        border: 1px solid #163d66;
+        border-top: 2px solid #ee1f27;
+        border-radius: 3px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+        z-index: 950;
+        transform: translateY(calc(100% + 20px));
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+        overflow: hidden;
+      }
+
+      .mobile-ad-banner.visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .mobile-ad-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 8px;
+        cursor: pointer;
+        min-width: 0;
+      }
+
+      .mobile-ad-thumb {
+        width: 52px;
+        height: 44px;
+        object-fit: cover;
+        border-radius: 2px;
+        border: 1px solid #cccccc;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-text-wrap {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .mobile-ad-top-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 2px;
+      }
+
+      .mobile-ad-tag {
+        background: #f0f0f0;
+        color: #777777;
+        border: 1px solid #dcdcdc;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0 4px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-title {
+        font-family: "Arial Narrow", Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: #163d66;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .mobile-ad-snippet {
+        font-size: 10.5px;
+        line-height: 1.28;
+        color: #444444;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mobile-ad-close {
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: #666666;
+        background: #f7f7f7;
+        border-left: 1px solid #e4e4e4;
+        flex-shrink: 0;
+      }
+
+      .mobile-ad-close:hover {
+        background: #e31b23;
+        color: #ffffff;
       }
     }
   </style>
@@ -1046,17 +1282,12 @@
         </div>
       </header>
 
-      <!-- 2. СРОЧНЫЕ НОВОСТИ -->
+      <!-- 2. СРОЧНЫЕ НОВОСТИ (БЕГУЩАЯ СТРОКА) -->
       <section class="breaking-bar" aria-label="Breaking News">
         <div class="breaking-badge">Жедел жаңалықтар</div>
         <div class="breaking-track">
-          <div class="breaking-text-wrap" id="breakingTextTrigger">
-            <span class="breaking-headline" id="breakingHeadlineText">
-              Аманжоловта «Фенис» шығармашылық ұжымы өнер көрсетеді.
-            </span>
-            <span class="breaking-time" id="breakingTimeText">
-              - Бейсенбі, 25 Қараша 2026 18:00
-            </span>
+          <div class="breaking-marquee-viewport" id="breakingTextTrigger">
+            <div class="breaking-marquee-stage" id="breakingMarqueeStage"></div>
           </div>
           <div class="breaking-controls">
             <button type="button" class="breaking-arrow" id="breakingPrevBtn" title="Алдыңғы жаңалық"><</button>
@@ -1067,14 +1298,14 @@
 
       <!-- 3. ГЛАВНАЯ ТРЕХКОЛОНОЧНАЯ СЕТКА -->
       <main class="main-three-cols">
-        <!-- ЛЕВЫЙ БЛОК: КОММЕНТАРИИ ЧИТАТЕЛЕЙ -->
+        <!-- ЛЕВЫЙ БЛОК: КОММЕНТАРИИ ЧИТАТЕЛЕЙ (ДЕСКТОП) -->
         <aside class="panel-box top-news-panel">
           <div class="top-news-header">
             <h2 class="section-heading-condensed">Оқырман пікірлері</h2>
             <span class="cool-pill">LIVE</span>
           </div>
           <div class="comments-scroll-container">
-            <div class="comments-scroll-track" id="commentsScrollTrack"></div>
+            <div class="comments-scroll-track" id="commentsScrollTrackDesktop"></div>
           </div>
         </aside>
 
@@ -1140,12 +1371,14 @@
       </section>
 
       <!-- ЛЕНТА НОВОСТЕЙ (13 ЭЛЕМЕНТОВ) -->
-      <section class="full-news-feed" aria-label="News Feed">
+      <section class="full-news-feed" id="fullNewsFeed" aria-label="News Feed">
         <!-- Элемент 1 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-1">
           <div class="news-feed-trigger">
             <img src="images/17.jpg" alt="1-жаңалық">
-            <div class="news-feed-overlay">Номер 1: Пролог «Адалсыздықтың құны»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 1: Пролог «Адалсыздықтың құны»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Қойылым мектеп бітіру кешіне дайындалып жүрген Дана есімді қыздың оқиғасынан басталады. Ол әкесінің соңғы күндері өзін біртүрлі ұстап, түн ортасында қолына ақша салынған конверт ұстатқанын есіне алады. Көп ұзамай әкесінің заңсыз әрекеттері әшкереленіп, ұсталғаны туралы хабар тарайды. Дана үшін бұл күтпеген соққы болады. Әкесінің өз әрекетін отбасын ештеңеден тарықтырмау үшін жасағанын айтқанына қарамастан, қызы арам жолмен келген байлықтан бас тартып, әкесінен адал адам болуын қалағанын жеткізеді.</p>
@@ -1154,146 +1387,170 @@
         </article>
 
         <!-- Элемент 2 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-2">
           <div class="news-feed-trigger">
             <img src="images/18.jpg" alt="2-жаңалық">
-            <div class="news-feed-overlay">Номер 2: Эстрадалық би «Are you gonna be my girl?»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 2: Эстрадалық би «Are you gonna be my girl?»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Прологтағы оқиғадан кейін сахнаға журналист шығып, Дананың әкесінің ұсталғаны туралы жаңалықты жариялайды. Бұл хабар мектепке де тарап, сыныптастары мен айналасындағы адамдар Данаға түрлі көзқараспен қарай бастайды. Бірі оны аяса, енді бірі сыртынан сөз қылып, кінәлі адамның баласы ретінде бағалайды. Осындай ауыр сәтте Дана айналасындағылардың пікірінен өзін одан сайын жалғыз сезінеді. Осы көріністен кейінгі эстрадалық би оқиғаның көңіл күйін өзгертіп, сахнаға жастық жігер мен қозғалыс ырғағын алып келеді.</p>
-	    <p>Негізгі мағынасы: Нөмір жастардың өмірге деген құлшынысын, еркіндігін және ортадағы қарым-қатынасты бейнелейді. Сонымен бірге адамның сыртқы жағдайына қарап баға бермей, оның ішкі жан дүниесін түсіне білудің маңызын аңғартады.</p>
+            <p>Негізгі мағынасы: Нөмір жастардың өмірге деген құлшынысын, еркіндігін және ортадағы қарым-қатынасты бейнелейді. Сонымен бірге адамның сыртқы жағдайына қарап баға бермей, оның ішкі жан дүниесін түсіне білудің маңызын аңғартады.</p>
           </div>
         </article>
 
         <!-- Элемент 3 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-3">
           <div class="news-feed-trigger">
             <img src="images/19.jpg" alt="3-жаңалық">
-            <div class="news-feed-overlay">Номер 3: Вокалдық нөмір «Доп»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 3: Вокалдық нөмір «Доп»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Бұл бөлімде Аян есімді оқушының мектептегі жағдайы суреттеледі. Сыныптастары оның сыртқы келбетіне қатысты әзілдеп, көңіліне тиетін сөздер айтады. Осындай сәтте досы Жәнібек оны жалғыз қалдырмай, қорғауға тырысады. Аян бастапқыда болған жағдайға қысылып, өзін ыңғайсыз сезінгенімен, әжесінің ақылынан кейін шынайы достықтың қадірін түсінеді. Осы оқиғадан кейін орындалатын «Доп» әні бала көңіліндегі қарапайым қуаныш пен достықтың жылуын жеткізеді.</p>
-	    <p>Негізгі мағынасы: Адамның қадірі сыртқы келбетімен немесе өзгелердің бағасымен өлшенбейді. Нағыз дос қиын сәтте қолдау көрсетіп, жанынан табыла біледі. Достықтың негізі — сыйластық, түсіністік және адалдық.</p>
+            <p>Негізгі мағынасы: Адамның қадірі сыртқы келбетімен немесе өзгелердің бағасымен өлшенбейді. Нағыз дос қиын сәтте қолдау көрсетіп, жанынан табыла біледі. Достықтың негізі — сыйластық, түсіністік және адалдық.</p>
           </div>
         </article>
 
         <!-- Элемент 4 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-4">
           <div class="news-feed-trigger">
             <img src="images/20.jpg" alt="4-жаңалық">
-            <div class="news-feed-overlay">Номер 4: Жайдарман</div>
+            <div class="news-feed-overlay">
+              <span>Номер 4: Жайдарман</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Бұл бөлімде сахнадағы оқиғаға жеңіл әзіл мен көтеріңкі көңіл күй қосылады. Дана отбасындағы қиындықтардан кейін анасына көмектесу үшін жұмыс іздеп, би студиясына тазалықшы болып орналасады. Студияға келген Аян оның би өнеріне деген қабілетін байқап, кастингке қатысуға ұсыныс жасайды. Осылайша, Дананың өмірінде жаңа мүмкіндікке жол ашылады. Жайдарман нөмірі концерттің жалпы атмосферасын жандандырып, көрерменге көтеріңкі көңіл күй сыйлайды.</p>
-	    <p>Негізгі мағынасы: Әр адамның өмірінде күтпеген мүмкіндіктер кездеседі. Маңыздысы — қандай жағдайға тап болсаң да, өзіңе деген сенімді жоғалтпай, алға ұмтылу. Кейде кішкентай ғана мүмкіндік үлкен өзгерістердің бастамасына айналады.</p>
+            <p>Негізгі мағынасы: Әр адамның өмірінде күтпеген мүмкіндіктер кездеседі. Маңыздысы — қандай жағдайға тап болсаң да, өзіңе деген сенімді жоғалтпай, алға ұмтылу. Кейде кішкентай ғана мүмкіндік үлкен өзгерістердің бастамасына айналады.</p>
           </div>
         </article>
 
         <!-- Элемент 5 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-5">
           <div class="news-feed-trigger">
             <img src="images/21.jpg" alt="5-жаңалық">
-            <div class="news-feed-overlay">Номер 5: Халық биі «Ağ çiçəyim»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 5: Халық биі «Ağ çiçəyim»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Дана би студиясындағы кастингтен өз қабілеті мен еңбегінің арқасында сүрінбей өтеді. Бұл жетістік оның қиындықтарға қарамастан өнерге деген қызығушылығын жоғалтпағанын көрсетеді. Би нөмірі арқылы көрермен назарына әзірбайжан халқының ұлттық би өнері ұсынылады. Әсем қимылдар мен ұлттық нақыштағы сахналық көрініс халықтың мәдени болмысын, сұлулығы мен өнерге деген құрметін танытады.</p>
-	    <p>Негізгі мағынасы: Әр халықтың өнері — оның рухани байлығы мен мәдени мұрасы. Өзге ұлттың мәдениетін танып, құрметтеу арқылы халықтар арасындағы достық пен өзара сыйластық нығая түседі.</p>
+            <p>Негізгі мағынасы: Әр халықтың өнері — оның рухани байлығы мен мәдени мұрасы. Өзге ұлттың мәдениетін танып, құрметтеу арқылы халықтар арасындағы достық пен өзара сыйластық нығая түседі.</p>
           </div>
         </article>
 
         <!-- Элемент 6 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-6">
           <div class="news-feed-trigger">
             <img src="images/22.jpg" alt="6-жаңалық">
-            <div class="news-feed-overlay">Номер 6: Жеке вокал «Training season»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 6: Жеке вокал «Training season»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Кастингтен кейін Аян Дананы үйіне дейін шығарып салуды ұсынады. Екеуі жол бойы әңгімелесіп, бір-бірін жақынырақ тани түседі. Аян оның өнеріне сүйсініп, бірге уақыт өткізгеніне қуанышты екенін білдіреді. Қоштасар сәтте ол Дананың әлеуметтік желідегі парақшасын сұрайды. Алайда Дана уақытының басым бөлігін ҰБТ-ға дайындыққа арнағандықтан, әлеуметтік желілерді қолданбайтынын айтады. Осы көріністен кейін орындалатын «Training Season» әні жас жүректер арасындағы алғашқы сезімдер мен жаңа таныстықтың әсерін толықтырады.</p>
-	    <p>Негізгі мағынасы: Шынайы қарым-қатынас өзара құрмет пен сенімнен басталады. Бір-бірінің арманы мен мақсатын түсініп, жеке таңдауына құрметпен қарау — адал сезімнің маңызды белгісі.</p>
+            <p>Негізгі мағынасы: Шынайы қарым-қатынас өзара құрмет пен сенімнен басталады. Бір-бірінің арманы мен мақсатын түсініп, жеке таңдауына құрметпен қарау — адал сезімнің маңызды белгісі.</p>
           </div>
         </article>
 
         <!-- Элемент 7 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-7">
           <div class="news-feed-trigger">
             <img src="images/23.jpg" alt="7-жаңалық">
-            <div class="news-feed-overlay">Номер 7: Патриоттық нөмір</div>
+            <div class="news-feed-overlay">
+              <span>Номер 7: Патриоттық нөмір</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Дана ҰБТ-ға дайындалып отырып, қазақ халқының тарихындағы ауыр кезеңдердің бірі — «Ақтабан шұбырынды, Алқакөл сұлама» оқиғасын қайталайды. Ол 1723–1727 жылдардағы ел басына түскен нәубетті, Тәуке хан қайтыс болғаннан кейінгі саяси бытыраңқылықтың салдарын еске алады. Одан кейінгі көріністе Аян әжесімен болашақта қай елде өмір сүргісі келетіні туралы пікір алмасады. Әжесі оған ата-бабаның аманатын, туған жердің қадірін және ел болашағына үлес қосудың маңызын түсіндіреді. Осы ойлар патриоттық нөмір арқылы жалғасын табады.</p>
-	    <p>Негізгі мағынасы: Отанға деген адалдық — туған жерді сөз жүзінде сүю ғана емес, оның тарихын құрметтеп, болашағына жауапкершілікпен қарау. Елге қызмет ету біліммен, адал еңбекпен және нақты іспен көрініс табады.</p>
+            <p>Негізгі мағынасы: Отанға деген адалдық — туған жерді сөз жүзінде сүю ғана емес, оның тарихын құрметтеп, болашағына жауапкершілікпен қарау. Елге қызмет ету біліммен, адал еңбекпен және нақты іспен көрініс табады.</p>
           </div>
         </article>
 
         <!-- Элемент 8 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" id="newsFeedItem8" data-views-key="feed-8">
           <div class="news-feed-trigger">
             <img src="images/24.jpg" alt="8-жаңалық">
-            <div class="news-feed-overlay">Номер 8: Кәсіби бағдар беру ролигі</div>
+            <div class="news-feed-overlay">
+              <span>Номер 8: Кәсіби бағдар беру ролигі</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
+            <img src="images/24.gif" alt="8-жаңалық гифка" class="news-feed-gif">
             <p>ҰБТ нәтижесін күткен Дана 123 балл жинап, өзінің білім деңгейін дәлелдейді. Ол грантқа түсе алмай қаламын ба деп алаңдағанымен, көп ұзамай көптен күткен қуанышты хабарды алады: Дана университет грантының иегері атанады. Бұл жетістік — оның табандылығы мен тынымсыз еңбегінің нәтижесі. Осы сәттен кейін көрсетілетін кәсіби бағдар беру ролигі болашақ мамандықты таңдаудың, білім алудың және алға қойған мақсатқа ұмтылудың маңызын ашады.</p>
-	    <p>Негізгі мағынасы: Адамның болашағы өз қолында. Білімге деген құштарлық, еңбекқорлық пен табандылық кез келген қиындықты жеңуге жол ашады. Нағыз жетістік — өз күшіңмен жеткен нәтиже.</p>
+            <p>Негізгі мағынасы: Адамның болашағы өз қолында. Білімге деген құштарлық, еңбекқорлық пен табандылық кез келген қиындықты жеңуге жол ашады. Нағыз жетістік — өз күшіңмен жеткен нәтиже.</p>
           </div>
         </article>
 
         <!-- Элемент 9 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-9">
           <div class="news-feed-trigger">
             <img src="images/25.jpg" alt="9-жаңалық">
-            <div class="news-feed-overlay">Номер 9: Сюжеттік би «Lucent»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 9: Сюжеттік би «Lucent»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Дананың туған күніне анасы әкесінен келген сыйлықты табыстайды. Сыйлықтың ішінде көк шар мен әкесінің өз қолымен жазған хаты болады. Хатта әкесі өткен өміріне көз жүгіртіп, кезінде адалдықтың қадірін түсінбей, оңай жолды таңдағанына өкінетінін жеткізеді. Ол отбасының болашағын ойлаймын деп жүріп, сол болашақтың негізі сенім екенін ұмытқанын мойындайды. Сонымен қатар қызының өмірі өзінің қателіктерімен өлшенбеуін тілеп, Данадан өз абыройын адалдықпен сақтап қалуын сұрайды. Әкенің жан тебіренісін жеткізген осы хаттан кейін орындалатын «Lucent» биі кейіпкерлердің ішкі сезімдері мен рухани өзгерістерін бейнелейді.</p>
-	    <p>Негізгі мағынасы: Адам өз қателігін мойындап, одан сабақ ала білуі керек. Адалдықты жоғалту оңай болғанымен, жоғалған сенімді қайта қалыптастыру қиын. Бұл нөмір кешірім, өкініш және адамгершілік құндылықтар туралы ой қозғайды.</p>
+            <p>Негізгі мағынасы: Адам өз қателігін мойындап, одан сабақ ала білуі керек. Адалдықты жоғалту оңай болғанымен, жоғалған сенімді қайта қалыптастыру қиын. Бұл нөмір кешірім, өкініш және адамгершілік құндылықтар туралы ой қозғайды.</p>
           </div>
         </article>
 
         <!-- Элемент 10 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-10">
           <div class="news-feed-trigger">
             <img src="images/26.jpg" alt="10-жаңалық">
-            <div class="news-feed-overlay">Номер 10: Көркем сөз — Адал азамат</div>
+            <div class="news-feed-overlay">
+              <span>Номер 10: Көркем сөз — Адал азамат</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Оқиға арада жеті жыл өткен уақытқа ауысады. Көрермен енді өмірден өз орнын тапқан, әдебиет әлемінде өзіндік қолтаңбасын қалыптастырған Дана Ерасылқызымен танысады. Ол — жас жазушы, ақын әрі тарихшы. Телебағдарлама барысында Дана шығармашылық жолының басталуы мен тарихқа деген қызығушылығы туралы әңгімелейді. Кейін көрерменге өзінің жүрегіне жақын өлеңдерінің бірін оқып береді. Бұл бөлім кейіпкердің қиындықтарға мойымай, білім мен өнер арқылы биікке көтерілгенін көрсетеді.</p>
-	    <p>Негізгі мағынасы: Адал азамат болу — тек жеке өмірде шындықты ұстану емес, қоғамға пайдасын тигізіп, өз ісіне жауапкершілікпен қарау. Адамның білімі, өнері мен еңбегі елдің рухани дамуына үлес қоса алады.</p>
+            <p>Негізгі мағынасы: Адал азамат болу — тек жеке өмірде шындықты ұстану емес, қоғамға пайдасын тигізіп, өз ісіне жауапкершілікпен қарау. Адамның білімі, өнері мен еңбегі елдің рухани дамуына үлес қоса алады.</p>
           </div>
         </article>
 
         <!-- Элемент 11 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-11">
           <div class="news-feed-trigger">
             <img src="images/27.jpg" alt="11-жаңалық">
-            <div class="news-feed-overlay">Номер 11: Ерекше нөмір. «Every breath you take»</div>
+            <div class="news-feed-overlay">
+              <span>Номер 11: Ерекше нөмір. «Every breath you take»</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Дана шығармашылық жолындағы жетістіктерімен көрерменге танылғаннан кейін, оның құрметіне музыкалық нөмір ұсынылады. «Young and Beautiful» композициясымен қатар көрсетілетін бейнебаянда уақыттың өтуі, Дананың жастық шағынан егде жасқа дейінгі өмір жолы бейнеленеді. Ол бір сәтте өмірдің өткіншілігін, жылдар алмасқанымен, адам бойындағы асыл қасиеттердің маңызын еске салады.</p>
-	    <p>Негізгі мағынасы: Уақыт ешкімді күтпейді, жастық шақ пен сыртқы сұлулық та мәңгілік емес. Алайда адамның адал ісі, жақсы аты мен артында қалдырған рухани мұрасы уақыт өткен сайын құндылығын жоғалтпайды.</p>
+            <p>Негізгі мағынасы: Уақыт ешкімді күтпейді, жастық шақ пен сыртқы сұлулық та мәңгілік емес. Алайда адамның адал ісі, жақсы аты мен артында қалдырған рухани мұрасы уақыт өткен сайын құндылығын жоғалтпайды.</p>
           </div>
         </article>
 
         <!-- Элемент 12 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-12">
           <div class="news-feed-trigger">
             <img src="images/28.jpg" alt="12-жаңалық">
-            <div class="news-feed-overlay">Номер 12: Заманауи би</div>
+            <div class="news-feed-overlay">
+              <span>Номер 12: Заманауи би</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>Қорытынды бөлімде Аянның әжесі өткен оқиғаларға шолу жасап, немересіне адалдықтың өмірдің әр саласында маңызды екенін түсіндіреді. Отбасыңа, достарыңа, махаббатыңа, тарихыңа және Отаныңа адал болу — адамдық қасиеттің белгісі. Дегенмен, әженің айтуынша, ең бастысы — өз арманыңнан айнымай, мақсатыңнан адаспай, ең алдымен өзіңе адал болу. Осы өсиеттен кейін орындалатын заманауи би концерттің финалдық нүктесін қойып, көрерменге жігер мен үміт сыйлайды.</p>
-	    <p>Негізгі мағынасы: Адалдық — адам өмірінің барлық кезеңін байланыстыратын басты құндылық. Өзгеге адал болу өзіңе деген шынайылықтан басталады. Арманың мен мақсатыңа берік болып, таңдаған жолыңнан таймау — адал өмір сүрудің көрінісі.</p>
+            <p>Негізгі мағынасы: Адалдық — адам өмірінің барлық кезеңін байланыстыратын басты құндылық. Өзгеге адал болу өзіңе деген шынайылықтан басталады. Арманың мен мақсатыңа берік болып, таңдаған жолыңнан таймау — адал өмір сүрудің көрінісі.</p>
           </div>
         </article>
 
         <!-- Элемент 13 -->
-        <article class="news-feed-card">
+        <article class="news-feed-card" data-views-key="feed-13">
           <div class="news-feed-trigger">
             <img src="images/29.jpg" alt="13-жаңалық">
-            <div class="news-feed-overlay">Қорытынды идея</div>
+            <div class="news-feed-overlay">
+              <span>Қорытынды идея</span>
+            </div>
           </div>
           <div class="news-feed-dropdown">
             <p>«BORN TO BE TRUE» — адамның өмір жолындағы таңдауын, қателігін, өкінішін, ізденісі мен жетістігін суреттейтін қойылым. Әр нөмір бір-бірімен сабақтаса отырып, адалдықтың отбасыдан басталып, достықта, махаббатта, білімде, өнерде және Отанға қызмет етуде жалғасатынын көрсетеді. Ал концерттің түпкі ойы — адам қандай биікке көтерілсе де, өз болмысын жоғалтпай, ең алдымен өзіне адал болып қалуы керек.</p>
-	    <p></p>
           </div>
         </article>
       </section>
@@ -1320,12 +1577,40 @@
         </div>
       </div>
 
+      <!-- МОБИЛЬНЫЙ БЛОК КОММЕНТАРИЕВ ЧИТАТЕЛЕЙ (ПОД СОЦСЕТЯМИ ТОЛЬКО НА МОБИЛЬНЫХ) -->
+      <aside class="panel-box mobile-only-comments">
+        <div class="top-news-header">
+          <h2 class="section-heading-condensed">Оқырман пікірлері</h2>
+          <span class="cool-pill">LIVE</span>
+        </div>
+        <div class="comments-scroll-container">
+          <div class="comments-scroll-track" id="commentsScrollTrackMobile"></div>
+        </div>
+      </aside>
+
       <!-- 5. ФУТЕР -->
       <footer class="site-footer">
         <div>Copyright © 2026 <strong>Gykich</strong>. All Rights Reserved.</div>
         <div>«Фенит» ұжымы үшін арнайы жасалған. Барлық есімдер ойдан шығарылған, кездейсоқ сәйкестіктер мүмкін.</div>
       </footer>
     </div>
+  </div>
+
+  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (ТЕКСТ ИЗ 8 НОМЕРА, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
+  <div class="mobile-ad-banner" id="mobileAdBanner" role="region" aria-label="Жарнама блогы">
+    <div class="mobile-ad-content" id="mobileAdOpenTrigger">
+      <img src="images/24.jpg" alt="Номер 8: Кәсіби бағдар беру ролигі" class="mobile-ad-thumb">
+      <div class="mobile-ad-text-wrap">
+        <div class="mobile-ad-top-row">
+          <span class="mobile-ad-tag">Жарнама</span>
+          <span class="mobile-ad-title">Номер 8: Кәсіби бағдар беру ролигі</span>
+        </div>
+        <div class="mobile-ad-snippet">
+          ҰБТ нәтижесін күткен Дана 123 балл жинап, өзінің білім деңгейін дәлелдейді. Ол грантқа түсе алмай қаламын ба деп алаңдағанымен, көп ұзамай көптен күткен қуанышты хабарды алады.
+        </div>
+      </div>
+    </div>
+    <button type="button" class="mobile-ad-close" id="mobileAdCloseBtn" title="Жабу">×</button>
   </div>
 
   <!-- МОДАЛЬНОЕ ОКНО -->
@@ -1358,9 +1643,9 @@
       "use strict";
 
       var BREAKING_NEWS = [
-        { headline: "ІТ және Жаратылыстану ғылымдары жоғары мектебі белсенділері Аманжолов университетінде таныстырылым өткізеді.", time: "- 19 Қараша 2026 17:29" },
-        { headline: "Ірі кәсіпкер пара алу кезінде ұсталды.", time: "- 10 Қараша 2026 16:45" },
-        { headline: "Аманжоловқа 123 балл жинаған студент қыз оқуға түсті.", time: "- 1 Қыркүйек 2026 15:10" }
+        { headline: "ІТ және Жаратылыстану ғылымдары жоғары мектебі белсенділері Аманжолов университетінде таныстырылым өткізеді.", time: "- 19 Қараша 2026 17:29", views: "4.8к" },
+        { headline: "Ірі кәсіпкер пара алу кезінде ұсталды.", time: "- 10 Қараша 2026 16:45", views: "7.3к" },
+        { headline: "Аманжоловқа 123 балл жинаған студент қыз оқуға түсті.", time: "- 15 Маусым 2026 15:10", views: "8.6к" }
       ];
 
       var COMMENT_ITEMS = [
@@ -1371,7 +1656,8 @@
         "Назаровты білемін, оны әдейі қастандықпен ұстап берді!",
         "Біреу қалай 123 балл жинады? Мен де солай қалаймын😤!",
         "Қойылымда Архат бола ма?",
-        "УЭЭЭЭЭЭЭЭЭ"
+        "🔥Фенит🔥 жігіттері мен қыздары нағыз от қой😍",
+        "Концертті асыға күтіп жүрмін 🔥"
       ];
 
       var SINGLE_HERO_SLIDE = {
@@ -1379,6 +1665,7 @@
         title: "ІТ ЖӘНЕ ЖАРАТЫЛЫСТАНУ ҒЫЛЫМДАРЫ ЖОҒАРЫ МЕКТЕБІ ӨНЕР КӨРСЕТЕДІ",
         summary: "Биылғы ең үздік шығармашылық ұжымның қойылымы жақындап келеді",
         img: "images/1.jpg",
+        views: "6.4к",
         paragraphs: ["Флекс", "Нағыз сұмдық флекс"]
       };
 
@@ -1388,6 +1675,7 @@
           excerpt: "Бірінші курстықтарды жоғары курстағылар тағы трольдеп кетті",
           meta: "Қараша 22 2026 • Community Blog",
           img: "images/2.jpg",
+          views: "2.9к",
           paragraphs: ["Бірінші курстықтарды жоғары курстағылар тағы трольдеп кетті"]
         },
         {
@@ -1395,6 +1683,7 @@
           excerpt: "Бұрын-соңды болмаған жағдай, міне тағы қайталанды",
           meta: "Жаңартылды: 25 Қараша 2026 • Community Blog",
           img: "images/9.jpg",
+          views: "3.7к",
           paragraphs: ["Бұрын-соңды болмаған жағдай, міне тағы қайталанды"]
         },
         {
@@ -1402,28 +1691,174 @@
           excerpt: "Университет мұрасы сақталды",
           meta: "Жаңартылды: 25 Қараша 2026 • Community Blog",
           img: "images/6.jpg",
+          views: "2.2к",
           paragraphs: ["Университет мұрасы сақталды"]
         }
       ];
 
       var EDITORS_CHOICE_ITEMS = [
-        { title: "Аманжоловта қыз бала 123 балмен грантқа түсті", meta: "Қыркүйек 1 2026", img: "images/10.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "Жемқорлық үшін белгілі кәсіпкер Назаров Ерасыл қамауға алынды", meta: "Қараша 2 2026", img: "images/11.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "PhoenixNews — ең үздік бірінші курстықтар бар үздік жаңалықтар", meta: "Қараша 9 2026", img: "images/12.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "Аманжоловта 24-25 Қарашада белсенділер өнер көрсетеді", meta: "Қараша 5 2026", img: "images/13.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "123 балл жинаған қыз Назаров Ерасылдың қызы болып шықты", meta: "Қараша 9 2026", img: "images/14.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "Назаров Ерасыл пара беру және бәсекелестерге қорқыту жасады деп күдіктелуде", meta: "Қараша 10 2026", img: "images/15.jpg", paragraphs: ["Толық мәтін..."] },
-        { title: "Аманжоловта ірі іс-шаралар жоспарлануда", meta: "Қараша 20 2026", img: "images/16.jpg", paragraphs: ["Толық мәтін..."] }
+        { title: "Аманжоловта қыз бала 123 балмен грантқа түсті", meta: "Маусым 15 2026", img: "images/10.jpg", views: "8.1к", paragraphs: ["Толық мәтін..."] },
+        { title: "Назаров Ерасыл пара беру және бәсекелестерге қорқыту жасады деп күдіктелуде", meta: "Тамыз 1 2026", img: "images/15.jpg", views: "5.5к", paragraphs: ["Толық мәтін..."] },
+        { title: "Жемқорлық үшін белгілі кәсіпкер Назаров Ерасыл қамауға алынды", meta: "Тамыз 20 2026", img: "images/11.jpg", views: "6.9к", paragraphs: ["Толық мәтін..."] },
+        { title: "PhoenixNews — ең үздік бірінші курстықтар бар үздік жаңалықтар", meta: "Тамыз 24 2026", img: "images/12.jpg", views: "3.4к", paragraphs: ["Толық мәтін..."] },
+        { title: "123 балл жинаған қыз Назаров Ерасылдың қызы болып шықты", meta: "Тамыз 29 2026", img: "images/14.jpg", views: "7.8к", paragraphs: ["Толық мәтін..."] },
+        { title: "Аманжоловта 24-25 Қарашада белсенділер өнер көрсетеді", meta: "Қазан 5 2026", img: "images/13.jpg", views: "4.1к", paragraphs: ["Толық мәтін..."] },
+        { title: "Аманжоловта ірі іс-шаралар жоспарлануда", meta: "Қараша 20 2026", img: "images/16.jpg", views: "5.2к", paragraphs: ["Толық мәтін..."] }
       ];
+
+      var FEED_VIEWS_POOL = [
+        "5.1к", "3.8к", "4.4к", "2.7к", "6.2к", "3.1к",
+        "4.9к", "7.5к", "5.8к", "6.7к", "2.4к", "3.9к", "8.4к"
+      ];
+
+      function generateRandomViews() {
+        var tenths = Math.floor(Math.random() * 74) + 17;
+        return (tenths / 10).toFixed(1) + "к";
+      }
+
+      function createViewsBadge(viewsText) {
+        var span = document.createElement("span");
+        span.className = "views-badge";
+        span.title = "Қаралымдар";
+        span.innerHTML =
+          '<svg viewBox="0 0 16 16" aria-hidden="true">' +
+          '<path d="M8 3.5c-3.1 0-5.7 1.9-6.8 4.5 1.1 2.6 3.7 4.5 6.8 4.5s5.7-1.9 6.8-4.5C13.7 5.4 11.1 3.5 8 3.5zm0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8zm0-1.6a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z"/>' +
+          '</svg>' +
+          '<span>' + viewsText + "</span>";
+        return span;
+      }
 
       var state = {
         breakingIndex: 0,
         editorsOffset: 0,
         toastTimer: null,
-        commentsTimer: null,
-        breakingTimer: null
+        commentsTimers: []
       };
 
+      /* =====================================================================
+         БЕГУЩАЯ СТРОКА СРОЧНЫХ НОВОСТЕЙ (ПЛАВНЫЙ БЕГ + ПАУЗА 3 СЕК ПРИ КЛИКЕ)
+         ===================================================================== */
+      var marquee = {
+        viewport: null,
+        stage: null,
+        activeEl: null,
+        nextEl: null,
+        activeIndex: 0,
+        nextIndex: 1,
+        activeX: 0,
+        nextX: 0,
+        nextSpawned: false,
+        pauseUntil: 0,
+        lastTs: null,
+        rafId: null,
+        speedPxPerSec: 68,
+        gapPx: 48
+      };
+
+      function buildBreakingItemEl(item) {
+        var el = document.createElement("div");
+        el.className = "breaking-marquee-item";
+
+        var headline = document.createElement("span");
+        headline.className = "breaking-headline";
+        headline.textContent = item.headline;
+
+        var time = document.createElement("span");
+        time.className = "breaking-time";
+        time.textContent = item.time;
+
+        el.appendChild(headline);
+        el.appendChild(time);
+        return el;
+      }
+
+      function placeBreakingAtIndex(index, pauseMs) {
+        if (!marquee.stage) return;
+        var count = BREAKING_NEWS.length;
+        marquee.activeIndex = ((index % count) + count) % count;
+        marquee.nextIndex = (marquee.activeIndex + 1) % count;
+        state.breakingIndex = marquee.activeIndex;
+
+        marquee.stage.innerHTML = "";
+        marquee.activeEl = buildBreakingItemEl(BREAKING_NEWS[marquee.activeIndex]);
+        marquee.stage.appendChild(marquee.activeEl);
+        marquee.activeX = 0;
+        marquee.activeEl.style.transform = "translate3d(0px, -50%, 0)";
+
+        marquee.nextEl = null;
+        marquee.nextX = 0;
+        marquee.nextSpawned = false;
+
+        if (pauseMs && pauseMs > 0) {
+          marquee.pauseUntil = performance.now() + pauseMs;
+        } else {
+          marquee.pauseUntil = 0;
+        }
+        marquee.lastTs = performance.now();
+      }
+
+      function tickBreakingMarquee(now) {
+        if (marquee.lastTs === null) {
+          marquee.lastTs = now;
+        }
+        var dt = (now - marquee.lastTs) / 1000;
+        marquee.lastTs = now;
+        if (dt > 0.1) dt = 0.1;
+
+        var viewportWidth = marquee.viewport ? marquee.viewport.clientWidth : 600;
+
+        if (marquee.activeEl && now >= marquee.pauseUntil) {
+          var activeWidth = marquee.activeEl.offsetWidth || 0;
+          marquee.activeX -= marquee.speedPxPerSec * dt;
+          marquee.activeEl.style.transform = "translate3d(" + marquee.activeX.toFixed(1) + "px, -50%, 0)";
+
+          var activeRightEdge = marquee.activeX + activeWidth;
+
+          if (!marquee.nextSpawned && activeRightEdge <= viewportWidth) {
+            marquee.nextSpawned = true;
+            marquee.nextEl = buildBreakingItemEl(BREAKING_NEWS[marquee.nextIndex]);
+            marquee.stage.appendChild(marquee.nextEl);
+            marquee.nextX = Math.max(viewportWidth, activeRightEdge + marquee.gapPx);
+            marquee.nextEl.style.transform = "translate3d(" + marquee.nextX.toFixed(1) + "px, -50%, 0)";
+          }
+
+          if (marquee.nextEl) {
+            marquee.nextX -= marquee.speedPxPerSec * dt;
+            marquee.nextEl.style.transform = "translate3d(" + marquee.nextX.toFixed(1) + "px, -50%, 0)";
+          }
+
+          if (activeRightEdge <= 0) {
+            if (marquee.activeEl && marquee.activeEl.parentNode) {
+              marquee.activeEl.parentNode.removeChild(marquee.activeEl);
+            }
+            marquee.activeEl = marquee.nextEl;
+            marquee.activeX = marquee.nextX;
+            marquee.activeIndex = marquee.nextIndex;
+            state.breakingIndex = marquee.activeIndex;
+            marquee.nextIndex = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+
+            marquee.nextEl = null;
+            marquee.nextX = 0;
+            marquee.nextSpawned = false;
+          }
+        }
+
+        marquee.rafId = requestAnimationFrame(tickBreakingMarquee);
+      }
+
+      function initBreakingMarquee() {
+        marquee.viewport = document.getElementById("breakingTextTrigger");
+        marquee.stage = document.getElementById("breakingMarqueeStage");
+        placeBreakingAtIndex(0, 0);
+        if (marquee.rafId) {
+          cancelAnimationFrame(marquee.rafId);
+        }
+        marquee.rafId = requestAnimationFrame(tickBreakingMarquee);
+      }
+
+      /* =====================================================================
+         ОСТАЛЬНЫЕ ФУНКЦИИ ПОРТАЛА
+         ===================================================================== */
       function showToast(message) {
         var toastEl = document.getElementById("toastNotice");
         toastEl.textContent = message;
@@ -1435,9 +1870,16 @@
       }
 
       function openArticleModal(article) {
+        var viewsVal = article.views || generateRandomViews();
         document.getElementById("modalCategory").textContent = article.category || "PHOENIX NEWS";
         document.getElementById("modalTitle").textContent = article.title;
-        document.getElementById("modalMeta").textContent = article.meta || "Жаңартылды: 23 Қараша 2026 • AmanzholovNews Desk";
+
+        var metaEl = document.getElementById("modalMeta");
+        metaEl.textContent = "";
+        var metaText = document.createElement("span");
+        metaText.textContent = article.meta || "Жаңартылды: 23 Қараша 2026 • AmanzholovNews Desk";
+        metaEl.appendChild(metaText);
+        metaEl.appendChild(createViewsBadge(viewsVal));
 
         var modalImgBox = document.getElementById("modalImgBox");
         modalImgBox.innerHTML = "";
@@ -1461,22 +1903,9 @@
         document.getElementById("articleModal").classList.remove("open");
       }
 
-      function renderBreakingNews() {
-        var item = BREAKING_NEWS[state.breakingIndex];
-        document.getElementById("breakingHeadlineText").textContent = item.headline;
-        document.getElementById("breakingTimeText").textContent = item.time;
-      }
-
-      function startBreakingAutoplay() {
-        clearInterval(state.breakingTimer);
-        state.breakingTimer = setInterval(function () {
-          state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
-          renderBreakingNews();
-        }, 4000);
-      }
-
-      function initCommentsTicker() {
-        var track = document.getElementById("commentsScrollTrack");
+      function setupSingleCommentsTrack(trackId, delayOffset) {
+        var track = document.getElementById(trackId);
+        if (!track) return;
         track.innerHTML = "";
 
         var displayItems = COMMENT_ITEMS.concat(COMMENT_ITEMS);
@@ -1487,10 +1916,9 @@
           track.appendChild(div);
         });
 
-        clearInterval(state.commentsTimer);
-        state.commentsTimer = setInterval(function () {
+        var timerId = setInterval(function () {
           var firstChild = track.firstElementChild;
-          if (!firstChild) return;
+          if (!firstChild || firstChild.offsetHeight === 0) return;
 
           var stepHeight = firstChild.offsetHeight;
           track.style.transition = "transform 0.45s ease-in-out";
@@ -1501,12 +1929,30 @@
             track.appendChild(firstChild);
             track.style.transform = "translateY(0px)";
           }, 460);
-        }, 2300);
+        }, 2300 + (delayOffset || 0));
+
+        state.commentsTimers.push(timerId);
+      }
+
+      function initCommentsTicker() {
+        state.commentsTimers.forEach(function (id) {
+          clearInterval(id);
+        });
+        state.commentsTimers = [];
+        setupSingleCommentsTrack("commentsScrollTrackDesktop", 0);
+        setupSingleCommentsTrack("commentsScrollTrackMobile", 150);
       }
 
       function renderHero() {
         document.getElementById("heroImg").src = SINGLE_HERO_SLIDE.img;
-        document.getElementById("heroMeta").textContent = SINGLE_HERO_SLIDE.meta;
+
+        var heroMetaEl = document.getElementById("heroMeta");
+        heroMetaEl.textContent = "";
+        var dateSpan = document.createElement("span");
+        dateSpan.textContent = SINGLE_HERO_SLIDE.meta;
+        heroMetaEl.appendChild(dateSpan);
+        heroMetaEl.appendChild(createViewsBadge(SINGLE_HERO_SLIDE.views));
+
         document.getElementById("heroTitle").textContent = SINGLE_HERO_SLIDE.title;
         document.getElementById("heroSummary").textContent = SINGLE_HERO_SLIDE.summary;
       }
@@ -1533,12 +1979,18 @@
           titleEl.className = "blog-item-title";
           titleEl.textContent = post.title;
 
+          var footerRow = document.createElement("div");
+          footerRow.className = "blog-footer-row";
+
           var excerptEl = document.createElement("p");
           excerptEl.className = "blog-item-excerpt";
           excerptEl.textContent = post.excerpt;
 
+          footerRow.appendChild(excerptEl);
+          footerRow.appendChild(createViewsBadge(post.views));
+
           info.appendChild(titleEl);
-          info.appendChild(excerptEl);
+          info.appendChild(footerRow);
           card.appendChild(thumb);
           card.appendChild(info);
 
@@ -1548,6 +2000,7 @@
               meta: post.meta,
               category: "COMMUNITY BLOG",
               img: post.img,
+              views: post.views,
               paragraphs: post.paragraphs
             });
           });
@@ -1572,6 +2025,8 @@
             img.alt = currentItem.title;
             card.appendChild(img);
 
+            card.appendChild(createViewsBadge(currentItem.views));
+
             var caption = document.createElement("div");
             caption.className = "editor-caption";
             caption.textContent = currentItem.title;
@@ -1583,6 +2038,7 @@
                 meta: currentItem.meta,
                 category: "EDITOR'S CHOICE",
                 img: currentItem.img,
+                views: currentItem.views,
                 paragraphs: currentItem.paragraphs
               });
             });
@@ -1592,34 +2048,72 @@
         }
       }
 
+      function initFeedViews() {
+        var cards = document.querySelectorAll(".full-news-feed .news-feed-card");
+        cards.forEach(function (card, idx) {
+          var overlay = card.querySelector(".news-feed-overlay");
+          if (!overlay || overlay.querySelector(".views-badge")) return;
+          var viewsVal = FEED_VIEWS_POOL[idx] || generateRandomViews();
+          card.dataset.views = viewsVal;
+          overlay.appendChild(createViewsBadge(viewsVal));
+        });
+      }
+
+      function initMobileAdBanner() {
+        var adBanner = document.getElementById("mobileAdBanner");
+        var closeBtn = document.getElementById("mobileAdCloseBtn");
+        var openTrigger = document.getElementById("mobileAdOpenTrigger");
+        var targetCard = document.getElementById("newsFeedItem8");
+
+        if (!adBanner || !closeBtn || !openTrigger || !targetCard) return;
+
+        function hideAd() {
+          adBanner.classList.remove("visible");
+        }
+
+        setTimeout(function () {
+          if (window.innerWidth <= 768) {
+            adBanner.classList.add("visible");
+          }
+        }, 2000);
+
+        closeBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          hideAd();
+        });
+
+        openTrigger.addEventListener("click", function () {
+          hideAd();
+          targetCard.classList.add("open");
+          targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
       document.getElementById("brandResetBtn").addEventListener("click", function () {
-        state.breakingIndex = 0;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        placeBreakingAtIndex(0, 0);
         state.editorsOffset = 0;
         renderEditorsChoice();
         showToast("PhoenixNews басты беті жаңартылды");
       });
 
       document.getElementById("breakingPrevBtn").addEventListener("click", function () {
-        state.breakingIndex = (state.breakingIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        var nextIdx = (marquee.activeIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
+        placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingNextBtn").addEventListener("click", function () {
-        state.breakingIndex = (state.breakingIndex + 1) % BREAKING_NEWS.length;
-        renderBreakingNews();
-        startBreakingAutoplay();
+        var nextIdx = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+        placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingTextTrigger").addEventListener("click", function () {
-        var current = BREAKING_NEWS[state.breakingIndex];
+        var current = BREAKING_NEWS[marquee.activeIndex];
         openArticleModal({
           title: current.headline,
           meta: "Breaking News " + current.time,
           category: "BREAKING NEWS",
           img: "images/1.jpg",
+          views: current.views,
           paragraphs: [current.headline]
         });
       });
@@ -1630,6 +2124,7 @@
           meta: SINGLE_HERO_SLIDE.meta,
           category: "FEATURED STORY",
           img: SINGLE_HERO_SLIDE.img,
+          views: SINGLE_HERO_SLIDE.views,
           paragraphs: SINGLE_HERO_SLIDE.paragraphs
         });
       });
@@ -1657,20 +2152,23 @@
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           closeArticleModal();
+          var adBanner = document.getElementById("mobileAdBanner");
+          if (adBanner) adBanner.classList.remove("visible");
         }
       });
 
-      renderBreakingNews();
-      startBreakingAutoplay();
+      initBreakingMarquee();
       initCommentsTicker();
       renderHero();
       renderCommunityBlog();
       renderEditorsChoice();
+      initFeedViews();
+      initMobileAdBanner();
 
-      document.querySelectorAll('.news-feed-trigger').forEach(function(trigger) {
-        trigger.addEventListener('click', function() {
-          var card = this.closest('.news-feed-card');
-          card.classList.toggle('open');
+      document.querySelectorAll(".news-feed-trigger").forEach(function (trigger) {
+        trigger.addEventListener("click", function () {
+          var card = this.closest(".news-feed-card");
+          card.classList.toggle("open");
         });
       });
     })();
