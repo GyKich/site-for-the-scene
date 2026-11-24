@@ -1165,23 +1165,23 @@
       }
 
       .mobile-ad-content {
-  	flex: 1;
-  	display: flex;
-  	align-items: center;
-  	justify-content: center;
-  	background: #111111;
-  	cursor: pointer;
-  	min-width: 0;
-  	max-height: 140px;
-  	overflow: hidden;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #111111;
+        cursor: pointer;
+        min-width: 0;
+        max-height: 140px;
+        overflow: hidden;
       }
 
       .mobile-ad-gif {
-  	width: 100%;
-  	height: auto;
-  	max-height: 140px;
-  	object-fit: cover;
-  	display: block;
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        object-fit: cover;
+        display: block;
       }
 
       .mobile-ad-close {
@@ -1535,7 +1535,7 @@
     </div>
   </div>
 
-  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (ТЕКСТ ИЗ 8 НОМЕРА, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
+  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (GIF + КРЕСТИК, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
   <div class="mobile-ad-banner" id="mobileAdBanner" role="region" aria-label="Рекламный блок">
     <div class="mobile-ad-content" id="mobileAdOpenTrigger">
       <img src="../images/ad8.gif" alt="Реклама" class="mobile-ad-gif">
@@ -1572,28 +1572,22 @@
     (function () {
       "use strict";
 
-      var BREAKING_NEWS = [
-        { headline: "В Аманжолове выступают активисты ВШITиЕН.", time: "- 19 Ноября 2026 17:29", views: "4.8к" },
-        { headline: "Крупный бизнесмен был пойман за взяточничеством.", time: "- 10 Ноября 2026 16:45", views: "7.3к" },
-        { headline: "В Аманжолов поступила студентка со 123 баллами.", time: "- 15 Июнь 2026 15:10", views: "8.6к" }
-      ];
-
       var COMMENT_ITEMS = [
         "О БОЖЕ! Я даже не думал что Назаров Ерасыл мог такое вытворить!",
-	"Вот почему нельзя доверять людям только из-за их статуса и богатства.",
-	"Представляю, какой шок сейчас переживают его близкие. Особенно дети…",
-	"Пока не доказана вина, обвинять рано",
-	"Неужели никто раньше не замечал ничего подозрительного?",
-	"Надеюсь, пострадавшие наконец смогут рассказать всё, что раньше боялись сказать.",
-	"Слишком долго таким людям всё сходит с рук. Пора отвечать за свои поступки.",
-	"А сколько людей он мог обмануть, пока все вокруг восхищались его успехом?",
+        "Вот почему нельзя доверять людям только из-за их статуса и богатства.",
+        "Представляю, какой шок сейчас переживают его близкие. Особенно дети…",
+        "Пока не доказана вина, обвинять рано",
+        "Неужели никто раньше не замечал ничего подозрительного?",
+        "Надеюсь, пострадавшие наконец смогут рассказать всё, что раньше боялись сказать.",
+        "Слишком долго таким людям всё сходит с рук. Пора отвечать за свои поступки.",
+        "А сколько людей он мог обмануть, пока все вокруг восхищались его успехом?",
         "уау Дана крашиха я влюбилась 😍😍 Аян краш 🔥🔥",
         "Да тут и так было кто такой этот Назаров Ерасыл.",
         "Наконец-то ВШITиЕН выступят 🔥🔥🔥",
         "Я знаю Назарова, его подставили!",
         "Как кто-то смог набрать 123 балла? Я тоже так хочу😤!",
         "А на выступлении будет Архат?",
-	"Ребята из 🔥фенит🔥 просто огонь😍",
+        "Ребята из 🔥фенит🔥 просто огонь😍",
         "Не могу дождаться концерта 🔥"
       ];
 
@@ -1640,6 +1634,18 @@
         { title: "PhoenixNews лучшие новости в которых лучшие первокурсники", meta: "Авг 24 2026", img: "../images/12.jpg", views: "3.4к", paragraphs: ["PhoenixNews продолжает следить за самыми интересными событиями, людьми и достижениями нашего города. Наша редакция стремится рассказывать о том, что действительно заслуживает внимания, — от ярких творческих выступлений до историй успеха, вдохновляющих окружающих.","Мы верим, что за каждой новостью стоит своя история, за каждым событием — люди, а за каждым достижением — труд, упорство и стремление к лучшему.","Впереди нас ждёт ещё больше интересных событий, неожиданных открытий и историй, которые способны изменить взгляд на привычные вещи.","Оставайтесь с PhoenixNews — впереди самое интересное!"] },
         { title: "Девочка набравшая 123 балла оказалась дочерью Назарова Ерасыла", meta: "Авг 29 2026", img: "../images/14.jpg", views: "7.8к", paragraphs: ["Внимание общественности привлекла выпускница, недавно набравшая 123 балла на Едином национальном тестировании и получившая образовательный грант. Как выяснилось, девушка — Дана Ерасылқызы — является дочерью известного предпринимателя Ерасыла Назарова.","Дана зарекомендовала себя как способная и целеустремлённая ученица. Её высокий результат на ЕНТ вызвал интерес среди учащихся и преподавателей, а новость о поступлении стала поводом для поздравлений и обсуждений.","Однако после появления информации о её родстве с Назаровым у некоторых возникли вопросы: связано ли её поступление исключительно с личными достижениями или известность семьи также сыграла свою роль?","Пока сама Дана не давала публичных комментариев по поводу появившихся обсуждений. История продолжает привлекать внимание, оставляя открытым вопрос о том, где заканчиваются семейные связи и начинатся личный успех.","PhoenixNews продолжит следить за развитием этой истории."] }
       ];
+
+      function getBreakingFromCarousel() {
+        return EDITORS_CHOICE_ITEMS.map(function (item) {
+          return {
+            headline: item.title,
+            time: item.meta ? "- " + item.meta : "",
+            views: item.views,
+            img: item.img,
+            paragraphs: item.paragraphs
+          };
+        });
+      }
 
       var FEED_VIEWS_POOL = [
         "5.1к", "3.8к", "4.4к", "2.7к", "6.2к", "3.1к",
@@ -1709,13 +1715,16 @@
 
       function placeBreakingAtIndex(index, pauseMs) {
         if (!marquee.stage) return;
-        var count = BREAKING_NEWS.length;
+        var items = getBreakingFromCarousel();
+        if (!items.length) return;
+
+        var count = items.length;
         marquee.activeIndex = ((index % count) + count) % count;
         marquee.nextIndex = (marquee.activeIndex + 1) % count;
         state.breakingIndex = marquee.activeIndex;
 
         marquee.stage.innerHTML = "";
-        marquee.activeEl = buildBreakingItemEl(BREAKING_NEWS[marquee.activeIndex]);
+        marquee.activeEl = buildBreakingItemEl(items[marquee.activeIndex]);
         marquee.stage.appendChild(marquee.activeEl);
         marquee.activeX = 0;
         marquee.activeEl.style.transform = "translate3d(0px, -50%, 0)";
@@ -1741,8 +1750,10 @@
         if (dt > 0.1) dt = 0.1;
 
         var viewportWidth = marquee.viewport ? marquee.viewport.clientWidth : 600;
+        var items = getBreakingFromCarousel();
+        var count = items.length;
 
-        if (marquee.activeEl && now >= marquee.pauseUntil) {
+        if (marquee.activeEl && count > 0 && now >= marquee.pauseUntil) {
           var activeWidth = marquee.activeEl.offsetWidth || 0;
           marquee.activeX -= marquee.speedPxPerSec * dt;
           marquee.activeEl.style.transform = "translate3d(" + marquee.activeX.toFixed(1) + "px, -50%, 0)";
@@ -1751,10 +1762,13 @@
 
           if (!marquee.nextSpawned && activeRightEdge <= viewportWidth) {
             marquee.nextSpawned = true;
-            marquee.nextEl = buildBreakingItemEl(BREAKING_NEWS[marquee.nextIndex]);
+            marquee.nextIndex = marquee.activeIndex % count;
+            var upcomingIndex = (marquee.activeIndex + 1) % count;
+            marquee.nextEl = buildBreakingItemEl(items[upcomingIndex]);
             marquee.stage.appendChild(marquee.nextEl);
             marquee.nextX = Math.max(viewportWidth, activeRightEdge + marquee.gapPx);
             marquee.nextEl.style.transform = "translate3d(" + marquee.nextX.toFixed(1) + "px, -50%, 0)";
+            marquee.nextIndex = upcomingIndex;
           }
 
           if (marquee.nextEl) {
@@ -1768,9 +1782,9 @@
             }
             marquee.activeEl = marquee.nextEl;
             marquee.activeX = marquee.nextX;
-            marquee.activeIndex = marquee.nextIndex;
+            marquee.activeIndex = marquee.nextIndex % count;
             state.breakingIndex = marquee.activeIndex;
-            marquee.nextIndex = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+            marquee.nextIndex = (marquee.activeIndex + 1) % count;
 
             marquee.nextEl = null;
             marquee.nextX = 0;
@@ -2032,24 +2046,31 @@
       });
 
       document.getElementById("breakingPrevBtn").addEventListener("click", function () {
-        var nextIdx = (marquee.activeIndex - 1 + BREAKING_NEWS.length) % BREAKING_NEWS.length;
+        var count = getBreakingFromCarousel().length;
+        if (!count) return;
+        var nextIdx = (marquee.activeIndex - 1 + count) % count;
         placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingNextBtn").addEventListener("click", function () {
-        var nextIdx = (marquee.activeIndex + 1) % BREAKING_NEWS.length;
+        var count = getBreakingFromCarousel().length;
+        if (!count) return;
+        var nextIdx = (marquee.activeIndex + 1) % count;
         placeBreakingAtIndex(nextIdx, 3000);
       });
 
       document.getElementById("breakingTextTrigger").addEventListener("click", function () {
-        var current = BREAKING_NEWS[marquee.activeIndex];
+        var items = getBreakingFromCarousel();
+        var current = items[marquee.activeIndex];
+        if (!current) return;
+
         openArticleModal({
           title: current.headline,
-          meta: "Breaking News " + current.time,
+          meta: current.time ? current.time.replace(/^-\s*/, "") : "",
           category: "BREAKING NEWS",
-          img: "../images/1.jpg",
+          img: current.img || "../images/1.jpg",
           views: current.views,
-          paragraphs: [current.headline]
+          paragraphs: current.paragraphs && current.paragraphs.length ? current.paragraphs : [current.headline]
         });
       });
 
