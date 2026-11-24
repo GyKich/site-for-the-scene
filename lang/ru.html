@@ -1176,12 +1176,14 @@
         overflow: hidden;
       }
 
-      .mobile-ad-gif {
+      .mobile-ad-video {
         width: 100%;
         height: auto;
         max-height: 140px;
         object-fit: cover;
         display: block;
+        pointer-events: none;
+        user-select: none;
       }
 
       .mobile-ad-close {
@@ -1535,10 +1537,20 @@
     </div>
   </div>
 
-  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (GIF + КРЕСТИК, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
+  <!-- МОБИЛЬНАЯ ПАНЕЛЬ-ИМИТАЦИЯ РЕКЛАМЫ (ВИДЕО ПРОИГРЫВАЕТСЯ 2 РАЗА, ВЫЕЗЖАЕТ ЧЕРЕЗ 2 СЕК) -->
   <div class="mobile-ad-banner" id="mobileAdBanner" role="region" aria-label="Рекламный блок">
     <div class="mobile-ad-content" id="mobileAdOpenTrigger">
-      <img src="../images/ad8.gif" alt="Реклама" class="mobile-ad-gif">
+      <video
+        id="mobileAdVideo"
+        class="mobile-ad-video"
+        src="../images/ad8.mp4"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        tabindex="-1"
+        aria-hidden="true"
+      ></video>
     </div>
     <button type="button" class="mobile-ad-close" id="mobileAdCloseBtn" title="Закрыть">×</button>
   </div>
@@ -2012,9 +2024,46 @@
         var adBanner = document.getElementById("mobileAdBanner");
         var closeBtn = document.getElementById("mobileAdCloseBtn");
         var openTrigger = document.getElementById("mobileAdOpenTrigger");
+        var adVideo = document.getElementById("mobileAdVideo");
         var targetCard = document.getElementById("newsFeedItem8");
 
         if (!adBanner || !closeBtn || !openTrigger || !targetCard) return;
+
+        var playCount = 0;
+        var maxPlays = 2;
+        var finishedAllPlays = false;
+
+        function startAdVideo() {
+          if (!adVideo || finishedAllPlays) return;
+          adVideo.muted = true;
+          var playPromise = adVideo.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(function () {});
+          }
+        }
+
+        if (adVideo) {
+          adVideo.controls = false;
+          adVideo.loop = false;
+          adVideo.disablePictureInPicture = true;
+
+          adVideo.addEventListener("ended", function () {
+            playCount += 1;
+            if (playCount < maxPlays) {
+              adVideo.currentTime = 0;
+              startAdVideo();
+            } else {
+              finishedAllPlays = true;
+              adVideo.pause();
+            }
+          });
+
+          adVideo.addEventListener("play", function () {
+            if (finishedAllPlays) {
+              adVideo.pause();
+            }
+          });
+        }
 
         function hideAd() {
           adBanner.classList.remove("visible");
@@ -2023,6 +2072,7 @@
         setTimeout(function () {
           if (window.innerWidth <= 768) {
             adBanner.classList.add("visible");
+            startAdVideo();
           }
         }, 2000);
 
